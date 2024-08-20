@@ -14,3 +14,5 @@ Each project will need to provide a certain amount of features/functionalities, 
 - an authentication system to sign-up/sign-in (GUI and models)
 - a persistency system to store/retrieve/update user data (GUI and models)
 - one or (more likely) more application windows in which the actual, useful part of the application is performed (again, with GUI and models)
+
+test-commit
