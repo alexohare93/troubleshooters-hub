@@ -3,6 +3,6 @@ module hub.troubleshooters.soundlink {
     requires javafx.fxml;
 
 
-    opens hub.troubleshooters.soundlink to javafx.fxml;
-    exports hub.troubleshooters.soundlink;
+    opens hub.troubleshooters.soundlink.app to javafx.fxml;
+    exports hub.troubleshooters.soundlink.app;
 }

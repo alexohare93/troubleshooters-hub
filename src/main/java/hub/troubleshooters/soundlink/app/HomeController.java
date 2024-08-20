@@ -1,9 +1,9 @@
-package hub.troubleshooters.soundlink;
+package hub.troubleshooters.soundlink.app;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class HomeController {
     @FXML
     private Label welcomeText;
 
