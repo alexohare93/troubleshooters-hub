@@ -2,9 +2,12 @@ package hub.troubleshooters.soundlink.core.auth;
 
 import hub.troubleshooters.soundlink.core.CoreResult;
 
-public class AuthResult extends CoreResult<String, AuthException> {
+/**
+ * AuthResult contains no result but can have an error.
+ */
+public class AuthResult extends CoreResult<Void, AuthException> {
     public AuthResult() {
-        super("");
+        super((Void) null);
     }
 
     public AuthResult(AuthException error) {

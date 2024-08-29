@@ -16,5 +16,5 @@
   <Label fx:id="welcomeText"/>
   <TextField text="Username" fx:id="usernameInput" />
   <PasswordField text="Password" fx:id="passwordInput" />
-  <Button text="Hello!" onAction="#onHelloButtonClick"/>
+  <Button text="Log in" onAction="#onLoginButtonClick"/>
 </VBox>

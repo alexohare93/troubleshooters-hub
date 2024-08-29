@@ -2,6 +2,7 @@ module hub.troubleshooters.soundlink {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.google.guice;
+    requires java.sql;
 
 
     opens hub.troubleshooters.soundlink.app to javafx.fxml;

@@ -26,7 +26,7 @@ public class HomeController {
     }
 
     @FXML
-    protected void onHelloButtonClick() {
+    protected void onLoginButtonClick() {
         var loginResult = loginService.login(usernameInput.getText(), passwordInput.getText());
         if (loginResult.isSuccess()) {
             welcomeText.setText("Logged in successfully!");
