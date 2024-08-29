@@ -1,36 +1,49 @@
 package hub.troubleshooters.soundlink.core.auth;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 
-import java.sql.Statement;
-import java.util.Optional;
+import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 
 public class LoginServiceImpl implements LoginService {
 
     private boolean loggedIn = false;
-    private DatabaseConnection connection;
+    private final DatabaseConnection connection;
 
     @Inject
     public LoginServiceImpl(DatabaseConnection connection) {
         this.connection = connection;
     }
 
-    /**
-     * Authenticates the user provided they enter the correct username and password.
-     * @param username the username specified
-     * @param password the plaintext password specified.
-     * @return An AuthResult which may contain an error if authentication failed. Make sure to check .isSuccess() on
-     * this result.
-     */
     @Override
     public AuthResult login(String username, String password) {
-        if (!username.equals("test") || !password.equals("123")) {
-            return new AuthResult(new AuthException("Incorrect username or password"));
+        var sql = "SELECT HashedPassword FROM Users WHERE Username = ?";
+        AuthResult authResult;
+        try {
+            authResult = connection.executeQuery(sql, preparedStatement -> {
+                preparedStatement.setString(1, username);
+            }, resultSet -> {
+                if (resultSet.next()) {
+                    var savedHashedPassword = resultSet.getString("HashedPassword");
+                    if (verifyPassword(password, savedHashedPassword)) {
+                        loggedIn = true;
+                        return new AuthResult(); // successful login
+                    } else {
+                        // incorrect password
+                        return new AuthResult(new AuthException("Incorrect username or password"));
+                    }
+                } else {
+                    // incorrect username
+                    return new AuthResult(new AuthException("Incorrect username or password"));
+                }
+            });
+        } catch (SQLException e) {
+            authResult = new AuthResult(new AuthException("Internal server error. Please contact SoundLink support."));
         }
 
-        loggedIn = true;
-        return new AuthResult();
+        return authResult;
     }
 
     @Override
@@ -41,5 +54,10 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void logout() {
         loggedIn = false;
+    }
+
+    private boolean verifyPassword(String password, String hashedPassword) {
+        var result = BCrypt.verifyer().verify(password.toCharArray(), hashedPassword);
+        return result.verified;
     }
 }

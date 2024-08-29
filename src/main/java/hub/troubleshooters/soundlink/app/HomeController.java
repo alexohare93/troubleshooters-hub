@@ -31,7 +31,7 @@ public class HomeController {
         if (loginResult.isSuccess()) {
             welcomeText.setText("Logged in successfully!");
         } else {
-            welcomeText.setText("Login failed! Internal error: " + loginResult.getError().getMessage());
+            welcomeText.setText(loginResult.getError().getMessage());
         }
     }
 }

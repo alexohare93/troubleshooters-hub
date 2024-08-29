@@ -9,17 +9,24 @@ public class SQLiteDatabaseConnection implements DatabaseConnection {
         this.connectionString = connectionString;
     }
 
-    public <T> T executeQuery(PreparedStatement query, QueryExecutor<T> executor) throws SQLException {
+    public <T> T executeQuery(String sql, StatementPreparer preparer, QueryExecutor<T> executor) throws SQLException {
         var connection = DriverManager.getConnection(connectionString);
-        var resultSet = query.executeQuery();
+        var statement = connection.prepareStatement(sql);
+        preparer.prepare(statement);
+
+        var resultSet = statement.executeQuery();
         var result = executor.execute(resultSet);
+
         connection.close();
         return result;
     }
 
-    public void executeUpdate(PreparedStatement query, UpdateExecutor executor) throws SQLException {
+    public void executeUpdate(String sql, StatementPreparer preparer, UpdateExecutor executor) throws SQLException {
         var connection = DriverManager.getConnection(connectionString);
-        var rowsAffected = query.executeUpdate();
+        var statement = connection.prepareStatement(sql);
+        preparer.prepare(statement);
+
+        var rowsAffected = statement.executeUpdate();
         executor.execute(rowsAffected);
         connection.close();
     }
