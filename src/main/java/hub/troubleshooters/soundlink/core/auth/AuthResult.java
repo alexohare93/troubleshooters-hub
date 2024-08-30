@@ -3,7 +3,7 @@ package hub.troubleshooters.soundlink.core.auth;
 import hub.troubleshooters.soundlink.core.CoreResult;
 
 /**
- * AuthResult contains no result but can have an error.
+ * Represents the result of an authentication operation.
  */
 public class AuthResult extends CoreResult<Void, AuthException> {
     public AuthResult() {

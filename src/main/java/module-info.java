@@ -12,4 +12,5 @@ module hub.troubleshooters.soundlink {
     exports hub.troubleshooters.soundlink.core.auth;
     exports hub.troubleshooters.soundlink.core;
     exports hub.troubleshooters.soundlink.data;
+    exports hub.troubleshooters.soundlink.core.data.models;
 }

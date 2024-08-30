@@ -9,6 +9,18 @@ public interface LoginService {
      * this result.
      */
     AuthResult login(String username, String password);
-    boolean isLoggedIn();
+
+    /**
+     * Registers a new user with the given username and password.
+     * @param username the username to register
+     * @param password the plaintext password to register
+     * @return An AuthResult which may contain an error if registration failed. Make sure to check .isSuccess() on
+     * this result.
+     */
+    AuthResult register(String username, String password);
+
+    /**
+     * Logs out the current user.
+     */
     void logout();
 }

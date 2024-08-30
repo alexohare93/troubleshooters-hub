@@ -1,6 +1,9 @@
 package hub.troubleshooters.soundlink.core.auth;
 
-public class AuthException extends RuntimeException {
+/**
+ * Represents an exception that occurs during authentication or authorization.
+ */
+public class AuthException extends Exception {
     public AuthException(String message) {
         super(message);
     }

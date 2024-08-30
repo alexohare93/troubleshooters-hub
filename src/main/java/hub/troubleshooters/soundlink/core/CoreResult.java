@@ -1,5 +1,10 @@
 package hub.troubleshooters.soundlink.core;
 
+/**
+ * Represents the result of a core operation.
+ * @param <T> The type of the result.
+ * @param <E> The type of the error.
+ */
 public class CoreResult<T, E extends Exception> {
     private final T result;
     private final E error;
