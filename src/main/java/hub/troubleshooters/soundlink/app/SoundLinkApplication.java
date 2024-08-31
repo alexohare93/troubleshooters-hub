@@ -1,8 +1,8 @@
 package hub.troubleshooters.soundlink.app;
 
+import atlantafx.base.theme.PrimerLight;
+import hub.troubleshooters.soundlink.app.services.SceneManagerImpl;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import com.google.inject.Guice;
 
@@ -13,17 +13,14 @@ public class SoundLinkApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // set up DI injector
-        var injector = Guice.createInjector(new AppModule());
+        var injector = Guice.createInjector(new AppModule(stage));
+        var sceneManager = injector.getInstance(SceneManagerImpl.class);
 
-        // create FXML loader and set controller factory
-        var fxmlLoader = new FXMLLoader(SoundLinkApplication.class.getResource("home-view.fxml"));
-        fxmlLoader.setControllerFactory(new GuiceControllerFactory(injector));
+        // set theme
+        setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
 
-        var scene = new Scene(fxmlLoader.load(), 960, 540);
-        stage.setTitle("SoundLink");
-        stage.setScene(scene);
-
-        stage.show();
+        // switch to initial scene (login screen)
+        sceneManager.switchToScene("areas/login/login-view.fxml");
     }
 
     public static void main(String[] args) {
