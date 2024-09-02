@@ -3,7 +3,7 @@ CREATE TABLE Users (
    Username TEXT NOT NULL UNIQUE,
    HashedPassword TEXT NOT NULL,
    Created DATETIME DEFAULT CURRENT_TIMESTAMP,
-   LastLoggedIn DATETIME,
+   LastLogin DATETIME,
    Permission INTEGER DEFAULT 0
 );
 

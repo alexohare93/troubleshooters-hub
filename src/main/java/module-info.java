@@ -18,4 +18,6 @@ module hub.troubleshooters.soundlink {
     exports hub.troubleshooters.soundlink.app.areas.home;
     opens hub.troubleshooters.soundlink.app.areas.home to javafx.fxml;
     exports hub.troubleshooters.soundlink.app.services;
+    exports hub.troubleshooters.soundlink.data.factories;
+    exports hub.troubleshooters.soundlink.data.models;
 }
