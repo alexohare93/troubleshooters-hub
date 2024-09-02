@@ -2,6 +2,9 @@ package hub.troubleshooters.soundlink.data.models;
 
 import java.util.Date;
 
+/**
+ * Represents a user in the system.
+ */
 public class User {
     private final int id;
     private String username;

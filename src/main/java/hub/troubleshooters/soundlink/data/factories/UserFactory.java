@@ -67,6 +67,12 @@ public class UserFactory implements ModelFactory<User> {
         return Optional.of(user);
     }
 
+    /**
+     * Gets the user with the given username or an empty Optional.
+     * @param username the username of the user to get
+     * @return the user with the given username, if it exists
+     * @throws SQLException if an error occurs while getting the user
+     */
     public Optional<User> get(String username) throws SQLException {
         final String sql = "SELECT * FROM Users WHERE Username = ?";
         var user = connection.executeQuery(sql, statement -> statement.setString(1, username), executor -> {
@@ -88,6 +94,12 @@ public class UserFactory implements ModelFactory<User> {
         return Optional.of(user);
     }
 
+    /**
+     * Creates a new user with the given username and hashed password.
+     * @param username the username of the new user
+     * @param hashedPassword the hashed password of the new user
+     * @throws SQLException if an error occurs while creating the user
+     */
     public void create(String username, String hashedPassword) throws SQLException {
         final var sql = "INSERT INTO Users (Username, HashedPassword) VALUES (?, ?)";
         connection.executeUpdate(sql, preparedStatement -> {
