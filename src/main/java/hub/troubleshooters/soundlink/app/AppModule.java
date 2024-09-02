@@ -9,6 +9,7 @@ import hub.troubleshooters.soundlink.core.auth.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
 import hub.troubleshooters.soundlink.core.auth.LoginServiceImpl;
+import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
 import javafx.stage.Stage;
@@ -27,6 +28,9 @@ public class AppModule extends AbstractModule {
         bind(DatabaseConnection.class).to(SQLiteDatabaseConnection.class).in(Singleton.class);
         bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
         bind(SceneManager.class).to(SceneManagerImpl.class).in(Singleton.class);
+
+        // data factories
+        bind(UserFactory.class).in(Singleton.class);
     }
 
     @Provides
