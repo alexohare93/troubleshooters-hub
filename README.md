@@ -36,3 +36,22 @@ This project uses the familiar layered architecture pattern, with the following 
 - `hub.troubleshooters.soundlink.data` - contains the **data access layer** of the application.
 
 As a general rule, the **application layer** should only contain code that is directly related to the user interface, such as controllers, views, and view models. The **business layer** should contain the core logic of the application, and the **data access layer** should contain code that interacts with the database. The application layer should only communicate with the business layer, and the data access layer should only communicate with the business layer.
+
+## Adding a new table to the database
+
+For any new table created in the database, the following steps should be followed:
+
+1. create the table in the `/database.sql` file
+2. create a corresponding model in the `data.models` package
+3. create a business layer model in the `core.data.models` (optional)
+    1. add a static method to the `core.data.Map` class to map between the two models
+
+## Adding a new feature to the application
+
+For any new feature added to the application, the following steps should be followed:
+
+1. create a new branch from the `main` branch with the name `feature/<JIRA issue number>`, e.g. `feature/SL-10` if it's a feature or `bugfix/SL-10` if it's a bug fix.
+
+2. after completing the feature, create a pull request to merge the feature branch into the `main` branch (or any other branch that the feature is based on). Assign at least one reviewer to the pull request. Assigning isn't necessary if it's a simple bugfix but is recommended for features.
+
+3. after the pull request is approved, merge the feature branch into the `main` branch and delete the feature branch.
