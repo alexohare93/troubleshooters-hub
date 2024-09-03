@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.services;
 
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
+import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,8 @@ import java.io.IOException;
 public class SceneManagerImpl implements SceneManager {
     private final Stage primaryStage;
     private final Injector injector;
+
+    private SharedController sharedController = null;
 
     @Inject
     public SceneManagerImpl(Stage primaryStage, Injector injector) {
@@ -40,5 +43,31 @@ public class SceneManagerImpl implements SceneManager {
     @Override
     public void switchToScene(String fxmlFileName) {
         switchToScene(fxmlFileName, "SoundLink", 768, 540);
+    }
+
+    public void switchToOutletScene(String fxmlFileName) {
+        try {
+            var loader = new FXMLLoader(SoundLinkApplication.class.getResource(fxmlFileName));
+            loader.setControllerFactory(injector::getInstance);
+            Parent outletContent = loader.load();
+            initializeSharedView();
+            sharedController.setOutlet(outletContent);
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: replace with proper error handling
+        }
+    }
+
+    private void initializeSharedView() {
+        try {
+            var loader = new FXMLLoader(SoundLinkApplication.class.getResource("areas/shared/shared-view.fxml"));
+            loader.setControllerFactory(injector::getInstance);
+            Parent root = loader.load();
+            sharedController = loader.getController();
+            var scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO: replace with proper error handling
+        }
     }
 }
