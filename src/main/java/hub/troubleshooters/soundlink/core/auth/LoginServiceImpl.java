@@ -4,20 +4,17 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.data.Map;
 import hub.troubleshooters.soundlink.core.data.models.UserModel;
-import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.models.User;
 
 import java.sql.SQLException;
 
 public class LoginServiceImpl implements LoginService {
-    private final DatabaseConnection connection;
     private final UserFactory userFactory;
     private final IdentityService identityService;
 
     @Inject
-    public LoginServiceImpl(DatabaseConnection connection, IdentityService identityService, UserFactory userFactory) {
-        this.connection = connection;
+    public LoginServiceImpl(IdentityService identityService, UserFactory userFactory) {
         this.identityService = identityService;
         this.userFactory = userFactory;
     }
@@ -33,10 +30,9 @@ public class LoginServiceImpl implements LoginService {
             if (user.getHashedPassword().isEmpty() || !verifyPassword(password, user.getHashedPassword())) {
                 return new AuthResult(new AuthException("Incorrect username or password"));
             }
-            updateLastLoggedIn(user);
+            user.setLastLogin(java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
             var userModel = Map.userModel(user);
-            setIdentityContext(userModel);
-
+            identityService.setUserContext(new UserContext(userModel));
             userFactory.save(user);
             return new AuthResult(); // successful login
         } catch (SQLException e) {
@@ -61,15 +57,6 @@ public class LoginServiceImpl implements LoginService {
         } catch (SQLException e) {
             return new AuthResult(new AuthException("Internal server error. Please contact SoundLink support. Error: " + e.getMessage()));
         }
-    }
-
-    private void setIdentityContext(UserModel userModel) {
-        identityService.setUserContext(new UserContext(userModel));
-    }
-
-    private void updateLastLoggedIn(User user) throws SQLException {
-        user.setLastLogin(java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
-        userFactory.save(user);
     }
 
     private String hashPassword(String password) {
