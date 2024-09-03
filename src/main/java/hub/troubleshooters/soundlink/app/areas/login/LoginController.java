@@ -32,7 +32,7 @@ public class LoginController {
         }
         var loginResult = loginService.login(usernameInput.getText(), passwordInput.getText());
         if (loginResult.isSuccess()) {
-            sceneManager.switchToScene("areas/home/home-view.fxml");
+            sceneManager.switchToOutletScene("areas/home/home-view.fxml");
         } else {
             logError(loginResult.getError().getMessage());
         }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
+   <top>
+      <HBox prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button onAction="#onHomeButtonPressed" mnemonicParsing="false" text="SoundLink" />
+            <Button onAction="#onEventsButtonPressed" mnemonicParsing="false" text="Events" />
+            <Button mnemonicParsing="false" text="Communities" />
+            <MenuButton fx:id="usernameMenuButton" mnemonicParsing="false" text="Me">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Profile" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                <MenuItem onAction="#onLogoutButtonPressed" mnemonicParsing="false" text="Logout" />
+              </items>
+            </MenuButton>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <Pane fx:id="outlet" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
