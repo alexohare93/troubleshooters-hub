@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.areas.shared;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.auth.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
@@ -43,7 +44,7 @@ public class SharedController {
     @FXML
     protected void onLogoutButtonPressed() {
         loginService.logout();
-        sceneManager.switchToScene("areas/login/login-view.fxml");
+        sceneManager.switchToScene(Routes.LOGIN);
     }
 
     @FXML
@@ -53,6 +54,6 @@ public class SharedController {
 
     @FXML
     protected void onHomeButtonPressed() {
-        sceneManager.switchToOutletScene("areas/home/home-view.fxml");
+        sceneManager.switchToOutletScene(Routes.HOME);
     }
 }

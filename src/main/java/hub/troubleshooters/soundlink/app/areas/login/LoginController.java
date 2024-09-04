@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.areas.login;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
 import javafx.fxml.*;
@@ -32,7 +33,7 @@ public class LoginController {
         }
         var loginResult = loginService.login(usernameInput.getText(), passwordInput.getText());
         if (loginResult.isSuccess()) {
-            sceneManager.switchToOutletScene("areas/home/home-view.fxml");
+            sceneManager.switchToOutletScene(Routes.HOME);
         } else {
             logError(loginResult.getError().getMessage());
         }
