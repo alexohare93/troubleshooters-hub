@@ -15,6 +15,9 @@ public class SharedController {
     private final SceneManager sceneManager;
 
     @FXML
+    private Pane root;
+
+    @FXML
     protected MenuButton usernameMenuButton;
 
     @FXML
