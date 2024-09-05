@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundLink</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    header {
+      background-color: #1e3a8a; /* Dark blue */
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-logo {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin: 0 20px;
+    }
+
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #a5b4fc; /* Light blue */
+    }
+
+    .hero {
+      background-color: #1e3a8a; /* Dark blue */
+      color: #fff;
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 24px;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      background-color: #2563eb; /* Blue */
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #1d4ed8; /* Darker blue */
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .feature {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+    }
+
+    .feature h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .feature p {
+      font-size: 16px;
+      color: #666;
+    }
+
+    footer {
+      background-color: #1e3a8a; /* Dark blue */
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-logo">SoundLink</div>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Discover</a></li>
+        <li><a href="#">Create</a></li>
+        <li><a href="#">Communities</a></li>
+        <li><a href="#">Events</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Discover, Connect, and Celebrate Music</h1>
+      <p>Join the SoundLink community and experience local, community-driven music events.</p>
+      <a href="#" class="btn">Get Started</a>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <h3>Create Communities</h3>
+        <p>Build communities around your music interests and connect with like-minded people.</p>
+      </div>
+      <div class="feature">
+        <h3>Plan Events</h3>
+        <p>Collaborate with your community to organize small, intimate music events.</p>
+      </div>
+      <div class="feature">
+        <h3>Discover Events</h3>
+        <p>Find music events that match your preferences and location.</p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2023 SoundLink. All rights reserved.</p>
+  </footer>
+</body>
+</html>
