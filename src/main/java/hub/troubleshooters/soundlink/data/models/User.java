@@ -11,15 +11,13 @@ public class User {
     private String hashedPassword;
     private Date created;
     private Date lastLogin;
-    private int permission;
 
-    public User(int id, String username, String hashedPassword, Date created, Date lastLogin, int permission) {
+    public User(int id, String username, String hashedPassword, Date created, Date lastLogin) {
         this.id = id;
         this.username = username;
         this.hashedPassword = hashedPassword;
         this.created = created;
         this.lastLogin = lastLogin;
-        this.permission = permission;
     }
 
     public int getId() {
@@ -56,13 +54,5 @@ public class User {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
-    }
-
-    public int getPermission() {
-        return permission;
-    }
-
-    public void setPermission(int permission) {
-        this.permission = permission;
     }
 }
