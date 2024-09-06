@@ -7,40 +7,26 @@ import hub.troubleshooters.soundlink.data.models.User;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class UserFactory implements ModelFactory<User> {
-
-    private final DatabaseConnection connection;
+public class UserFactory extends ModelFactory<User> {
 
     @Inject
     public UserFactory(DatabaseConnection connection) {
-        this.connection = connection;
+        super(connection, "Users");
     }
 
     @Override
     public void save(User model) throws SQLException {
-        final String sql = "UPDATE Users SET Username = ?, HashedPassword = ?, Created = ?, LastLogin = ?, Permission = ? WHERE Id = ?;";
+        final String sql = "UPDATE Users SET Username = ?, HashedPassword = ?, Created = ?, LastLogin = ? WHERE Id = ?;";
         connection.executeUpdate(sql, statement -> {
-            statement.setString(1, model.getUsername());
-            statement.setString(2, model.getHashedPassword());
-            statement.setDate(3, new java.sql.Date(model.getCreated().getTime()));
-            statement.setDate(4, new java.sql.Date(model.getLastLogin().getTime()));
-            statement.setInt(5, model.getPermission());
-            statement.setInt(6, model.getId());
+            var param = 1;
+            statement.setString(param++, model.getUsername());
+            statement.setString(param++, model.getHashedPassword());
+            statement.setDate(param++, new java.sql.Date(model.getCreated().getTime()));
+            statement.setDate(param++, new java.sql.Date(model.getLastLogin().getTime()));
+            statement.setInt(param, model.getId());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update user. Rows affected: " + rowsAffected);
-            }
-        });
-    }
-
-    @Override
-    public void delete(int id) throws SQLException {
-        final String sql = "DELETE FROM Users WHERE Id = ?";
-        connection.executeUpdate(sql, statement -> {
-            statement.setInt(1, id);
-        }, rowsAffected -> {
-            if (rowsAffected != 1) {
-                throw new SQLException("Failed to delete user. Rows affected: " + rowsAffected);
             }
         });
     }
@@ -51,12 +37,11 @@ public class UserFactory implements ModelFactory<User> {
         var user = connection.executeQuery(sql, statement -> statement.setInt(1, id), executor -> {
             if (executor.next()) {
                 return new User(
-                        executor.getInt("Id"),
-                        executor.getString("Username"),
-                        executor.getString("HashedPassword"),
-                        executor.getDate("Created"),
-                        executor.getDate("LastLogin"),
-                        executor.getInt("Permission")
+                    executor.getInt("Id"),
+                    executor.getString("Username"),
+                    executor.getString("HashedPassword"),
+                    executor.getDate("Created"),
+                    executor.getDate("LastLogin")
                 );
             }
             return null;
@@ -82,8 +67,7 @@ public class UserFactory implements ModelFactory<User> {
                         executor.getString("Username"),
                         executor.getString("HashedPassword"),
                         executor.getDate("Created"),
-                        executor.getDate("LastLogin"),
-                        executor.getInt("Permission")
+                        executor.getDate("LastLogin")
                 );
             }
             return null;

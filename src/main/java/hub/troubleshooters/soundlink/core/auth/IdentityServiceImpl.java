@@ -1,5 +1,7 @@
 package hub.troubleshooters.soundlink.core.auth;
 
+import hub.troubleshooters.soundlink.data.models.Community;
+
 import java.util.List;
 import java.util.Set;
 
@@ -17,15 +19,15 @@ public class IdentityServiceImpl implements IdentityService {
     }
 
     @Override
-    public boolean isAuthorized(Scope... scopes) {
+    public boolean isAuthorized(Community community, Scope... scopes) {
         if (userContext == null) {
             return false;
         }
 
         // superadmin override
-        if (userContext.getCurrentScopes().contains(Scope.SUPERADMIN)) {
+        if (userContext.getCurrentScopes(community).contains(Scope.SUPERADMIN)) {
             return true;
         }
-        return userContext.getCurrentScopes().containsAll(List.of(scopes));
+        return userContext.getCurrentScopes(community).containsAll(List.of(scopes));
     }
 }

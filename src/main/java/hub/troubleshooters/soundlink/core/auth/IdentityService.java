@@ -1,6 +1,6 @@
 package hub.troubleshooters.soundlink.core.auth;
 
-import java.util.Set;
+import hub.troubleshooters.soundlink.data.models.Community;
 
 public interface IdentityService {
     void setUserContext(UserContext userContext);
@@ -11,5 +11,5 @@ public interface IdentityService {
      * @param scopes The scopes to check.
      * @return True if the user is authorized, false otherwise.
      */
-    boolean isAuthorized(Scope... scopes);
+    boolean isAuthorized(Community community, Scope... scopes);
 }

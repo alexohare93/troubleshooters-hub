@@ -33,7 +33,7 @@ public class SharedController {
 
     @FXML
     public void initialize() {
-        usernameMenuButton.setText(identityService.getUserContext().getUser().username());
+        usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
     }
 
     public void setOutlet(Parent content) {
