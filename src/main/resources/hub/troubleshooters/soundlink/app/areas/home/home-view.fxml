@@ -1,16 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <!-- Header bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+            <children>
+                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Discover" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" />
+            </children>
+        </HBox>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
-   <children>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="53.0" prefWidth="604.0" text="Welcome to SoundLink" textAlignment="CENTER" textFill="#ff7878">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-   </children>
-</VBox>
+        <!-- Central container for image and experience cards -->
+        <VBox alignment="CENTER" layoutX="50.0" layoutY="100.0" spacing="40.0">
+            <!-- Pane with background image and text -->
+            <Pane prefHeight="300.0" prefWidth="700.0" style="-fx-background-color: #004d40;">
+                <children>
+                    <!-- ImageView for the headphones -->
+                    <ImageView fitHeight="300.0" fitWidth="700.0" opacity="0.4" preserveRatio="true">
+                        <image>
+                            <Image url="@/path/to/your/headphone_image.png" />
+                        </image>
+                    </ImageView>
+                    
+                    <!-- VBox with text overlay -->
+                    <VBox alignment="CENTER" prefHeight="300.0" prefWidth="700.0" spacing="20.0">
+                        <Label style="-fx-font-size: 36px; -fx-text-fill: white;" text="Connect with Your Musical Tribe" />
+                        <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Explore local music scenes and find your people." />
+                        <Button style="-fx-background-color: #ffcc00; -fx-font-size: 16px;" text="JOIN US" />
+                    </VBox>
+                </children>
+            </Pane>
+
+            <!-- HBox for the experience cards, centered horizontally -->
+            <HBox alignment="CENTER" spacing="40.0">
+                <!-- Build Connections Card -->
+                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Build Connections" />
+                    <Label layoutX="3.0" style="-fx-font-size: 14px;" text="Meet people who share your taste in music and form lasting bonds." wrapText="true" />
+                </VBox>
+                <!-- Create Experiences Card -->
+                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Experiences" />
+                    <Label style="-fx-font-size: 14px;" text="Collaborate with your community to craft unique musical events." wrapText="true" />
+                </VBox>
+                <!-- Find Your Beat Card -->
+                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Find Your Beat" />
+                    <Label style="-fx-font-size: 14px;" text="Discover events and experiences that match your unique taste." wrapText="true" />
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Footer -->
+        <Label layoutX="300.0" layoutY="570.0" style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
+    </children>
+</AnchorPane>
