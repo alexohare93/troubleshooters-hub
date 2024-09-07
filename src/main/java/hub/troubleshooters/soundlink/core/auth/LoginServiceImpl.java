@@ -2,21 +2,21 @@ package hub.troubleshooters.soundlink.core.auth;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.google.inject.Inject;
-import hub.troubleshooters.soundlink.core.data.Map;
-import hub.troubleshooters.soundlink.core.data.models.UserModel;
+import hub.troubleshooters.soundlink.data.factories.CommunityUserFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
-import hub.troubleshooters.soundlink.data.models.User;
 
 import java.sql.SQLException;
 
 public class LoginServiceImpl implements LoginService {
     private final UserFactory userFactory;
+    private final CommunityUserFactory communityUserFactory;
     private final IdentityService identityService;
 
     @Inject
-    public LoginServiceImpl(IdentityService identityService, UserFactory userFactory) {
+    public LoginServiceImpl(IdentityService identityService, UserFactory userFactory, CommunityUserFactory communityUserFactory) {
         this.identityService = identityService;
         this.userFactory = userFactory;
+        this.communityUserFactory = communityUserFactory;
     }
 
     @Override
@@ -31,8 +31,11 @@ public class LoginServiceImpl implements LoginService {
                 return new AuthResult(new AuthException("Incorrect username or password"));
             }
             user.setLastLogin(java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
-            var userModel = Map.userModel(user);
-            identityService.setUserContext(new UserContext(userModel));
+
+            // get all community memberships for this user
+            var memberships = communityUserFactory.get(user);
+
+            identityService.setUserContext(new UserContext(user, memberships));
             userFactory.save(user);
             return new AuthResult(); // successful login
         } catch (SQLException e) {
