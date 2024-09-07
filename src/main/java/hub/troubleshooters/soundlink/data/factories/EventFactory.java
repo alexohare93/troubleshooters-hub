@@ -35,9 +35,19 @@ public class EventFactory implements ModelFactory<Event> {
 
 	@Override
 	public void delete(int id) throws SQLException {
-		final String sql = "DELETE FROM Events WHERE Id = ?";
-		connection.executeUpdate(sql, statement -> statement.setInt(1, id), rowsAffected -> {
-			if (rowsAffected != 1) {
+		// transaction prevents the partial success of the query
+		final String sql =
+				"BEGIN;" +
+				"DELETE FROM EventAttendees WHERE EventId = ?;" +
+				"DELETE FROM EventComments WHERE EventId = ?;" +
+				"DELETE FROM Events WHERE Id = ?;" +
+				"COMMIT;";
+		connection.executeUpdate(sql, statement -> {
+				statement.setInt(1, id);
+				statement.setInt(2, id);
+				statement.setInt(3, id);
+			}, rowsAffected -> {
+			if (rowsAffected == 0) {
 				throw new SQLException("Failed to delete event. Rows Affected: " + rowsAffected);
 			}
 		});

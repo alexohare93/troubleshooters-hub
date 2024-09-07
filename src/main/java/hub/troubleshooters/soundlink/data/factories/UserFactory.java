@@ -18,14 +18,13 @@ public class UserFactory implements ModelFactory<User> {
 
     @Override
     public void save(User model) throws SQLException {
-        final String sql = "UPDATE Users SET Username = ?, HashedPassword = ?, Created = ?, LastLogin = ?, Permission = ? WHERE Id = ?;";
+        final String sql = "UPDATE Users SET Username = ?, HashedPassword = ?, Created = ?, LastLogin = ? WHERE Id = ?;";
         connection.executeUpdate(sql, statement -> {
             statement.setString(1, model.getUsername());
             statement.setString(2, model.getHashedPassword());
             statement.setDate(3, new java.sql.Date(model.getCreated().getTime()));
             statement.setDate(4, new java.sql.Date(model.getLastLogin().getTime()));
-            statement.setInt(5, model.getPermission());
-            statement.setInt(6, model.getId());
+            statement.setInt(5, model.getId());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update user. Rows affected: " + rowsAffected);
@@ -33,13 +32,27 @@ public class UserFactory implements ModelFactory<User> {
         });
     }
 
+    // Deletes the user along with all of their comments, posts and registrations in communities and events.
     @Override
     public void delete(int id) throws SQLException {
-        final String sql = "DELETE FROM Users WHERE Id = ?";
+        // transaction prevents the partial success of the query
+        final String sql =
+                "BEGIN;" +
+                "DELETE FROM CommunityPosts WHERE UserId = ?;" +
+                "DELETE FROM EventComments WHERE UserId = ?;" +
+                "DELETE FROM CommunityMembers WHERE UserId = ?;" +
+                "DELETE FROM EventAttendees WHERE UserId = ?;" +
+                "DELETE FROM Users WHERE Id = ?;" +
+                "COMMIT;";
+
         connection.executeUpdate(sql, statement -> {
             statement.setInt(1, id);
+            statement.setInt(2, id);
+            statement.setInt(3, id);
+            statement.setInt(4, id);
+            statement.setInt(5, id);
         }, rowsAffected -> {
-            if (rowsAffected != 1) {
+            if (rowsAffected == 0) {
                 throw new SQLException("Failed to delete user. Rows affected: " + rowsAffected);
             }
         });
@@ -55,8 +68,7 @@ public class UserFactory implements ModelFactory<User> {
                         executor.getString("Username"),
                         executor.getString("HashedPassword"),
                         executor.getDate("Created"),
-                        executor.getDate("LastLogin"),
-                        executor.getInt("Permission")
+                        executor.getDate("LastLogin")
                 );
             }
             return null;
@@ -82,8 +94,7 @@ public class UserFactory implements ModelFactory<User> {
                         executor.getString("Username"),
                         executor.getString("HashedPassword"),
                         executor.getDate("Created"),
-                        executor.getDate("LastLogin"),
-                        executor.getInt("Permission")
+                        executor.getDate("LastLogin")
                 );
             }
             return null;

@@ -32,9 +32,25 @@ public class CommunityFactory implements ModelFactory<Community> {
 
 	@Override
 	public void delete(int id) throws SQLException {
-		final String sql = "DELETE FROM Communities WHERE Id = ?";
-		connection.executeUpdate(sql, statement -> statement.setInt(1, id), rowsAffected -> {
-			if (rowsAffected != 1) {
+		// transaction prevents the partial success of the query
+		final String sql =
+				"BEGIN;" +
+				"DELETE FROM CommunityPosts WHERE CommunityId = ?;" +
+				"DELETE FROM CommunityMembers WHERE CommunityId = ?;" +
+				"DELETE FROM EventComments WHERE EventId IN (SELECT Id FROM Events WHERE CommunityId = ?);" +
+				"DELETE FROM EventAttendees WHERE EventId IN (SELECT Id FROM Events WHERE CommunityId = ?);" +
+				"DELETE FROM Events WHERE CommunityId = ?;" +
+				"DELETE FROM Communities WHERE Id = ?;" +
+				"COMMIT;";
+		connection.executeUpdate(sql, statement -> {
+				statement.setInt(1, id);
+				statement.setInt(2, id);
+				statement.setInt(3, id);
+				statement.setInt(4, id);
+				statement.setInt(5, id);
+				statement.setInt(6, id);
+			}, rowsAffected -> {
+			if (rowsAffected == 0) {
 				throw new SQLException("Failed to update community. Rows Affected: " + rowsAffected);
 			}
 		});

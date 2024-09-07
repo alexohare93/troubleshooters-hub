@@ -3,8 +3,7 @@ CREATE TABLE Users (
     Username TEXT NOT NULL UNIQUE,
     HashedPassword TEXT NOT NULL,
     Created DATETIME DEFAULT CURRENT_TIMESTAMP,
-    LastLogin DATETIME,
-    Permission INTEGER DEFAULT 0
+    LastLogin DATETIME
 );
 
 CREATE TABLE Communities (
@@ -20,7 +19,8 @@ CREATE TABLE CommunityMembers (
     UserId INTEGER NOT NULL,
     Permission INTEGER DEFAULT 0,
     FOREIGN KEY (CommunityId) REFERENCES Communities(Id),
-    FOREIGN KEY (UserId) REFERENCES Users(Id)
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    UNIQUE (CommunityId, UserId)
 );
 
 CREATE TABLE CommunityPosts (
@@ -51,7 +51,8 @@ CREATE TABLE EventAttendees (
     UserId INTEGER NOT NULL,
     Permission INTEGER DEFAULT 0,
     FOREIGN KEY (EventId) REFERENCES Events(Id),
-    FOREIGN KEY (UserId) REFERENCES Users(Id)
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    UNIQUE (EventId, UserId)
 );
 
 CREATE TABLE EventComments (
@@ -66,11 +67,11 @@ CREATE TABLE EventComments (
 
 -- test data
 
--- username is 'admin', password is '123' and is superadmin
-INSERT INTO Users (Username, HashedPassword, Permission) VALUES ('admin', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli', 1);
+-- username is 'admin', password is '123'
+INSERT INTO Users (Username, HashedPassword, Permission) VALUES ('admin', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
--- username is 'user', password is '123' and is able to read and write events
-INSERT INTO Users (Username, HashedPassword, Permission) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli', 6);
+-- username is 'user', password is '123'
+INSERT INTO Users (Username, HashedPassword, Permission) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
 INSERT INTO Communities (Name, Genre, Description) VALUES ('Test Community', 'Test Rock', 'This is a test Community');
 
