@@ -65,7 +65,7 @@
                     <!-- ImageView for the headphones -->
                     <ImageView fitHeight="300.0" fitWidth="700.0" opacity="0.4" preserveRatio="true">
                         <image>
-                            <Image url="@/path/to/your/headphone_image.png" />
+                            <Image url="headphone_image.png" />
                         </image>
                     </ImageView>
                     
