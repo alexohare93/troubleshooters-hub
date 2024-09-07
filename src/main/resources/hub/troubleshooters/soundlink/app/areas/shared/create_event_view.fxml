@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <!-- Header bar -->
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+            <children>
+                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Discover" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" />
+                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" />
+            </children>
+        </HBox>
+
+        <!-- Main content for event creation form -->
+        <VBox alignment="CENTER" layoutX="100.0" layoutY="60.0" prefHeight="300.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
+            <children>
+                <!-- Title -->
+                <Label style="-fx-text-fill: #004d40; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a New Event" />
+                
+                <!-- Event Name -->
+                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label text="Event Name:" style="-fx-font-size: 16px;" />
+                    <TextField promptText="Enter event name" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+                </VBox>
+
+                <!-- Date -->
+                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label text="Date:" style="-fx-font-size: 16px;" />
+                    <DatePicker style="-fx-background-color: white; -fx-border-color: lightgray;" promptText="dd/mm/yyyy" />
+                </VBox>
+
+                <!-- Location -->
+                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label text="Location:" style="-fx-font-size: 16px;" />
+                    <TextField promptText="Enter location" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+                </VBox>
+
+                <!-- Description -->
+                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label text="Description:" style="-fx-font-size: 16px;" />
+                    <TextArea promptText="Enter event description" prefHeight="100.0" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+                </VBox>
+
+                <!-- Create Event Button -->
+                <Button mnemonicParsing="false" style="-fx-background-color: #004d40; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Event" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
+
