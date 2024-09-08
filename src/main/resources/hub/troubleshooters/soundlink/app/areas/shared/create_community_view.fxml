@@ -13,10 +13,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- Header bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -32,7 +32,7 @@
         <VBox alignment="CENTER" layoutX="101.0" layoutY="57.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="535.0" prefWidth="599.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
             <children>
                 <!-- Title -->
-                <Label style="-fx-text-fill: #2f4f2f; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a Community" />
+                <Label style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a Community" />
 
                 <!-- Community Name -->
                 <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
