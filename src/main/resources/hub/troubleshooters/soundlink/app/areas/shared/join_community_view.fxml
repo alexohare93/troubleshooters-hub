@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.CheckBox?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -35,8 +36,15 @@
                 <Label style="-fx-font-size: 16px;" text="Members: 320" />
                 <Label style="-fx-font-size: 16px;" text="Discussions: 24 active discussions" />
                 <Label style="-fx-font-size: 16px;" text="Upcoming Events: 3" />
-            </VBox>
+                <!-- HBox for Checkbox and Guidelines Label -->
+                <HBox alignment="CENTER_LEFT" spacing="10.0">                    
+                    <Label wrapText="true" text="Guidelines will promote respect, inclusivity, and cultural sensitivity. All users must follow these rules to create a welcoming and safe environment." style="-fx-font-size: 16px; -fx-text-fill: gray;" />
+                </HBox>
 
+                <!-- Checkbox for Agreement -->
+                <CheckBox text="I agree to the community guidelines" style="-fx-font-size: 14px;" />
+            </VBox>
+ 
             <!-- Join Community Button -->
             <Button prefWidth="600.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" text="Join Community" />
         </VBox>
