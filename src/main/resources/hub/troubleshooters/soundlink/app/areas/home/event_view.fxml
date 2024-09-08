@@ -38,6 +38,9 @@
                 <Label style="-fx-font-size: 14px;" text="Location: The Promenade, Robina Town Centre" />
                 <Label style="-fx-font-size: 14px;" text="Duration: 4 hr" />
                 <Label style="-fx-font-size: 14px;" text="Public: Anyone on or off Facebook" />
+                <!-- RSVP Button -->
+                <Button text="RSVP" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" prefWidth="100.0" />
+
             </VBox>
 
             <!-- Guests Section -->
@@ -48,9 +51,8 @@
                 <Label style="-fx-font-size: 14px;" text="Maria Smith" />
                 <Label style="-fx-font-size: 14px;" text="James Brown" />
                 <Label style="-fx-font-size: 14px;" text="Mary Jane" />
-                <Label style="-fx-font-size: 14px;" text="Peter Parker" />
-                <Label style="-fx-font-size: 14px;" text="Tony Stark" />
-                <Button style="-fx-background-color: #004d40; -fx-text-fill: white;" text="Invite" />
+                <Label style="-fx-font-size: 14px;" text="Peter Parker" />                
+                <Button text="Invite" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" prefWidth="100.0" />
             </VBox>
         </HBox>
 
