@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- Header bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -29,7 +29,7 @@
         <VBox alignment="CENTER" layoutX="100.0" layoutY="60.0" prefHeight="300.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
             <children>
                 <!-- Title -->
-                <Label style="-fx-text-fill: #004d40; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a New Event" />
+                <Label style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a New Event" />
                 
                 <!-- Event Name -->
                 <VBox alignment="CENTER_LEFT" spacing="10.0">
@@ -56,7 +56,7 @@
                 </VBox>
 
                 <!-- Create Event Button -->
-                <Button mnemonicParsing="false" style="-fx-background-color: #004d40; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Event" />
+                <Button mnemonicParsing="false" style="-fx-background-color: #fa8072; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Event" />
             </children>
         </VBox>
     </children>
