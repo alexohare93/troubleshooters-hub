@@ -12,10 +12,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import java.lang.String?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- Header bar with buttons on the right side -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
                 
@@ -35,7 +35,7 @@
         <HBox layoutX="20.0" layoutY="100.0" spacing="30.0">
             <!-- Filters Sidebar -->
             <VBox prefWidth="250.0" style="-fx-background-color: white; -fx-padding: 20px; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-border-radius: 5px;">
-                <Label text="Advanced Search" style="-fx-text-fill: #0099cc; -fx-font-size: 18px; -fx-font-weight: bold;" />
+                <Label text="Advanced Search" style="-fx-text-fill: #fa8072; -fx-font-size: 18px; -fx-font-weight: bold;" />
                 <Label text="Event Type:" style="-fx-padding: 10 0 0 0;" />
                 <ComboBox prefWidth="200.0">
                     <items>
@@ -73,18 +73,20 @@
             <VBox spacing="20.0">
                 <!-- Event Item Card -->
                 <VBox alignment="CENTER" prefHeight="100.0" prefWidth="450.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0099cc;" text="Summer Music Festival" />
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;" text="Summer Music Festival" />
                     <Label text="Location: New York" />
                     <Label text="Date: August 15, 2024" />
-                    <Button text="Get Tickets" style="-fx-background-color: #ffcc00; -fx-text-fill: white;" />
+                    <Label text="" />
+                    <Button text="Sign Up " style="-fx-background-color: #ffcc00; -fx-text-fill: white;" />
                 </VBox>
 
                 <!-- Additional Event Cards -->
                 <VBox alignment="CENTER" prefHeight="100.0" prefWidth="450.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0099cc;" text="Jazz Night" />
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;" text="Jazz Night" />
                     <Label text="Location: Chicago" />
                     <Label text="Date: September 20, 2024" />
-                    <Button text="Get Tickets" style="-fx-background-color: #ffcc00; -fx-text-fill: white;" />
+                    <Label text="" />
+                    <Button text="Sign Up" style="-fx-background-color: #ffcc00; -fx-text-fill: white;" />
                 </VBox>
             </VBox>
         </HBox>
