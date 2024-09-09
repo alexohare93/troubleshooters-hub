@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- Header bar with SoundLink title -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="Sound Link" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -23,26 +25,33 @@
         </HBox>
 
         <!-- Main Content for Community Page -->
-        <VBox alignment="CENTER" layoutX="100.0" layoutY="110.0" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
+        <VBox alignment="CENTER" layoutX="100.0" layoutY="84.0" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
             
             <!-- Community Title -->
-            <Label style="-fx-text-fill: #2f4f2f; -fx-font-size: 28px; -fx-font-weight: bold;" text="Rock Enthusiasts Community" />
+            <Label style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Rock Enthusiasts Community" />
 
             <!-- Community Description -->
-            <Label style="-fx-text-fill: gray; -fx-font-size: 16px; -fx-wrap-text: true;" text="This is a community for all rock music enthusiasts. Join us to share your experiences, attend rock events, and participate in discussions." />
-
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <TextFlow prefWidth="650">
+                    <Text style="-fx-font-size: 16px; -fx-fill: gray;" text="This is a community for all rock music enthusiasts. Join us to share your experiences, attend rock events, and participate in discussions." />
+                </TextFlow>
+            </HBox>
+            
             <!-- Community Stats or Additional Info -->
             <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
                 <Label style="-fx-font-size: 16px;" text="Members: 320" />
                 <Label style="-fx-font-size: 16px;" text="Discussions: 24 active discussions" />
                 <Label style="-fx-font-size: 16px;" text="Upcoming Events: 3" />
-                <!-- HBox for Checkbox and Guidelines Label -->
-                <HBox alignment="CENTER_LEFT" spacing="10.0">                    
-                    <Label wrapText="true" text="Guidelines will promote respect, inclusivity, and cultural sensitivity. All users must follow these rules to create a welcoming and safe environment." style="-fx-font-size: 16px; -fx-text-fill: gray;" />
-                </HBox>
+            <!-- HBox for Checkbox and Guidelines TextFlow -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <TextFlow prefWidth="650">
+                    <Text style="-fx-font-size: 16px; -fx-fill: gray;" text="Guidelines will promote respect, inclusivity, and cultural sensitivity. All users must follow these rules to create a welcoming and safe environment." />
+                </TextFlow>
+            </HBox>
+
 
                 <!-- Checkbox for Agreement -->
-                <CheckBox text="I agree to the community guidelines" style="-fx-font-size: 14px;" />
+                <CheckBox style="-fx-font-size: 14px;" text="I agree to the community guidelines" />
             </VBox>
  
             <!-- Join Community Button -->
