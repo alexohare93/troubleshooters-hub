@@ -7,10 +7,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #e6ffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- Header bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #0099cc;">
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
             <children>
                 <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
                 <Region HBox.hgrow="ALWAYS" />
@@ -24,42 +24,38 @@
 
         <!-- Event Title and Time -->
         <VBox alignment="CENTER" layoutX="0" layoutY="60" prefWidth="800.0" spacing="10.0">
-            <Label style="-fx-font-size: 28px; -fx-text-fill: #004d40; -fx-font-weight: bold;" text="Rock Music Fest" />
-            <Label style="-fx-font-size: 16px; -fx-text-fill: #004d40;" text="Thursday 19 December 2024 | 16:00 - 20:00" />
+            <Label style="-fx-font-size: 28px; -fx-text-fill: #fa8072; -fx-font-weight: bold;" text="Rock Music Fest" />
+            <Label style="-fx-font-size: 16px; -fx-text-fill: #fa8072;" text="Thursday 19 December 2024 | 16:00 - 20:00" />
+            <Label layoutX="40.0" layoutY="524.0" style="-fx-font-size: 14px; -fx-text-fill: #fa8072; -fx-padding: 0 50 0 50;" text="The Rock Music Fest brings together top artists and bands for an unforgettable night under the stars." wrapText="true" />
         </VBox>
 
         <!-- Event Details and Guests Container -->
-        <HBox alignment="CENTER" layoutX="50.0" layoutY="150.0" prefHeight="300.0" prefWidth="700.0" spacing="40.0">
+        <HBox alignment="CENTER" layoutX="50.0" layoutY="205.0" prefHeight="300.0" prefWidth="700.0" spacing="40.0">
             <!-- Event Details Section -->
             <VBox prefWidth="300.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 20;">
-                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #004d40;" text="Event Details" />
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;" text="Event Details" />
                 <Label style="-fx-font-size: 14px;" text="1.4K people responded" />
                 <Label style="-fx-font-size: 14px;" text="Event by: Sound Link" />
                 <Label style="-fx-font-size: 14px;" text="Location: The Promenade, Robina Town Centre" />
                 <Label style="-fx-font-size: 14px;" text="Duration: 4 hr" />
                 <Label style="-fx-font-size: 14px;" text="Public: Anyone on or off Facebook" />
                 <!-- RSVP Button -->
-                <Button text="RSVP" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" prefWidth="100.0" />
-
-            </VBox>
-
+                <Button prefWidth="100.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" text="RSVP" />
+   
+                  </VBox>
+   
             <!-- Guests Section -->
             <VBox prefWidth="300.0" spacing="10.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 20;">
-                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #004d40;" text="Guests" />
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;" text="Guests" />
                 <Label style="-fx-font-size: 14px;" text="26 Going | 1.4K Interested" />
                 <Label style="-fx-font-size: 14px;" text="Alex Johnson" />
                 <Label style="-fx-font-size: 14px;" text="Maria Smith" />
                 <Label style="-fx-font-size: 14px;" text="James Brown" />
                 <Label style="-fx-font-size: 14px;" text="Mary Jane" />
                 <Label style="-fx-font-size: 14px;" text="Peter Parker" />                
-                <Button text="Invite" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" prefWidth="100.0" />
+                <Button prefWidth="100.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px;" text="Invite" />
             </VBox>
         </HBox>
-
-        <!-- Event Description -->
-        <Label layoutX="40.0" layoutY="524.0" style="-fx-font-size: 14px; -fx-text-fill: #004d40; -fx-padding: 0 50 0 50;" text="The Rock Music Fest brings together top artists and bands for an unforgettable night under the stars." wrapText="true" />
-
-        <!-- Footer -->
-        <Label layoutX="300.0" layoutY="570.0" style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
+        
     </children>
 </AnchorPane>
