@@ -43,8 +43,29 @@ For any new table created in the database, the following steps should be followe
 
 1. create the table in the `/database.sql` file
 2. create a corresponding model in the `data.models` package
-3. create a business layer model in the `core.data.models` (optional)
-    1. add a static method to the `core.data.Map` class to map between the two models
+3. create a relevant factory in the `data.models.factories` package which extends `ModelFactory` and implement the needed methods
+4. register the factory as a singleton in the `app.AppModule` class
+
+Now, whenever you want to create, read, update, and destroy any objects of that DB type, you can inject the factory you just created into the necessary service.
+
+e.g.
+
+```java
+// this example file would be located at core.auth.LoginService
+
+private final UserFactory userFactory;
+
+// injecting the newly created UserFactory into our service using the @Inject decorator
+@Inject
+public LoginService(UserFactory userFactory) {
+    this.userFactory = userFactory;
+}
+
+public void login(String username) {
+    User user = userFactory.get(username);  // using the injected UserFactory to call the DB to get the user.
+    // ...
+}
+```
 
 ## Adding a new feature to the application
 
