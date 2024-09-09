@@ -41,6 +41,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -54,6 +56,8 @@
                 <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" />
                 <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" />
                 <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" />
+                    <!-- Notification Button -->
+                <Button fx:id="notificationButton" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Notifications" onAction="#handleNotifications" />
             </children>
         </HBox>
 
@@ -65,7 +69,7 @@
                     <!-- ImageView for the headphones -->
                     <ImageView fitHeight="300.0" fitWidth="700.0" opacity="0.4" preserveRatio="true">
                         <image>
-                            <Image url="headphone_image.png" />
+                            <Image url="@/path/to/your/headphone_image.png" />
                         </image>
                     </ImageView>
                     
@@ -73,7 +77,7 @@
                     <VBox alignment="CENTER" prefHeight="300.0" prefWidth="700.0" spacing="20.0">
                         <Label style="-fx-font-size: 36px; -fx-text-fill: white;" text="Connect with Your Musical Tribe" />
                         <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Explore local music scenes and find your people." />
-                        <Button style="-fx-background-color: #008075; -fx-font-size: 16px;" text="JOIN US" />
+                        <Button style="-fx-background-color: #007bff; -fx-font-size: 16px;" text="JOIN US" />
                     </VBox>
                 </children>
             </Pane>
@@ -81,24 +85,23 @@
             <!-- HBox for the experience cards, centered horizontally -->
             <HBox alignment="CENTER" spacing="40.0">
                 <!-- Build Connections Card -->
-                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Build Connections" />
-                    <Label layoutX="3.0" style="-fx-font-size: 14px;" text="Meet people who share your taste in music and form lasting bonds." wrapText="true" />
+                <VBox alignment="CENTER" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Build Connections" />
+                    <Label layoutX="3.0" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Meet people who share your taste in music and form lasting bonds." wrapText="true" prefHeight="100.0" />
                 </VBox>
+
                 <!-- Create Experiences Card -->
-                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Create Experiences" />
-                    <Label style="-fx-font-size: 14px;" text="Collaborate with your community to craft unique musical events." wrapText="true" />
+                <VBox alignment="CENTER" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Create Experiences" />
+                    <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Collaborate with your community to craft unique musical events." wrapText="true" prefHeight="100.0" />
                 </VBox>
+
                 <!-- Find Your Beat Card -->
-                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Find Your Beat" />
-                    <Label style="-fx-font-size: 14px;" text="Discover events and experiences that match your unique taste." wrapText="true" />
+                <VBox alignment="CENTER" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
+                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Find Your Beat" />
+                    <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Discover events and experiences that match your unique taste." wrapText="true" prefHeight="100.0" />
                 </VBox>
             </HBox>
-        </VBox>
-
-        <!-- Footer -->
-        <Label layoutX="300.0" layoutY="570.0" style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
+        </VBox>        
     </children>
 </AnchorPane>
