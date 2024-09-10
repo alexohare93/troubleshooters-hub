@@ -7,13 +7,11 @@ import hub.troubleshooters.soundlink.data.models.User;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class UserFactory implements ModelFactory<User> {
-
-    private final DatabaseConnection connection;
+public class UserFactory extends ModelFactory<User> {
 
     @Inject
     public UserFactory(DatabaseConnection connection) {
-        this.connection = connection;
+        super(connection, "Users");
     }
 
     @Override
@@ -32,43 +30,17 @@ public class UserFactory implements ModelFactory<User> {
         });
     }
 
-    // Deletes the user along with all of their comments, posts and registrations in communities and events.
-    @Override
-    public void delete(int id) throws SQLException {
-        // transaction prevents the partial success of the query
-        final String sql =
-                "BEGIN;" +
-                "DELETE FROM CommunityPosts WHERE UserId = ?;" +
-                "DELETE FROM EventComments WHERE UserId = ?;" +
-                "DELETE FROM CommunityMembers WHERE UserId = ?;" +
-                "DELETE FROM EventAttendees WHERE UserId = ?;" +
-                "DELETE FROM Users WHERE Id = ?;" +
-                "COMMIT;";
-
-        connection.executeUpdate(sql, statement -> {
-            statement.setInt(1, id);
-            statement.setInt(2, id);
-            statement.setInt(3, id);
-            statement.setInt(4, id);
-            statement.setInt(5, id);
-        }, rowsAffected -> {
-            if (rowsAffected == 0) {
-                throw new SQLException("Failed to delete user. Rows affected: " + rowsAffected);
-            }
-        });
-    }
-
     @Override
     public Optional<User> get(int id) throws SQLException {
         final String sql = "SELECT * FROM Users WHERE Id = ?";
         var user = connection.executeQuery(sql, statement -> statement.setInt(1, id), executor -> {
             if (executor.next()) {
                 return new User(
-                        executor.getInt("Id"),
-                        executor.getString("Username"),
-                        executor.getString("HashedPassword"),
-                        executor.getDate("Created"),
-                        executor.getDate("LastLogin")
+                    executor.getInt("Id"),
+                    executor.getString("Username"),
+                    executor.getString("HashedPassword"),
+                    executor.getDate("Created"),
+                    executor.getDate("LastLogin")
                 );
             }
             return null;

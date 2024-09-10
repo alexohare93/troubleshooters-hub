@@ -10,11 +10,13 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class SceneManagerImpl implements SceneManager {
     private final Stage primaryStage;
     private final Injector injector;
 
+    private Parent root = null;
     private SharedController sharedController = null;
 
     @Inject
@@ -28,7 +30,7 @@ public class SceneManagerImpl implements SceneManager {
         try {
             var loader = new FXMLLoader(SoundLinkApplication.class.getResource(fxmlFileName));
             loader.setControllerFactory(injector::getInstance);
-            Parent root = loader.load();
+            root = loader.load();
             var scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle(sceneName);
@@ -50,7 +52,9 @@ public class SceneManagerImpl implements SceneManager {
             var loader = new FXMLLoader(SoundLinkApplication.class.getResource(fxmlFileName));
             loader.setControllerFactory(injector::getInstance);
             Parent outletContent = loader.load();
-            initializeSharedView();
+            if (sharedController == null || root == null || !Objects.equals(root.getId(), "root")) {
+                initializeSharedView();
+            }
             sharedController.setOutlet(outletContent);
         } catch (IOException e) {
             e.printStackTrace(); // TODO: replace with proper error handling
@@ -61,7 +65,7 @@ public class SceneManagerImpl implements SceneManager {
         try {
             var loader = new FXMLLoader(SoundLinkApplication.class.getResource("areas/shared/shared-view.fxml"));
             loader.setControllerFactory(injector::getInstance);
-            Parent root = loader.load();
+            root = loader.load();
             sharedController = loader.getController();
             var scene = new Scene(root);
             primaryStage.setScene(scene);

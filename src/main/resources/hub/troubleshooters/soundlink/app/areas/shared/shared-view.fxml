@@ -4,28 +4,48 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
-   <top>
-      <HBox prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button onAction="#onHomeButtonPressed" mnemonicParsing="false" text="SoundLink" />
-            <Button onAction="#onEventsButtonPressed" mnemonicParsing="false" text="Events" />
-            <Button mnemonicParsing="false" text="Communities" />
-            <MenuButton fx:id="usernameMenuButton" mnemonicParsing="false" text="Me">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Profile" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                <MenuItem onAction="#onLogoutButtonPressed" mnemonicParsing="false" text="Logout" />
-              </items>
-            </MenuButton>
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <Pane fx:id="outlet" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center>
+<?import javafx.scene.layout.VBox?>
+<BorderPane fx:id="root" stylesheets="@navbar_style.css"
+            prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
+    <top>
+        <VBox> <!-- Use VBox to stack HBox and Pane -->
+            <HBox fx:id="navBar" alignment="CENTER" spacing="15" styleClass="nav-bar hbox" prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                <children>
+                    <!-- Logo -->
+                    <Button mnemonicParsing="false" text="SoundLink" styleClass="logo-button"/>
+
+                    <!-- Navigation Buttons -->
+                    <Button onAction="#onHomeButtonPressed" mnemonicParsing="false" text="Event" styleClass="nav-button" />
+                    <Button onAction="#onEventsButtonPressed" mnemonicParsing="false" text="Community" styleClass="nav-button" />
+                    <Button mnemonicParsing="false" text="Profile" styleClass="nav-button" />
+                    <Button mnemonicParsing="false" text="Settings" styleClass="nav-button" />
+
+                    <!-- Search Icon -->
+                    <Button mnemonicParsing="false" text="🔍" styleClass="icon-button" />
+
+                    <!-- Notifications Icon -->
+                    <Button mnemonicParsing="false" text="💬" styleClass="icon-button" />
+
+                    <!-- Profile/User Icon -->
+                    <MenuButton fx:id="usernameMenuButton" text="User" styleClass="icon-button">
+                        <items>
+                            <MenuItem text="Profile" />
+                            <SeparatorMenuItem />
+                            <MenuItem onAction="#onLogoutButtonPressed" text="Logout" />
+                        </items>
+                    </MenuButton>
+                </children>
+            </HBox>
+            <!-- Add the green separator line here -->
+            <Pane prefHeight="3" styleClass="green-separator"/> <!-- The green line separator -->
+        </VBox>
+    </top>
+    <center>
+        <Pane fx:id="outlet" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+    </center>
 </BorderPane>

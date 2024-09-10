@@ -9,6 +9,8 @@ import hub.troubleshooters.soundlink.core.auth.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
 import hub.troubleshooters.soundlink.core.auth.LoginServiceImpl;
+import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
+import hub.troubleshooters.soundlink.data.factories.CommunityUserFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
@@ -31,6 +33,8 @@ public class AppModule extends AbstractModule {
 
         // data factories
         bind(UserFactory.class).in(Singleton.class);
+        bind(CommunityFactory.class).in(Singleton.class);
+        bind(CommunityUserFactory.class).in(Singleton.class);
     }
 
     @Provides

@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.areas.shared;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.auth.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
@@ -8,11 +9,16 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
 
 public class SharedController {
     private final LoginService loginService;
     private final IdentityService identityService;
     private final SceneManager sceneManager;
+
+    @FXML
+    private Pane root;
 
     @FXML
     protected MenuButton usernameMenuButton;
@@ -28,8 +34,25 @@ public class SharedController {
     }
 
     @FXML
+    private HBox navBar;
+
+    @FXML
+    private Button eventButton, communityButton, profileButton, settingsButton;
+
+    @FXML
     public void initialize() {
-        usernameMenuButton.setText(identityService.getUserContext().getUser().username());
+        usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
+        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
+            adjustFontSize(newVal.doubleValue());
+        });
+    }
+
+    private void adjustFontSize(double width) {
+        double fontSize = width / 30;
+        eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
+        communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
+        profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
+        settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
     }
 
     public void setOutlet(Parent content) {
@@ -40,7 +63,7 @@ public class SharedController {
     @FXML
     protected void onLogoutButtonPressed() {
         loginService.logout();
-        sceneManager.switchToScene("areas/login/login-view.fxml");
+        sceneManager.switchToScene(Routes.LOGIN);
     }
 
     @FXML
@@ -50,6 +73,7 @@ public class SharedController {
 
     @FXML
     protected void onHomeButtonPressed() {
-        sceneManager.switchToOutletScene("areas/home/home-view.fxml");
+        sceneManager.switchToOutletScene(Routes.HOME);
     }
+
 }

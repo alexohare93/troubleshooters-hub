@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app;
 
 import atlantafx.base.theme.PrimerLight;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManagerImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -20,7 +21,7 @@ public class SoundLinkApplication extends Application {
         setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
 
         // switch to initial scene (login screen)
-        sceneManager.switchToScene("areas/login/login-view.fxml");
+        sceneManager.switchToScene(Routes.LOGIN);
     }
 
     public static void main(String[] args) {

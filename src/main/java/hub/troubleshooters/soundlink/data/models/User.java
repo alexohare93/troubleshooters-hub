@@ -12,6 +12,14 @@ public class User {
     private Date created;
     private Date lastLogin;
 
+    /**
+     * This constructor should only be used for testing.
+     * @param id
+     */
+    public User(int id) {
+        this.id = id;
+    }
+
     public User(int id, String username, String hashedPassword, Date created, Date lastLogin) {
         this.id = id;
         this.username = username;
