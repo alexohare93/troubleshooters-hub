@@ -44,7 +44,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
     <children>
         <!-- Header bar -->
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
