@@ -76,3 +76,14 @@ For any new feature added to the application, the following steps should be foll
 2. after completing the feature, create a pull request to merge the feature branch into the `main` branch (or any other branch that the feature is based on). Assign at least one reviewer to the pull request. Assigning isn't necessary if it's a simple bugfix but is recommended for features.
 
 3. after the pull request is approved, merge the feature branch into the `main` branch and delete the feature branch.
+
+
+## Adding tests to the application
+
+Testing is done using [JUnit 5](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/). Mockito is a mocking framework that allows you to create mock objects and stub the behavior of the methods of these objects which is useful we're using Dependency Injection, we can easily inject mock objects into the unit of code we're testing.
+
+To add a new test to the application, the following steps should be followed:
+
+1. create a new test class in the `test` directory with the same package structure as the class you're testing. The test class should have the same name as the class you're testing with the suffix `Test`, e.g. `LoginServiceTest` if you're testing the `LoginService` class.
+
+2. If you're testing a class that has dependencies, you should mock these dependencies using Mockito. You can do this by annotating the dependencies with `@Mock`. You can then inject these dependencies into the class you're testing using the `@InjectMocks` annotation. Follow the example in `test/java/hub/troubleshooters/soundlink/core/auth/LoginServiceImplTest.java`.
