@@ -1,0 +1,66 @@
+/* Navigation bar styling */
+.nav-bar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10;
+    -fx-alignment: center;
+}
+
+/* Glass button style */
+.glass-button {
+    -fx-background-color: #e0e0e0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-padding: 10 20;
+    -fx-min-width: 90px;
+    -fx-text-overrun: ellipsis-word;
+    -fx-alignment: center;
+}
+
+/* Green separator style */
+.green-separator {
+    -fx-background-color: green; /* Green color */
+    -fx-pref-height: 3px; /* Height of the line */
+    -fx-padding: 0;
+    -fx-margin: 0;
+}
+
+/* Logo button */
+.logo-button {
+    -fx-font-family: 'Arial Black', sans-serif;
+    -fx-font-size: 18px;
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+}
+
+/* Navigation buttons */
+.nav-button {
+    -fx-background-color: #e0e0e0;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-padding: 10 20;
+    -fx-min-width: 90px;
+}
+
+/* Icon button */
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-font-size: 16px;
+    -fx-min-width: 40px;
+    -fx-padding: 5 10;
+}
+
+/* Hover effects */
+.nav-button:hover, .icon-button:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+.nav-button:pressed, .icon-button:pressed {
+    -fx-background-color: #cccccc;
+}
+
