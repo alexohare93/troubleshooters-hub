@@ -15,8 +15,10 @@ CREATE TABLE Communities (
 );
 
 CREATE TABLE CommunityMembers (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
     CommunityId INTEGER NOT NULL,
     UserId INTEGER NOT NULL,
+    Created DATETIME DEFAULT CURRENT_TIMESTAMP,
     Permission INTEGER DEFAULT 0,
     FOREIGN KEY (CommunityId) REFERENCES Communities(Id),
     FOREIGN KEY (UserId) REFERENCES Users(Id),
@@ -47,6 +49,7 @@ CREATE TABLE Events (
 );
 
 CREATE TABLE EventAttendees (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
     EventId INTEGER NOT NULL,
     UserId INTEGER NOT NULL,
     Permission INTEGER DEFAULT 0,
@@ -68,10 +71,10 @@ CREATE TABLE EventComments (
 -- test data
 
 -- username is 'admin', password is '123'
-INSERT INTO Users (Username, HashedPassword, Permission) VALUES ('admin', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
+INSERT INTO Users (Username, HashedPassword) VALUES ('admin', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
 -- username is 'user', password is '123'
-INSERT INTO Users (Username, HashedPassword, Permission) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
+INSERT INTO Users (Username, HashedPassword) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
 INSERT INTO Communities (Name, Genre, Description) VALUES ('Test Community', 'Test Rock', 'This is a test Community');
 

@@ -7,12 +7,12 @@ import hub.troubleshooters.soundlink.data.models.Event;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class EventFactory implements ModelFactory<Event> {
-
-	private final DatabaseConnection connection;
+public class EventFactory extends ModelFactory<Event> {
 
 	@Inject
-	public EventFactory(DatabaseConnection connection) {this.connection = connection;}
+	public EventFactory(DatabaseConnection connection) {
+		super(connection, "Events");
+	}
 
 	@Override
 	public void save(Event event) throws SQLException {
@@ -29,26 +29,6 @@ public class EventFactory implements ModelFactory<Event> {
 		}, rowsAffected -> {
 			if (rowsAffected != 1) {
 				throw new SQLException("Failed to update event. Rows Affected: " + rowsAffected);
-			}
-		});
-	}
-
-	@Override
-	public void delete(int id) throws SQLException {
-		// transaction prevents the partial success of the query
-		final String sql =
-				"BEGIN;" +
-				"DELETE FROM EventAttendees WHERE EventId = ?;" +
-				"DELETE FROM EventComments WHERE EventId = ?;" +
-				"DELETE FROM Events WHERE Id = ?;" +
-				"COMMIT;";
-		connection.executeUpdate(sql, statement -> {
-				statement.setInt(1, id);
-				statement.setInt(2, id);
-				statement.setInt(3, id);
-			}, rowsAffected -> {
-			if (rowsAffected == 0) {
-				throw new SQLException("Failed to delete event. Rows Affected: " + rowsAffected);
 			}
 		});
 	}
@@ -71,7 +51,9 @@ public class EventFactory implements ModelFactory<Event> {
 			}
 			return null;
 		});
-		if (event == null) return Optional.empty();
+		if (event == null) {
+			return Optional.empty();
+		}
 		return Optional.of(event);
 	}
 
