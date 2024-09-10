@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
 
 public class SharedController {
     private final LoginService loginService;
@@ -32,8 +34,25 @@ public class SharedController {
     }
 
     @FXML
+    private HBox navBar;
+
+    @FXML
+    private Button eventButton, communityButton, profileButton, settingsButton;
+
+    @FXML
     public void initialize() {
         usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
+        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
+            adjustFontSize(newVal.doubleValue());
+        });
+    }
+
+    private void adjustFontSize(double width) {
+        double fontSize = width / 30;
+        eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
+        communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
+        profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
+        settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
     }
 
     public void setOutlet(Parent content) {
@@ -56,4 +75,5 @@ public class SharedController {
     protected void onHomeButtonPressed() {
         sceneManager.switchToOutletScene(Routes.HOME);
     }
+
 }
