@@ -41,45 +41,48 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
+<AnchorPane style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
     <children>
-        <!-- Central container for image and experience cards -->
-        <VBox alignment="CENTER" layoutX="50.0" layoutY="100.0" spacing="40.0">
-            <!-- Pane with background image and text -->
-            <Pane prefHeight="300.0" prefWidth="700.0" style="-fx-background-color: #fa8072;">
-                <children>
-                    <!-- VBox with text overlay -->
-                    <VBox alignment="CENTER" prefHeight="300.0" prefWidth="700.0" spacing="20.0">
+        <!-- StackPane fills the entire AnchorPane -->
+        <StackPane fx:id="subPane" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <!-- Central container for image and experience cards -->
+            <VBox alignment="CENTER" spacing="40.0" StackPane.alignment="CENTER" VBox.vgrow="ALWAYS">
+                <!-- Pane with background image and text -->
+                <Pane style="-fx-background-color: #fa8072;" VBox.vgrow="ALWAYS">
+                    <VBox alignment="CENTER" spacing="20.0" maxWidth="Infinity" maxHeight="Infinity">
                         <Label style="-fx-font-size: 36px; -fx-text-fill: white;" text="Connect with Your Musical Tribe" />
                         <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Explore local music scenes and find your people." />
                         <Button style="-fx-background-color: #007bff; -fx-font-size: 16px;" text="JOIN US" />
                     </VBox>
-                </children>
-            </Pane>
+                </Pane>
 
-            <!-- HBox for the experience cards, centered horizontally -->
-            <HBox alignment="CENTER" spacing="40.0">
-                <!-- Build Connections Card -->
-                <VBox alignment="CENTER" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Build Connections" />
-                    <Label layoutX="3.0" style="-fx-font-size: 14px; -fx-text-fill: white;" text="Meet people who share your taste in music and form lasting bonds." wrapText="true" prefHeight="100.0" />
-                </VBox>
+                <!-- HBox for the experience cards, centered horizontally -->
+                <HBox alignment="CENTER" spacing="40.0" HBox.hgrow="ALWAYS">
+                    <!-- Build Connections Card -->
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Build Connections" />
+                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Meet people who share your taste in music and form lasting bonds." wrapText="true" />
+                    </VBox>
 
-                <!-- Create Experiences Card -->
-                <VBox alignment="CENTER" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Create Experiences" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Collaborate with your community to craft unique musical events." wrapText="true" prefHeight="100.0" />
-                </VBox>
+                    <!-- Create Experiences Card -->
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Create Experiences" />
+                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Collaborate with your community to craft unique musical events." wrapText="true" />
+                    </VBox>
 
-                <!-- Find Your Beat Card -->
-                <VBox alignment="CENTER" prefHeight="125.0" prefWidth="200.0" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Find Your Beat" />
-                    <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Discover events and experiences that match your unique taste." wrapText="true" prefHeight="100.0" />
-                </VBox>
-            </HBox>
-        </VBox>        
+                    <!-- Find Your Beat Card -->
+                    <VBox alignment="CENTER" HBox.hgrow="ALWAYS" style="-fx-background-color: #FA8072; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;" VBox.vgrow="ALWAYS">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;" text="Find Your Beat" />
+                        <Label style="-fx-font-size: 14px; -fx-text-fill: white;" text="Discover events and experiences that match your unique taste." wrapText="true" />
+                    </VBox>
+                </HBox>
+                <VBox.margin>
+                    <Insets top="50.0" />
+                </VBox.margin>
+            </VBox>
+        </StackPane>
     </children>
 </AnchorPane>

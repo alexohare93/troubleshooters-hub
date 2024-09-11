@@ -20,14 +20,12 @@
             <HBox fx:id="navBar" alignment="CENTER_LEFT" style="-fx-background-color: #fa8072;" spacing="15" styleClass="nav-bar hbox" prefHeight="51.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                 <children>
                     <!-- Logo -->
-                    <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
+                    <Button styleClass="logo-button" text="SOUNDLINK" onAction="#onHomeButtonPressed" mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: white; -fx-font-size: 24px;
+                    -fx-font-weight: bold; -fx-padding: 0; -fx-cursor: hand;" />
                     <Region HBox.hgrow="ALWAYS" />
 
                     <!-- Navigation Buttons -->
-                    <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" onAction="#onHomeButtonPressed" />
-                    <!--  <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Discover" onAction="#onDiscoverButtonPressed" /> -->
-                    <!--  <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" onAction="#onCreateButtonPressed" /> -->
-                   <!--  <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" onAction="#onCommunitiesButtonPressed" /> -->
+                    <!--  <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" onAction="#onCommunitiesButtonPressed" /> -->
                     <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" onAction="#onEventsButtonPressed" />
 
                     <!-- Search Icon -->
