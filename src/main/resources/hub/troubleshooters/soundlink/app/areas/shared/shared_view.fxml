@@ -44,12 +44,8 @@
                     </MenuButton>
                 </children>
             </HBox>
-
-            <!-- Add the green separator line here -->
-            <Pane prefHeight="3" styleClass="green-separator"/> <!-- The green line separator -->
         </VBox>
     </top>
-
     <center>
         <Pane fx:id="outlet" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
     </center>
