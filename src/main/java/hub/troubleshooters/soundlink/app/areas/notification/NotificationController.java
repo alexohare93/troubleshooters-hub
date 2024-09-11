@@ -3,7 +3,7 @@ package hub.troubleshooters.soundlink.app.areas.shared;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class YourController {
+public class NotificationController {
 
     private final IntegerProperty notificationCount = new SimpleIntegerProperty(0);
 
