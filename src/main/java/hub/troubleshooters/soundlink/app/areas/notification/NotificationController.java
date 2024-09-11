@@ -2,6 +2,12 @@ package hub.troubleshooters.soundlink.app.areas.shared;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.services.SceneManager;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 public class NotificationController {
 
