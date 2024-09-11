@@ -1,4 +1,4 @@
-package hub.troubleshooters.soundlink.app;
+package hub.troubleshooters.soundlink.app.areas.shared;
 
 import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
@@ -7,7 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-public class MainController {
+public class NotificationController {
 
     @FXML
     private Button notificationButton;
