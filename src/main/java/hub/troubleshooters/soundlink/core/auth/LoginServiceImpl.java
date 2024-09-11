@@ -2,21 +2,21 @@ package hub.troubleshooters.soundlink.core.auth;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.google.inject.Inject;
-import hub.troubleshooters.soundlink.data.factories.CommunityUserFactory;
+import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 
 import java.sql.SQLException;
 
 public class LoginServiceImpl implements LoginService {
     private final UserFactory userFactory;
-    private final CommunityUserFactory communityUserFactory;
+    private final CommunityMemberFactory communityMemberFactory;
     private final IdentityService identityService;
 
     @Inject
-    public LoginServiceImpl(IdentityService identityService, UserFactory userFactory, CommunityUserFactory communityUserFactory) {
+    public LoginServiceImpl(IdentityService identityService, UserFactory userFactory, CommunityMemberFactory communityUserFactory) {
         this.identityService = identityService;
         this.userFactory = userFactory;
-        this.communityUserFactory = communityUserFactory;
+        this.communityMemberFactory = communityUserFactory;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
             user.setLastLogin(java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
 
             // get all community memberships for this user
-            var memberships = communityUserFactory.get(user);
+            var memberships = communityMemberFactory.get(user);
 
             identityService.setUserContext(new UserContext(user, memberships));
             userFactory.save(user);

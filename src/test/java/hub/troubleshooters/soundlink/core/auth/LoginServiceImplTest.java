@@ -1,12 +1,11 @@
 package hub.troubleshooters.soundlink.core.auth;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import hub.troubleshooters.soundlink.data.factories.CommunityUserFactory;
+import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,7 +25,7 @@ class LoginServiceImplTest {
     @Mock
     private UserFactory userFactory;
     @Mock
-    private CommunityUserFactory communityUserFactory;
+    private CommunityMemberFactory communityMemberFactory;
     @Mock
     private IdentityService identityService;
 
@@ -58,7 +57,7 @@ class LoginServiceImplTest {
         assertTrue(result.isSuccess());
         assertNull(result.getError());
 
-        verify(communityUserFactory).get(user);
+        verify(communityMemberFactory).get(user);
         verify(userFactory).save(user); // ensure the save method was called during our test
     }
 

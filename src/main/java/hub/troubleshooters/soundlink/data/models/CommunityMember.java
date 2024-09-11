@@ -2,14 +2,14 @@ package hub.troubleshooters.soundlink.data.models;
 
 import java.util.Date;
 
-public class CommunityUser {
+public class CommunityMember {
     private int id;
     private int communityId;
     private int userId;
     private Date created;
     private int permission;
 
-    public CommunityUser(int id, int communityId, int userId, Date created, int permission) {
+    public CommunityMember(int id, int communityId, int userId, Date created, int permission) {
         this.id = id;
         this.communityId = communityId;
         this.userId = userId;
