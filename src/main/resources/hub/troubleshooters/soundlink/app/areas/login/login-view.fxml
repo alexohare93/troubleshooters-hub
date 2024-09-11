@@ -67,14 +67,29 @@
                         <!-- Username and Password fields -->
                         <TextField fx:id="usernameInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="283.0" promptText="Username" style="-fx-background-color: white; -fx-border-color: lightgray;" />
                         <PasswordField fx:id="passwordInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="283.0" promptText="Password" style="-fx-background-color: white; -fx-border-color: lightgray;" />
-                                                
-                        <!-- Status label for any error messages -->
-                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0" prefWidth="600.0" text="" textAlignment="CENTER" textFill="RED" />
-                          <Button mnemonicParsing="false" onAction="#onLoginButtonClick" style="-fx-background-color: #fa8072; -fx-font-size: 16px;" text="Login" />
                     </children>
                 </VBox>
             </center>
-
+            <bottom>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <ButtonBar prefHeight="40.0" prefWidth="161.0">
+                                    <buttons>
+                                        <Button mnemonicParsing="false" onAction="#onLoginButtonClick" styleClass="success" text="Login" />
+                                        <Button mnemonicParsing="false" onAction="#onRegisterButtonClick" text="Register" />
+                                    </buttons>
+                                </ButtonBar>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="50.0" top="20.0" />
+                            </VBox.margin>
+                        </HBox>
+                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0" prefWidth="600.0" text="" textAlignment="CENTER" textFill="RED" />
+                    </children>
+                </VBox>
+            </bottom>
             <VBox.margin>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </VBox.margin>
