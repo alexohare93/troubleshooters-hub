@@ -1,56 +1,37 @@
 package hub.troubleshooters.soundlink.app.areas.shared;
 
-import hub.troubleshooters.soundlink.app.areas.Routes;
-import hub.troubleshooters.soundlink.app.services.SceneManager;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
-public class NotificationController {
+public class YourController {
+
+    private final IntegerProperty notificationCount = new SimpleIntegerProperty(0);
 
     @FXML
     private Button notificationButton;
 
-    private int notificationCount = 0;
-
-    public void handleNotifications(ActionEvent event) {
-        if (notificationCount > 0) {            
-            clearNotifications();
-        } else {
-          //TODO add logger here saying no new notifications
-        }
+    @FXML
+    public void initialize() {        
+        bindNotificationButton();
     }
 
-    public void addNotification() {
-        notificationCount++;
-        updateNotificationButton();
-    }
-
-    private void clearNotifications() {
-        notificationCount = 0;
-        updateNotificationButton();
-    }
-
-    private void updateNotificationButton() {
-        if (notificationCount > 0) {
-            notificationButton.setText("Notifications (" + notificationCount + ")");
-            notificationButton.setStyle("-fx-background-color: #ffd700; -fx-text-fill: black;");
-        } else {
-            notificationButton.setText("Notifications");
-            notificationButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");
-        }
-    }
-
-    public void checkForEventReminders() {
-        Platform.runLater(() -> {
-            if (checkForUpcomingEvents()) {
-                addNotification();
+    private void bindNotificationButton() {
+       notificationButton.textProperty().bind(notificationCount.asString("Notifications (%d)"));
+        
+        notificationCount.addListener((observable, oldValue, newValue) -> {
+            if (newValue.intValue() > 0) {
+                notificationButton.setStyle("-fx-background-color: #ffd700; -fx-text-fill: black;");
+            } else {
+                notificationButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white;");                
             }
         });
     }
 
-    private boolean checkForUpcomingEvents() {
-        return true;
+    public void incrementNotifications() {
+        notificationCount.set(notificationCount.get() + 1);
+    }
+
+    public void clearNotifications() {
+        notificationCount.set(0);
     }
 }
