@@ -47,6 +47,6 @@
         </VBox>
     </top>
     <center>
-        <Pane fx:id="outlet" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+        <ScrollPane fx:id="outlet" prefHeight="540.0" prefWidth="768.0" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>
