@@ -44,35 +44,13 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
     <children>
-        <!-- Header bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
-            <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Discover" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" />
-                    <!-- Notification Button -->
-                <Button fx:id="notificationButton" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Notifications" onAction="#handleNotifications" />
-            </children>
-        </HBox>
-
         <!-- Central container for image and experience cards -->
         <VBox alignment="CENTER" layoutX="50.0" layoutY="100.0" spacing="40.0">
             <!-- Pane with background image and text -->
             <Pane prefHeight="300.0" prefWidth="700.0" style="-fx-background-color: #fa8072;">
                 <children>
-                    <!-- ImageView for the headphones -->
-                    <ImageView fitHeight="300.0" fitWidth="700.0" opacity="0.4" preserveRatio="true">
-                        <image>
-                            <Image url="@/path/to/your/headphone_image.png" />
-                        </image>
-                    </ImageView>
-                    
                     <!-- VBox with text overlay -->
                     <VBox alignment="CENTER" prefHeight="300.0" prefWidth="700.0" spacing="20.0">
                         <Label style="-fx-font-size: 36px; -fx-text-fill: white;" text="Connect with Your Musical Tribe" />
