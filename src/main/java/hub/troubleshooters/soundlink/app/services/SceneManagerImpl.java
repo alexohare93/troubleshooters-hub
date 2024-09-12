@@ -63,7 +63,7 @@ public class SceneManagerImpl implements SceneManager {
 
     private void initializeSharedView() {
         try {
-            var loader = new FXMLLoader(SoundLinkApplication.class.getResource("areas/shared/shared-view.fxml"));
+            var loader = new FXMLLoader(SoundLinkApplication.class.getResource("areas/shared/shared_view.fxml"));
             loader.setControllerFactory(injector::getInstance);
             root = loader.load();
             sharedController = loader.getController();

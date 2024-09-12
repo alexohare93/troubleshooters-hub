@@ -14,23 +14,6 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <!-- Header bar with buttons on the right side -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
-            <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
-                
-                <!-- Spacer to push buttons to the right -->
-                <Region HBox.hgrow="ALWAYS" />
-
-                <!-- Navigation buttons on the right -->
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Discover" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" />
-            </children>
-        </HBox>
-
         <!-- Search Section (Advanced Filters) -->
         <HBox layoutX="20.0" layoutY="100.0" spacing="30.0">
             <!-- Filters Sidebar -->
@@ -90,8 +73,5 @@
                 </VBox>
             </VBox>
         </HBox>
-
-        <!-- Footer -->
-        <Label layoutX="300.0" layoutY="570.0" style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
     </children>
 </AnchorPane>

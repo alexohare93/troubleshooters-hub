@@ -13,21 +13,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <!-- Header bar -->
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
-            <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
-                <Region HBox.hgrow="ALWAYS" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Home" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Discover" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Create" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Communities" />
-                <Button style="-fx-background-color: transparent; -fx-text-fill: white;" text="Events" />
-            </children>
-        </HBox>
-
         <!-- Main content for event creation form -->
         <VBox alignment="CENTER" layoutX="101.0" layoutY="57.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="535.0" prefWidth="599.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
             <children>

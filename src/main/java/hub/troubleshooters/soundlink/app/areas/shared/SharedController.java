@@ -49,11 +49,26 @@ public class SharedController {
 
     @FXML
     protected void onEventsButtonPressed() {
-        sceneManager.switchToOutletScene("areas/home/test-view.fxml");
+        sceneManager.switchToOutletScene("areas/events/search_event_view.fxml");
     }
 
     @FXML
     protected void onHomeButtonPressed() {
         sceneManager.switchToOutletScene(Routes.HOME);
     }
+
+    @FXML
+    protected void createEventsPressed()  {sceneManager.switchToOutletScene("areas/events/create_event_view.fxml");}
+
+    @FXML
+    protected void searchEventsPressed()  {sceneManager.switchToOutletScene("areas/events/search_event_view.fxml");}
+
+    @FXML
+    protected void createCommunitiesPressed()  {sceneManager.switchToOutletScene("areas/communities/create_community_view.fxml");}
+
+    @FXML
+    protected void searchCommunitiesPressed()  {sceneManager.switchToOutletScene("areas/communities/search_community_view.fxml");}
+
+    @FXML
+    protected void onProfileButtonPressed()  {sceneManager.switchToOutletScene("areas/user/user_profile_view.fxml");}
 }
