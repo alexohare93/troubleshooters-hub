@@ -36,11 +36,13 @@ public class SharedController {
     @FXML
     public void initialize() {
         usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
-        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
+/*        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
             adjustFontSize(newVal.doubleValue());
         });
+ */
     }
 
+/*
     private void adjustFontSize(double width) {
     double fontSize = width / 30;
     eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
@@ -48,7 +50,7 @@ public class SharedController {
     profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
     settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
     }
-
+*/
     public void setOutlet(Parent content) {
         outlet.getChildren().clear();
         outlet.getChildren().add(content);
