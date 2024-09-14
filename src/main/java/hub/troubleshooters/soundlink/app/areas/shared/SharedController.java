@@ -58,17 +58,17 @@ public class SharedController {
     }
 
     @FXML
-    protected void createEventsPressed()  {sceneManager.switchToOutletScene("areas/events/create_event_view.fxml");}
+    protected void createEventsPressed()  {sceneManager.switchToOutletScene(Routes.CREATEEVENTS);}
 
     @FXML
-    protected void searchEventsPressed()  {sceneManager.switchToOutletScene("areas/events/search_event_view.fxml");}
+    protected void searchEventsPressed()  {sceneManager.switchToOutletScene(Routes.SEARCHEVENTS);}
 
     @FXML
-    protected void createCommunitiesPressed()  {sceneManager.switchToOutletScene("areas/communities/create_community_view.fxml");}
+    protected void createCommunitiesPressed()  {sceneManager.switchToOutletScene(Routes.CREATECOMMUNITIES);}
 
     @FXML
-    protected void searchCommunitiesPressed()  {sceneManager.switchToOutletScene("areas/communities/search_community_view.fxml");}
+    protected void searchCommunitiesPressed()  {sceneManager.switchToOutletScene(Routes.SEARCHCOMMUNITIES);}
 
     @FXML
-    protected void onProfileButtonPressed()  {sceneManager.switchToOutletScene("areas/user/user_profile_view.fxml");}
+    protected void onProfileButtonPressed()  {sceneManager.switchToOutletScene(Routes.PROFILE);}
 }
