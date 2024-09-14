@@ -9,8 +9,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.HBox;
-import javafx.scene.control.Button;
 
 public class SharedController {
     private final LoginService loginService;
@@ -34,25 +32,8 @@ public class SharedController {
     }
 
     @FXML
-    private HBox navBar;
-
-    @FXML
-    private Button eventButton, communityButton, profileButton, settingsButton;
-
-    @FXML
     public void initialize() {
         usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
-        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
-            adjustFontSize(newVal.doubleValue());
-        });
-    }
-
-    private void adjustFontSize(double width) {
-        double fontSize = width / 30;
-        eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
-        communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
-        profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
-        settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
     }
 
     public void setOutlet(Parent content) {
@@ -68,7 +49,7 @@ public class SharedController {
 
     @FXML
     protected void onEventsButtonPressed() {
-        sceneManager.switchToOutletScene("areas/home/test-view.fxml");
+        sceneManager.switchToOutletScene("areas/events/search_event_view.fxml");
     }
 
     @FXML
@@ -76,4 +57,18 @@ public class SharedController {
         sceneManager.switchToOutletScene(Routes.HOME);
     }
 
+    @FXML
+    protected void createEventsPressed()  {sceneManager.switchToOutletScene("areas/events/create_event_view.fxml");}
+
+    @FXML
+    protected void searchEventsPressed()  {sceneManager.switchToOutletScene("areas/events/search_event_view.fxml");}
+
+    @FXML
+    protected void createCommunitiesPressed()  {sceneManager.switchToOutletScene("areas/communities/create_community_view.fxml");}
+
+    @FXML
+    protected void searchCommunitiesPressed()  {sceneManager.switchToOutletScene("areas/communities/search_community_view.fxml");}
+
+    @FXML
+    protected void onProfileButtonPressed()  {sceneManager.switchToOutletScene("areas/user/user_profile_view.fxml");}
 }

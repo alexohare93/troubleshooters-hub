@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <!-- Main content for event creation form -->
+        <VBox alignment="CENTER" layoutX="101.0" layoutY="57.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="535.0" prefWidth="599.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
+            <children>
+                <!-- Title -->
+                <Label style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a Community" />
+
+                <!-- Community Name -->
+                <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Community Name" />
+                    <TextField maxWidth="-Infinity" prefHeight="30.0" prefWidth="300.0" promptText="Enter community name" />
+                </VBox>
+
+                <!-- Genre Input -->
+                <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Select Genre" />
+                    <ComboBox prefWidth="150.0" promptText="Select Genre">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Rock" />
+                                <String fx:value="Jazz" />
+                                <String fx:value="Hip-Hop" />
+                                <String fx:value="Electronic" />
+                                <String fx:value="Classical" />
+                                <String fx:value="Indie" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                </VBox>
+
+                <!-- Description -->
+                <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Description" />
+                    <TextArea prefHeight="100.0" prefWidth="600.0" promptText="Describe your community..." />
+                </VBox>
+
+                <!-- Guidelines Text Input -->
+                <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Community Guidelines" />
+                    <TextArea prefHeight="200.0" prefWidth="600.0" promptText="Write your community guidelines here..." />
+                </VBox>
+
+                <!-- Private Community Checkbox -->
+                <VBox alignment="CENTER_LEFT" prefWidth="600.0" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Privacy Settings" />
+                    <CheckBox style="-fx-font-size: 14px;" text="Make this a private community (Only invited members can join)" />
+                </VBox>
+
+                <!-- Create Community Button -->
+                <Button prefWidth="600.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-size: 16px;" text="Create Community" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
