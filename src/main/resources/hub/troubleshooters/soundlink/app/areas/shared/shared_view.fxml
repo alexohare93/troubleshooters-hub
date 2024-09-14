@@ -7,11 +7,11 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="root" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
+<BorderPane fx:id="root" prefHeight="810.0" prefWidth="1152.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
     <top>
         <VBox style="-fx-background-color: #fa8072;"> <!-- Use VBox to stack HBox and Pane -->
             <!-- Navigation Bar -->
@@ -58,6 +58,13 @@
         </VBox>
     </top>
     <center>
-        <Pane fx:id="outlet" prefHeight="540.0" prefWidth="768.0" BorderPane.alignment="CENTER" />
+      <StackPane>
+         <children>
+            <HBox fx:id="outlet" alignment="CENTER" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </StackPane>
     </center>
 </BorderPane>
