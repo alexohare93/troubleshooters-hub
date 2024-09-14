@@ -1,7 +1,7 @@
 package hub.troubleshooters.soundlink.core.auth;
 
 import hub.troubleshooters.soundlink.data.models.Community;
-import hub.troubleshooters.soundlink.data.models.CommunityUser;
+import hub.troubleshooters.soundlink.data.models.CommunityMember;
 import hub.troubleshooters.soundlink.data.models.User;
 
 import java.util.HashSet;
@@ -17,9 +17,9 @@ public class UserContext {
     /**
      * A list of all community memberships this user belongs to
      */
-    private final List<CommunityUser> communityUsers;
+    private final List<CommunityMember> communityUsers;
 
-    public UserContext(User user, List<CommunityUser> communityUsers) {
+    public UserContext(User user, List<CommunityMember> communityUsers) {
         this.user = user;
         this.communityUsers = communityUsers;
     }

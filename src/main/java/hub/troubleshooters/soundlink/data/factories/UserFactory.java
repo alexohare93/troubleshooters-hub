@@ -18,12 +18,11 @@ public class UserFactory extends ModelFactory<User> {
     public void save(User model) throws SQLException {
         final String sql = "UPDATE Users SET Username = ?, HashedPassword = ?, Created = ?, LastLogin = ? WHERE Id = ?;";
         connection.executeUpdate(sql, statement -> {
-            var param = 1;
-            statement.setString(param++, model.getUsername());
-            statement.setString(param++, model.getHashedPassword());
-            statement.setDate(param++, new java.sql.Date(model.getCreated().getTime()));
-            statement.setDate(param++, new java.sql.Date(model.getLastLogin().getTime()));
-            statement.setInt(param, model.getId());
+            statement.setString(1, model.getUsername());
+            statement.setString(2, model.getHashedPassword());
+            statement.setDate(3, new java.sql.Date(model.getCreated().getTime()));
+            statement.setDate(4, new java.sql.Date(model.getLastLogin().getTime()));
+            statement.setInt(5, model.getId());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update user. Rows affected: " + rowsAffected);
