@@ -69,6 +69,9 @@ public class SceneManagerImpl implements SceneManager {
             sharedController = loader.getController();
             var scene = new Scene(root);
             primaryStage.setScene(scene);
+            // first time changing to the shared view will resize the window.
+            primaryStage.setWidth(1152);
+            primaryStage.setHeight(810);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace(); // TODO: replace with proper error handling
