@@ -34,27 +34,23 @@ public class SharedController {
     }
 
     @FXML
-    private HBox navBar;
-
-    @FXML
-    private Button eventButton, communityButton, profileButton, settingsButton;
-
-    @FXML
     public void initialize() {
         usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
-        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
+/*        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
             adjustFontSize(newVal.doubleValue());
         });
+ */
     }
 
+/*
     private void adjustFontSize(double width) {
-        double fontSize = width / 30;
-        eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
-        communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
-        profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
-        settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
+    double fontSize = width / 30;
+    eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
+    communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
+    profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
+    settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
     }
-
+*/
     public void setOutlet(Parent content) {
         outlet.getChildren().clear();
         outlet.getChildren().add(content);
@@ -67,13 +63,22 @@ public class SharedController {
     }
 
     @FXML
-    protected void onEventsButtonPressed() {
-        sceneManager.switchToOutletScene("areas/home/test-view.fxml");
-    }
-
-    @FXML
     protected void onHomeButtonPressed() {
         sceneManager.switchToOutletScene(Routes.HOME);
     }
 
+    @FXML
+    protected void createEventsPressed()  {sceneManager.switchToOutletScene(Routes.CREATEEVENTS);}
+
+    @FXML
+    protected void searchEventsPressed()  {sceneManager.switchToOutletScene(Routes.SEARCHEVENTS);}
+
+    @FXML
+    protected void createCommunitiesPressed()  {sceneManager.switchToOutletScene(Routes.CREATECOMMUNITIES);}
+
+    @FXML
+    protected void searchCommunitiesPressed()  {sceneManager.switchToOutletScene(Routes.SEARCHCOMMUNITIES);}
+
+    @FXML
+    protected void onProfileButtonPressed()  {sceneManager.switchToOutletScene(Routes.PROFILE);}
 }
