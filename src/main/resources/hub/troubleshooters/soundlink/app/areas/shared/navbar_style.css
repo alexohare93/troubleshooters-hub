@@ -3,19 +3,7 @@
     -fx-background-color: #ffffff;
     -fx-padding: 10;
     -fx-alignment: center;
-}
-
-/* Glass button style */
-.glass-button {
-    -fx-background-color: #e0e0e0;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-border-color: #cccccc;
-    -fx-border-width: 1px;
-    -fx-padding: 10 20;
-    -fx-min-width: 90px;
-    -fx-text-overrun: ellipsis-word;
-    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 1); /* Soft shadow for the navbar */
 }
 
 /* Green separator style */
@@ -26,41 +14,75 @@
     -fx-margin: 0;
 }
 
-/* Logo button */
+/* Custom logo button styling */
 .logo-button {
-    -fx-font-family: 'Arial Black', sans-serif;
-    -fx-font-size: 18px;
+    -fx-font-family: 'Comic Sans MS', sans-serif; /* Changed font to something more dynamic */
+    -fx-font-size: 24px;
     -fx-background-color: transparent;
-    -fx-text-fill: black;
+    -fx-text-fill: #333333;
+    -fx-padding: 0 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    -fx-cursor: hand; /* Pointer cursor for logo */
+    -fx-font-weight: bold;
 }
 
-/* Navigation buttons */
+/* Hover and pressed effect for logo */
+.logo-button:hover {
+    -fx-text-fill: green; /* Change text color to green (matching the green separator) */
+}
+
+.logo-button:pressed {
+    -fx-text-fill: #0056b3; /* Pressed state can remain blue if you'd like */
+}
+
+/* Navigation buttons with dropdown support */
 .nav-button {
-    -fx-background-color: #e0e0e0;
+    -fx-background-color: linear-gradient(to bottom, #e9ecef, #dee2e6);
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-border-color: #cccccc;
     -fx-border-width: 1px;
     -fx-padding: 10 20;
-    -fx-min-width: 90px;
+    -fx-min-width: 100px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1); /* Subtle shadow */
+    -fx-background-radius: 10;
 }
 
-/* Icon button */
+/* Icon buttons (search, notifications, etc.) */
 .icon-button {
-    -fx-background-color: transparent;
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f8f9fa);
     -fx-border-color: #cccccc;
     -fx-border-width: 1px;
     -fx-font-size: 16px;
     -fx-min-width: 40px;
     -fx-padding: 5 10;
+    -fx-background-radius: 10;
 }
 
-/* Hover effects */
+/* Hover and pressed effects */
 .nav-button:hover, .icon-button:hover {
-    -fx-background-color: #d0d0d0;
+    -fx-background-color: linear-gradient(to bottom, #ced4da, #e9ecef);
 }
 
 .nav-button:pressed, .icon-button:pressed {
-    -fx-background-color: #cccccc;
+    -fx-background-color: linear-gradient(to bottom, #adb5bd, #ced4da);
+}
+
+/* Menu items for dropdowns */
+.menu-item {
+    -fx-padding: 5;
+}
+
+/* Menu button styling */
+.menu-button {
+    -fx-background-color: linear-gradient(to bottom, #e9ecef, #dee2e6);
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-padding: 10 20;
+    -fx-min-width: 100px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+    -fx-background-radius: 10;
 }
 

@@ -13,36 +13,46 @@
 <BorderPane fx:id="root" stylesheets="@navbar_style.css"
             prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
     <top>
-        <VBox> <!-- Use VBox to stack HBox and Pane -->
+        <VBox>
             <HBox fx:id="navBar" alignment="CENTER" spacing="15" styleClass="nav-bar hbox" prefHeight="51.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                 <children>
-                    <!-- Logo -->
+                    <!-- Logo as Button with custom font -->
                     <Button mnemonicParsing="false" text="SoundLink" styleClass="logo-button"/>
 
-                    <!-- Navigation Buttons -->
-                    <Button onAction="#onHomeButtonPressed" mnemonicParsing="false" text="Event" styleClass="nav-button" />
-                    <Button onAction="#onEventsButtonPressed" mnemonicParsing="false" text="Community" styleClass="nav-button" />
-                    <Button mnemonicParsing="false" text="Profile" styleClass="nav-button" />
-                    <Button mnemonicParsing="false" text="Settings" styleClass="nav-button" />
+                    <!-- Dropdown for Events -->
+                    <MenuButton text="Events" styleClass="nav-button">
+                        <items>
+                            <MenuItem text="Search" />
+                            <MenuItem text="Create" />
+                        </items>
+                    </MenuButton>
+
+                    <!-- Dropdown for Communities -->
+                    <MenuButton text="Communities" styleClass="nav-button">
+                        <items>
+                            <MenuItem text="Search" />
+                            <MenuItem text="Create" />
+                        </items>
+                    </MenuButton>
+
+                    <!-- Profile/User Icon -->
+                    <MenuButton fx:id="usernameMenuButton" text="User" styleClass="icon-button">
+                        <items>
+                            <MenuItem text="Account Setting" />
+                            <SeparatorMenuItem />
+                            <MenuItem onAction="#onLogoutButtonPressed" text="Logout" />
+                        </items>
+                    </MenuButton>
 
                     <!-- Search Icon -->
                     <Button mnemonicParsing="false" text="🔍" styleClass="icon-button" />
 
                     <!-- Notifications Icon -->
                     <Button mnemonicParsing="false" text="💬" styleClass="icon-button" />
-
-                    <!-- Profile/User Icon -->
-                    <MenuButton fx:id="usernameMenuButton" text="User" styleClass="icon-button">
-                        <items>
-                            <MenuItem text="Profile" />
-                            <SeparatorMenuItem />
-                            <MenuItem onAction="#onLogoutButtonPressed" text="Logout" />
-                        </items>
-                    </MenuButton>
                 </children>
             </HBox>
-            <!-- Add the green separator line here -->
-            <Pane prefHeight="3" styleClass="green-separator"/> <!-- The green line separator -->
+            <!-- Green separator line -->
+            <Pane prefHeight="3" styleClass="green-separator"/>
         </VBox>
     </top>
     <center>
