@@ -43,6 +43,10 @@ public class CreateEventModelValidator implements ModelValidator<CreateEventMode
             errors.add(new ValidationError("Publish date is before current date"));
         }
 
+        if (createEventModel.location() == null || createEventModel.location().isEmpty()) {
+            errors.add(new ValidationError("Location is null or empty"));
+        }
+
         // verify that community exists
         try {
             var community = communityFactory.get(createEventModel.communityId());

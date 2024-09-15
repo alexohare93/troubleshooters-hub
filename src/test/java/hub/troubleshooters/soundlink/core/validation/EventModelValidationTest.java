@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class EventModelValidationTest {
@@ -40,7 +39,7 @@ public class EventModelValidationTest {
 
     @Test
     void testCreateEventModel_Valid() throws SQLException {
-        var model = new CreateEventModel("Valid event", "Valid description", new Date(Instant.now().toEpochMilli() + 1000), 1);
+        var model = new CreateEventModel("Valid event", "Valid description", new Date(Instant.now().toEpochMilli() + 1000), "test location", 1);
 
         when(communityFactory.get(model.communityId())).thenReturn(Optional.of(community));
         var result = createEventModelValidator.validate(model);
@@ -50,12 +49,12 @@ public class EventModelValidationTest {
 
     @Test
     void testCreateEventModel_Invalid() throws SQLException {
-        var model = new CreateEventModel("", null, new Date(Instant.now().toEpochMilli() - 1000), 0);
+        var model = new CreateEventModel("", null, new Date(Instant.now().toEpochMilli() - 1000), null, 0);
         when(communityFactory.get(model.communityId())).thenReturn(Optional.empty());
         var result = createEventModelValidator.validate(model);
 
         assertFalse(result.isSuccess());
-        assertEquals(4, result.getErrors().size());
+        assertEquals(5, result.getErrors().size());
     }
 
     @Test
