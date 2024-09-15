@@ -39,7 +39,7 @@ CREATE TABLE CommunityPosts (
 CREATE TABLE Events (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     CommunityId INTEGER NOT NULL,
-    Name TEXT NOT NULL UNIQUE,
+    Name TEXT NOT NULL,
     Description TEXT NOT NULL,
     Venue TEXT NOT NULL,
     Capacity INTEGER NOT NULL,
