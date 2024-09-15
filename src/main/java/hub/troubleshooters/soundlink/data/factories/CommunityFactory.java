@@ -5,6 +5,8 @@ import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.models.Community;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CommunityFactory extends ModelFactory<Community> {
@@ -47,6 +49,38 @@ public class CommunityFactory extends ModelFactory<Community> {
         });
         if (community == null) return Optional.empty();
         return Optional.of(community);
+    }
+
+    /**
+     * Returns a list of communities given a list of IDs
+     * @param ids a list of community IDs
+     * @return a list of communities
+     * @throws SQLException if there was an underlying SQL error
+     */
+    public List<Community> get(List<Integer> ids) throws SQLException {
+        final String sql = "SELECT * FROM Communities WHERE Id IN (?)";
+        // transforming int array to comma-delimited string
+        var sb = new StringBuilder();
+        for (int id : ids) {
+            sb.append(id);
+            sb.append(',');
+        }
+        if (!sb.isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1);  // remove final comma
+        }
+        return connection.executeQuery(sql, statement -> statement.setString(1, sb.toString()), executor -> {
+            var result = new ArrayList<Community>();
+            while (executor.next()) {
+                result.add(new Community(
+                        executor.getInt("Id"),
+                        executor.getString("Name"),
+                        executor.getString("Description"),
+                        executor.getString("Genre"),
+                        executor.getDate("Created")
+                ));
+            }
+            return result;
+        });
     }
 
     /**
