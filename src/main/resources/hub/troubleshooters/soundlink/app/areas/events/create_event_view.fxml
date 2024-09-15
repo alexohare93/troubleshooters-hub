@@ -7,7 +7,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import hub.troubleshooters.soundlink.app.components.IntegerTextField?>
 
 <!-- Main content for event creation form -->
 
@@ -38,12 +40,22 @@
               <Label style="-fx-font-size: 16px;" text="Date *" />
               <DatePicker fx:id="publishDatePicker" promptText="dd/mm/yyyy" style="-fx-background-color: white; -fx-border-color: lightgray;" />
           </VBox>
-
-                            <!-- Location -->
-          <VBox alignment="CENTER_LEFT" spacing="10.0">
-              <Label style="-fx-font-size: 16px;" text="Location *" />
-              <TextField fx:id="locationTextField" promptText="Enter location" style="-fx-background-color: white; -fx-border-color: lightgray;" />
-          </VBox>
+      <HBox spacing="50.0">
+         <children>
+      
+                                  <!-- Location -->
+                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Location *" />
+                    <TextField fx:id="locationTextField" prefHeight="27.0" prefWidth="231.0" promptText="Enter location" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+                </VBox>
+            <VBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label style="-fx-font-size: 16px;" text="Capacity" />
+                  <IntegerTextField fx:id="capacityTextField" promptText="Unlimited" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
 
                             <!-- Description -->
           <VBox alignment="CENTER_LEFT" prefWidth="318.0" spacing="10.0">

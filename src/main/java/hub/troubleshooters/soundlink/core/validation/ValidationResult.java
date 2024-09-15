@@ -6,7 +6,7 @@ import java.util.*;
 
 public class ValidationResult extends CoreResult<Void, ValidationError> {
 
-    private List<ValidationError> errors;
+    private List<ValidationError> errors = new ArrayList<>();
 
     public ValidationResult(ValidationError error) {
         super(error);

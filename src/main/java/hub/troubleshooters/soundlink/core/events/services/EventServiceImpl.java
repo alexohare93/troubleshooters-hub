@@ -6,7 +6,6 @@ import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelVali
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
-import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.sql.SQLException;
 
@@ -32,7 +31,7 @@ public class EventServiceImpl implements EventService {
 
         // save event to DB
         try {
-            eventFactory.create(model.name(), model.description(), model.communityId(), model.location(), 5, model.publishDate());
+            eventFactory.create(model.name(), model.description(), model.communityId(), model.location(), model.capacity(), model.scheduledDate());
         } catch (SQLException e) {
             return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
         }

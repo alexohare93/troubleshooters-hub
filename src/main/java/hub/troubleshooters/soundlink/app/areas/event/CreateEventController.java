@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.app.areas.event;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.components.IntegerTextField;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.Scope;
@@ -33,6 +34,7 @@ public class CreateEventController {
     @FXML private TextArea descriptionTextArea;
     @FXML private TextField locationTextField;
     @FXML private DatePicker publishDatePicker;
+    @FXML private IntegerTextField capacityTextField;
 
     @FXML private Label errorLabel;
     @FXML private Tooltip errorTooltip;
@@ -70,13 +72,15 @@ public class CreateEventController {
 
         var publishDate = Date.from(localPublishDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         int communityId = communityOption.map(Community::getId).orElse(0);  // id of 0 will always result in a validation error due to autoincrement
+        var capacity = capacityTextField.getText().isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(capacityTextField.getText());   // should never throw due to the applied TextFormatter
 
-        var createEventModel = new CreateEventModel(name, description, publishDate, location, communityId);
+        var createEventModel = new CreateEventModel(name, description, publishDate, location, capacity, communityId);
 
         // send to event service to validate and save
         var result = eventService.createEvent(createEventModel);
         if (result.isSuccess()) {
             sceneManager.switchToOutletScene(Routes.HOME);
+            // sceneManager.flash(Flash.SUCCESS, "Event created successfully");
             return;
         }
 

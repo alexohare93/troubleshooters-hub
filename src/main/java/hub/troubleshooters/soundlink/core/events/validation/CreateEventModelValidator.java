@@ -37,14 +37,18 @@ public class CreateEventModelValidator implements ModelValidator<CreateEventMode
             errors.add(new ValidationError("Description is null or empty"));
         }
 
-        if (createEventModel.publishDate() == null) {
+        if (createEventModel.scheduledDate() == null) {
             errors.add(new ValidationError("Date is null"));
-        } else if (createEventModel.publishDate().before(Date.from(Instant.now()))) {
-            errors.add(new ValidationError("Publish date is before current date"));
+        } else if (createEventModel.scheduledDate().before(Date.from(Instant.now()))) {
+            errors.add(new ValidationError("Scheduled date is before current date"));
         }
 
         if (createEventModel.location() == null || createEventModel.location().isEmpty()) {
             errors.add(new ValidationError("Location is null or empty"));
+        }
+
+        if (createEventModel.capacity() <= 0) {
+            errors.add(new ValidationError("Capacity is less than 0"));
         }
 
         // verify that community exists
