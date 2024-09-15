@@ -3,7 +3,7 @@ package hub.troubleshooters.soundlink.app.areas.login;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
-import hub.troubleshooters.soundlink.core.auth.LoginService;
+import hub.troubleshooters.soundlink.core.auth.services.LoginService;
 import javafx.fxml.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;

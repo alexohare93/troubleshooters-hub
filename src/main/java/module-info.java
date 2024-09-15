@@ -4,6 +4,7 @@ module hub.troubleshooters.soundlink {
     requires java.sql;
     requires bcrypt;
     requires atlantafx.base;
+    requires jsr305;
 
 
     opens hub.troubleshooters.soundlink.app to javafx.fxml;
@@ -21,4 +22,12 @@ module hub.troubleshooters.soundlink {
     exports hub.troubleshooters.soundlink.data.models;
     exports hub.troubleshooters.soundlink.app.areas.shared;
     opens hub.troubleshooters.soundlink.app.areas.shared to javafx.fxml;
+    opens hub.troubleshooters.soundlink.app.areas.event to javafx.fxml, com.google.guice;
+    exports hub.troubleshooters.soundlink.core.validation;
+    exports hub.troubleshooters.soundlink.core.auth.services;
+    exports hub.troubleshooters.soundlink.core.auth.validation;
+    exports hub.troubleshooters.soundlink.core.events.validation to com.google.guice, javafx.fxml;
+    exports hub.troubleshooters.soundlink.core.events.services to com.google.guice, javafx.fxml;
+    exports hub.troubleshooters.soundlink.core.events.models;
+    exports hub.troubleshooters.soundlink.app.components to javafx.fxml;
 }
