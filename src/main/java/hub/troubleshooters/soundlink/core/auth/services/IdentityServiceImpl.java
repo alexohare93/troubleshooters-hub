@@ -1,13 +1,14 @@
-package hub.troubleshooters.soundlink.core.auth;
+package hub.troubleshooters.soundlink.core.auth.services;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.core.auth.Scope;
+import hub.troubleshooters.soundlink.core.auth.UserContext;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.data.models.CommunityMember;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 
 public class IdentityServiceImpl implements IdentityService {
     private final CommunityFactory communityFactory;

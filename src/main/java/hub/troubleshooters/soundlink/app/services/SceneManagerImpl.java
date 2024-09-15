@@ -20,7 +20,7 @@ public class SceneManagerImpl implements SceneManager {
     private SharedController sharedController = null;
 
     private final int STAGE_WIDTH = 1152;
-    private final int STAGE_HEIGHT = 810;
+    private final int STAGE_HEIGHT = 900;
 
     @Inject
     public SceneManagerImpl(Stage primaryStage, Injector injector) {

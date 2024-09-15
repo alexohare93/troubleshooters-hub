@@ -1,7 +1,10 @@
-package hub.troubleshooters.soundlink.core.auth;
+package hub.troubleshooters.soundlink.core.auth.services;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.core.auth.validation.AuthError;
+import hub.troubleshooters.soundlink.core.auth.validation.AuthResult;
+import hub.troubleshooters.soundlink.core.auth.UserContext;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 

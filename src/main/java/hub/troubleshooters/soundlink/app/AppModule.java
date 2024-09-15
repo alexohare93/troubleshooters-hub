@@ -5,10 +5,12 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.app.services.SceneManagerImpl;
-import hub.troubleshooters.soundlink.core.auth.IdentityService;
-import hub.troubleshooters.soundlink.core.auth.IdentityServiceImpl;
-import hub.troubleshooters.soundlink.core.auth.LoginService;
-import hub.troubleshooters.soundlink.core.auth.LoginServiceImpl;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityServiceImpl;
+import hub.troubleshooters.soundlink.core.auth.services.LoginService;
+import hub.troubleshooters.soundlink.core.auth.services.LoginServiceImpl;
+import hub.troubleshooters.soundlink.core.events.services.EventService;
+import hub.troubleshooters.soundlink.core.events.services.EventServiceImpl;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
@@ -27,10 +29,13 @@ public class AppModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(Stage.class).toInstance(primaryStage);
-        bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
         bind(DatabaseConnection.class).to(SQLiteDatabaseConnection.class).in(Singleton.class);
-        bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
         bind(SceneManager.class).to(SceneManagerImpl.class).in(Singleton.class);
+
+        // core services
+        bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
+        bind(EventService.class).to(EventServiceImpl.class).in(Singleton.class);
+        bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
 
         // data factories
         bind(UserFactory.class).in(Singleton.class);

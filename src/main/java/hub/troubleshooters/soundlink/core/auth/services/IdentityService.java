@@ -1,5 +1,7 @@
-package hub.troubleshooters.soundlink.core.auth;
+package hub.troubleshooters.soundlink.core.auth.services;
 
+import hub.troubleshooters.soundlink.core.auth.Scope;
+import hub.troubleshooters.soundlink.core.auth.UserContext;
 import hub.troubleshooters.soundlink.data.models.Community;
 
 import java.util.List;

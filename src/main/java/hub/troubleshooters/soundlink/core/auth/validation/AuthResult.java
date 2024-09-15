@@ -1,4 +1,4 @@
-package hub.troubleshooters.soundlink.core.auth;
+package hub.troubleshooters.soundlink.core.auth.validation;
 
 import hub.troubleshooters.soundlink.core.CoreResult;
 
