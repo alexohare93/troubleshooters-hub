@@ -42,18 +42,3 @@ jobs:
       # Run Maven tests
       - name: Run tests
         run: mvn test
-
-  deploy:
-    # Deploy job will run after the build completes
-    runs-on: ubuntu-latest
-    needs: build  # Ensure the build passes before deploying
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Deploy step (replace this with your actual deployment steps)
-      - name: Deploy to production
-        run: |
-          echo "Deploying application..."
-          # Add your deployment steps here, e.g., copying files, deploying to a server
