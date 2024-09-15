@@ -37,7 +37,7 @@ jobs:
 
       # Run Maven commands
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn -B package --file pom.xml
 
       # Run Maven tests
       - name: Run tests
