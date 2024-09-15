@@ -19,6 +19,9 @@ public class SceneManagerImpl implements SceneManager {
     private Parent root = null;
     private SharedController sharedController = null;
 
+    private final int STAGE_WIDTH = 1152;
+    private final int STAGE_HEIGHT = 810;
+
     @Inject
     public SceneManagerImpl(Stage primaryStage, Injector injector) {
         this.primaryStage = primaryStage;
@@ -44,7 +47,7 @@ public class SceneManagerImpl implements SceneManager {
 
     @Override
     public void switchToScene(String fxmlFileName) {
-        switchToScene(fxmlFileName, "SoundLink", 768, 540);
+        switchToScene(fxmlFileName, "SoundLink", 768, 540);     // 768x540 is login stage's size
     }
 
     public void switchToOutletScene(String fxmlFileName) {
@@ -69,6 +72,9 @@ public class SceneManagerImpl implements SceneManager {
             sharedController = loader.getController();
             var scene = new Scene(root);
             primaryStage.setScene(scene);
+            // first time changing to the shared view will resize the window.
+            primaryStage.setWidth(STAGE_WIDTH);
+            primaryStage.setHeight(STAGE_HEIGHT);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace(); // TODO: replace with proper error handling
