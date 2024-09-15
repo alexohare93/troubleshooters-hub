@@ -9,6 +9,7 @@ import hub.troubleshooters.soundlink.core.auth.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
 import hub.troubleshooters.soundlink.core.auth.LoginServiceImpl;
+import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
@@ -35,6 +36,9 @@ public class AppModule extends AbstractModule {
         bind(UserFactory.class).in(Singleton.class);
         bind(CommunityFactory.class).in(Singleton.class);
         bind(CommunityMemberFactory.class).in(Singleton.class);
+
+        // validators
+        bind(CreateEventModelValidator.class).in(Singleton.class);
     }
 
     @Provides
