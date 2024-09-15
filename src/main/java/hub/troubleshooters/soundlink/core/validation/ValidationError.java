@@ -3,16 +3,16 @@ package hub.troubleshooters.soundlink.core.validation;
 import java.util.List;
 
 /**
- * An exception that occurs during model validation.
+ * An error that occurs during model validation.
  * @see ModelValidator
  */
-public class ValidationException extends Exception {
-    public ValidationException(String message) {
+public class ValidationError extends RuntimeException {
+    public ValidationError(String message) {
         super(message);
     }
 
-    public ValidationException(List<ValidationException> errors) {
-        super(new ValidationException(errors.stream()
+    public ValidationError(List<ValidationError> errors) {
+        super(new ValidationError(errors.stream()
                 .map(e -> '{' + e.getMessage() + '}')
                 .reduce((msg, acc) -> msg + "," + acc)
                 .orElse("")

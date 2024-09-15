@@ -4,17 +4,17 @@ import hub.troubleshooters.soundlink.core.CoreResult;
 
 import java.util.*;
 
-public class ValidationResult extends CoreResult<Void, ValidationException> {
+public class ValidationResult extends CoreResult<Void, ValidationError> {
 
-    private List<ValidationException> errors;
+    private List<ValidationError> errors;
 
-    public ValidationResult(ValidationException error) {
+    public ValidationResult(ValidationError error) {
         super(error);
         errors = Collections.singletonList(error);
     }
 
-    public ValidationResult(List<ValidationException> errors) {
-        super(new ValidationException(errors));
+    public ValidationResult(List<ValidationError> errors) {
+        super(new ValidationError(errors));
         this.errors = errors;
     }
 
@@ -22,7 +22,7 @@ public class ValidationResult extends CoreResult<Void, ValidationException> {
         super((Void) null);
     }
 
-    public List<ValidationException> getErrors() {
+    public List<ValidationError> getErrors() {
         return errors;
     }
 }

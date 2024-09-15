@@ -24,11 +24,11 @@ public class LoginServiceImpl implements LoginService {
         try {
             var userOption = userFactory.get(username);
             if (userOption.isEmpty()) {
-                return new AuthResult(new AuthException("Incorrect username or password"));
+                return new AuthResult(new AuthError("Incorrect username or password"));
             }
             var user = userOption.get();
             if (user.getHashedPassword().isEmpty() || !verifyPassword(password, user.getHashedPassword())) {
-                return new AuthResult(new AuthException("Incorrect username or password"));
+                return new AuthResult(new AuthError("Incorrect username or password"));
             }
             user.setLastLogin(java.sql.Timestamp.valueOf(java.time.LocalDateTime.now()));
 
@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
             userFactory.save(user);
             return new AuthResult(); // successful login
         } catch (SQLException e) {
-            return new AuthResult(new AuthException("Internal server error. Please contact SoundLink support. Error: " + e.getMessage()));
+            return new AuthResult(new AuthError("Internal server error. Please contact SoundLink support. Error: " + e.getMessage()));
         }
     }
 
@@ -52,13 +52,13 @@ public class LoginServiceImpl implements LoginService {
     public AuthResult register(String username, String password) {
         try {
             if (userFactory.get(username).isPresent()) {
-                return new AuthResult(new AuthException("User already exists"));
+                return new AuthResult(new AuthError("User already exists"));
             }
             var hashedPassword = hashPassword(password);
             userFactory.create(username, hashedPassword);
             return new AuthResult(); // registration successful
         } catch (SQLException e) {
-            return new AuthResult(new AuthException("Internal server error. Please contact SoundLink support. Error: " + e.getMessage()));
+            return new AuthResult(new AuthError("Internal server error. Please contact SoundLink support. Error: " + e.getMessage()));
         }
     }
 

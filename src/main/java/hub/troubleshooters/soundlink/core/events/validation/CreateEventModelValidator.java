@@ -1,8 +1,9 @@
 package hub.troubleshooters.soundlink.core.events.validation;
 
+import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.validation.ModelValidator;
-import hub.troubleshooters.soundlink.core.validation.ValidationException;
+import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 
@@ -16,39 +17,40 @@ public class CreateEventModelValidator implements ModelValidator<CreateEventMode
 
     private final CommunityFactory communityFactory;
 
+    @Inject
     public CreateEventModelValidator(CommunityFactory communityFactory) {
         this.communityFactory = communityFactory;
     }
 
     @Override
     public ValidationResult validate(CreateEventModel createEventModel) {
-        List<ValidationException> errors = new ArrayList<>();
+        List<ValidationError> errors = new ArrayList<>();
         if (createEventModel == null) {
-            return new ValidationResult(new ValidationException("Model is null"));
+            return new ValidationResult(new ValidationError("Model is null"));
         }
 
         if (createEventModel.name() == null || createEventModel.name().isEmpty()) {
-            errors.add(new ValidationException("Name is null or empty"));
+            errors.add(new ValidationError("Name is null or empty"));
         }
 
         if (createEventModel.description() == null || createEventModel.description().isEmpty()) {
-            errors.add(new ValidationException("Description is null or empty"));
+            errors.add(new ValidationError("Description is null or empty"));
         }
 
         if (createEventModel.publishDate() == null) {
-            errors.add(new ValidationException("Date is null"));
+            errors.add(new ValidationError("Date is null"));
         } else if (createEventModel.publishDate().before(Date.from(Instant.now()))) {
-            errors.add(new ValidationException("Publish date is before current date"));
+            errors.add(new ValidationError("Publish date is before current date"));
         }
 
         // verify that community exists
         try {
             var community = communityFactory.get(createEventModel.communityId());
             if (community.isEmpty()) {
-                errors.add(new ValidationException("Community not found with id: " + createEventModel.communityId()));
+                errors.add(new ValidationError("Community not found with id: " + createEventModel.communityId()));
             }
         } catch (SQLException e) {
-            errors.add(new ValidationException("Internal error: " + e.getMessage()));
+            errors.add(new ValidationError("Internal error: " + e.getMessage()));
         }
 
         if (errors.isEmpty()) {
