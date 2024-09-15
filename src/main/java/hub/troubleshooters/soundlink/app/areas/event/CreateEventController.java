@@ -80,7 +80,7 @@ public class CreateEventController {
         var result = eventService.createEvent(createEventModel);
         if (result.isSuccess()) {
             sceneManager.switchToOutletScene(Routes.HOME);
-            // sceneManager.flash(Flash.SUCCESS, "Event created successfully");
+            sceneManager.alert(new Alert(Alert.AlertType.INFORMATION, "Event created successfully.", ButtonType.OK));
             return;
         }
 
