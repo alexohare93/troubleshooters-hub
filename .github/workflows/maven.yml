@@ -4,12 +4,10 @@ name: Java CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-      - hotfix/SL-37
+      - main      
   pull_request:
     branches:
       - main
-      - hotfix/SL-37
 
 # Define the jobs that run the pipeline
 jobs:
