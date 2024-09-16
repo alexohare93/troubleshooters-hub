@@ -4,5 +4,5 @@ import java.sql.SQLException;
 
 @FunctionalInterface
 public interface UpdateExecutor {
-    void execute(int affectedRows) throws SQLException;
+  void execute(int affectedRows) throws SQLException;
 }

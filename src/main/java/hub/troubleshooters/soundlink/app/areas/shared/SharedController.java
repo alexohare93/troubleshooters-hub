@@ -9,76 +9,82 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.HBox;
-import javafx.scene.control.Button;
 
 public class SharedController {
-    private final LoginService loginService;
-    private final IdentityService identityService;
-    private final SceneManager sceneManager;
+  private final LoginService loginService;
+  private final IdentityService identityService;
+  private final SceneManager sceneManager;
 
-    @FXML
-    private Pane root;
+  @FXML private Pane root;
 
-    @FXML
-    protected MenuButton usernameMenuButton;
+  @FXML protected MenuButton usernameMenuButton;
 
-    @FXML
-    private Pane outlet;
+  @FXML private Pane outlet;
 
-    @Inject
-    public SharedController(LoginService loginService, IdentityService identityService, SceneManager sceneManager) {
-        this.loginService = loginService;
-        this.identityService = identityService;
-        this.sceneManager = sceneManager;
-    }
+  @Inject
+  public SharedController(
+      LoginService loginService, IdentityService identityService, SceneManager sceneManager) {
+    this.loginService = loginService;
+    this.identityService = identityService;
+    this.sceneManager = sceneManager;
+  }
 
-    @FXML
-    public void initialize() {
-        usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
-/*        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
-            adjustFontSize(newVal.doubleValue());
-        });
- */
-    }
+  @FXML
+  public void initialize() {
+    usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
+    /*        navBar.widthProperty().addListener((obs, oldVal, newVal) -> {
+               adjustFontSize(newVal.doubleValue());
+           });
+    */
+  }
 
-/*
-    private void adjustFontSize(double width) {
-    double fontSize = width / 30;
-    eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
-    communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
-    profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
-    settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
-    }
-*/
-    public void setOutlet(Parent content) {
-        outlet.getChildren().clear();
-        outlet.getChildren().add(content);
-    }
+  /*
+      private void adjustFontSize(double width) {
+      double fontSize = width / 30;
+      eventButton.setStyle("-fx-font-size: " + fontSize + "px;");
+      communityButton.setStyle("-fx-font-size: " + fontSize + "px;");
+      profileButton.setStyle("-fx-font-size: " + fontSize + "px;");
+      settingsButton.setStyle("-fx-font-size: " + fontSize + "px;");
+      }
+  */
+  public void setOutlet(Parent content) {
+    outlet.getChildren().clear();
+    outlet.getChildren().add(content);
+  }
 
-    @FXML
-    protected void onLogoutButtonPressed() {
-        loginService.logout();
-        sceneManager.switchToScene(Routes.LOGIN);
-    }
+  @FXML
+  protected void onLogoutButtonPressed() {
+    loginService.logout();
+    sceneManager.switchToScene(Routes.LOGIN);
+  }
 
-    @FXML
-    protected void onHomeButtonPressed() {
-        sceneManager.switchToOutletScene(Routes.HOME);
-    }
+  @FXML
+  protected void onHomeButtonPressed() {
+    sceneManager.switchToOutletScene(Routes.HOME);
+  }
 
-    @FXML
-    protected void createEventsPressed()  {sceneManager.switchToOutletScene(Routes.CREATEEVENTS);}
+  @FXML
+  protected void createEventsPressed() {
+    sceneManager.switchToOutletScene(Routes.CREATEEVENTS);
+  }
 
-    @FXML
-    protected void searchEventsPressed()  {sceneManager.switchToOutletScene(Routes.SEARCHEVENTS);}
+  @FXML
+  protected void searchEventsPressed() {
+    sceneManager.switchToOutletScene(Routes.SEARCHEVENTS);
+  }
 
-    @FXML
-    protected void createCommunitiesPressed()  {sceneManager.switchToOutletScene(Routes.CREATECOMMUNITIES);}
+  @FXML
+  protected void createCommunitiesPressed() {
+    sceneManager.switchToOutletScene(Routes.CREATECOMMUNITIES);
+  }
 
-    @FXML
-    protected void searchCommunitiesPressed()  {sceneManager.switchToOutletScene(Routes.SEARCHCOMMUNITIES);}
+  @FXML
+  protected void searchCommunitiesPressed() {
+    sceneManager.switchToOutletScene(Routes.SEARCHCOMMUNITIES);
+  }
 
-    @FXML
-    protected void onProfileButtonPressed()  {sceneManager.switchToOutletScene(Routes.PROFILE);}
+  @FXML
+  protected void onProfileButtonPressed() {
+    sceneManager.switchToOutletScene(Routes.PROFILE);
+  }
 }

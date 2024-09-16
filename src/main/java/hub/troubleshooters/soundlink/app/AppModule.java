@@ -9,37 +9,37 @@ import hub.troubleshooters.soundlink.core.auth.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.LoginService;
 import hub.troubleshooters.soundlink.core.auth.LoginServiceImpl;
+import hub.troubleshooters.soundlink.data.DatabaseConnection;
+import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
-import hub.troubleshooters.soundlink.data.DatabaseConnection;
-import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
 import javafx.stage.Stage;
 
 public class AppModule extends AbstractModule {
-    private final Stage primaryStage;
+  private final Stage primaryStage;
 
-    public AppModule(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
+  public AppModule(Stage primaryStage) {
+    this.primaryStage = primaryStage;
+  }
 
-    @Override
-    protected void configure() {
-        bind(Stage.class).toInstance(primaryStage);
-        bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
-        bind(DatabaseConnection.class).to(SQLiteDatabaseConnection.class).in(Singleton.class);
-        bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
-        bind(SceneManager.class).to(SceneManagerImpl.class).in(Singleton.class);
+  @Override
+  protected void configure() {
+    bind(Stage.class).toInstance(primaryStage);
+    bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
+    bind(DatabaseConnection.class).to(SQLiteDatabaseConnection.class).in(Singleton.class);
+    bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
+    bind(SceneManager.class).to(SceneManagerImpl.class).in(Singleton.class);
 
-        // data factories
-        bind(UserFactory.class).in(Singleton.class);
-        bind(CommunityFactory.class).in(Singleton.class);
-        bind(CommunityMemberFactory.class).in(Singleton.class);
-    }
+    // data factories
+    bind(UserFactory.class).in(Singleton.class);
+    bind(CommunityFactory.class).in(Singleton.class);
+    bind(CommunityMemberFactory.class).in(Singleton.class);
+  }
 
-    @Provides
-    SQLiteDatabaseConnection provideSQLiteDatabaseConnection() {
-        String connectionString = "jdbc:sqlite:database.db";
-        return new SQLiteDatabaseConnection(connectionString);
-    }
+  @Provides
+  SQLiteDatabaseConnection provideSQLiteDatabaseConnection() {
+    String connectionString = "jdbc:sqlite:database.db";
+    return new SQLiteDatabaseConnection(connectionString);
+  }
 }
