@@ -7,13 +7,9 @@ import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 
-import java.sql.SQLException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Optional;
 
-public class CreateEventModelValidator implements ModelValidator<CreateEventModel> {
+public class CreateEventModelValidator extends ModelValidator<CreateEventModel> {
 
     private final CommunityFactory communityFactory;
 
@@ -24,46 +20,26 @@ public class CreateEventModelValidator implements ModelValidator<CreateEventMode
 
     @Override
     public ValidationResult validate(CreateEventModel createEventModel) {
-        List<ValidationError> errors = new ArrayList<>();
         if (createEventModel == null) {
             return new ValidationResult(new ValidationError("Model is null"));
         }
 
-        if (createEventModel.name() == null || createEventModel.name().isEmpty()) {
-            errors.add(new ValidationError("Name is null or empty"));
-        }
+        return ensure(
+                notEmpty("Name", createEventModel.name()),
+                notEmpty("Description", createEventModel.description()),
+                isFuture("Scheduled date", createEventModel.scheduledDate()),
+                notEmpty("Location", createEventModel.location()),
+                isPositive("Capacity", createEventModel.capacity()),
+                communityExists(createEventModel.communityId())
+        );
+    }
 
-        if (createEventModel.description() == null || createEventModel.description().isEmpty()) {
-            errors.add(new ValidationError("Description is null or empty"));
-        }
-
-        if (createEventModel.scheduledDate() == null) {
-            errors.add(new ValidationError("Date is null"));
-        } else if (createEventModel.scheduledDate().before(Date.from(Instant.now()))) {
-            errors.add(new ValidationError("Scheduled date is before current date"));
-        }
-
-        if (createEventModel.location() == null || createEventModel.location().isEmpty()) {
-            errors.add(new ValidationError("Location is null or empty"));
-        }
-
-        if (createEventModel.capacity() <= 0) {
-            errors.add(new ValidationError("Capacity is less than 0"));
-        }
-
-        // verify that community exists
-        try {
-            var community = communityFactory.get(createEventModel.communityId());
-            if (community.isEmpty()) {
-                errors.add(new ValidationError("Community not found with id: " + createEventModel.communityId()));
-            }
-        } catch (SQLException e) {
-            errors.add(new ValidationError("Internal error: " + e.getMessage()));
-        }
-
-        if (errors.isEmpty()) {
-            return new ValidationResult();
-        }
-        return new ValidationResult(errors);
+    /**
+     * A wrapper for the base class' version of this method that injects CommunityFactory
+     * @param communityId The ID of the community being checked
+     * @return Optional.empty() if validation succeeds, else an Optional.of the validation error.
+     */
+    private Optional<ValidationError> communityExists(int communityId) {
+        return communityExists(communityFactory, communityId);
     }
 }

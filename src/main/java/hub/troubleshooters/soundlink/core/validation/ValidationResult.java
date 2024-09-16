@@ -14,7 +14,7 @@ public class ValidationResult extends CoreResult<Void, ValidationError> {
     }
 
     public ValidationResult(List<ValidationError> errors) {
-        super(new ValidationError(errors));
+        super(errors.isEmpty() ? null : new ValidationError(errors));
         this.errors = errors;
     }
 
