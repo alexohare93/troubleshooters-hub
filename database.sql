@@ -20,8 +20,8 @@ CREATE TABLE CommunityMembers (
     UserId INTEGER NOT NULL,
     Created DATETIME DEFAULT CURRENT_TIMESTAMP,
     Permission INTEGER DEFAULT 0,
-    FOREIGN KEY (CommunityId) REFERENCES Communities(Id),
-    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (CommunityId) REFERENCES Communities(Id) ON DELETE CASCADE,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
     UNIQUE (CommunityId, UserId)
 );
 
@@ -32,8 +32,8 @@ CREATE TABLE CommunityPosts (
     Title TEXT NOT NULL,
     Content TEXT NOT NULL,
     Posted DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserId) REFERENCES Users(Id),
-    FOREIGN KEY (CommunityId) REFERENCES Communities(Id)
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
+    FOREIGN KEY (CommunityId) REFERENCES Communities(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE Events (
@@ -45,7 +45,7 @@ CREATE TABLE Events (
     Capacity INTEGER NOT NULL,
     Scheduled DATETIME NOT NULL,
     Created DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (CommunityId) REFERENCES Communities(Id)
+    FOREIGN KEY (CommunityId) REFERENCES Communities(Id) ON DELETE CASCADE
 );
 
 CREATE TABLE EventAttendees (
@@ -53,8 +53,8 @@ CREATE TABLE EventAttendees (
     EventId INTEGER NOT NULL,
     UserId INTEGER NOT NULL,
     Permission INTEGER DEFAULT 0,
-    FOREIGN KEY (EventId) REFERENCES Events(Id),
-    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (EventId) REFERENCES Events(Id) ON DELETE CASCADE,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
     UNIQUE (EventId, UserId)
 );
 
@@ -64,8 +64,8 @@ CREATE TABLE EventComments (
     UserId INTEGER NOT NULL,
     Content TEXT NOT NULL,
     Posted DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserId) REFERENCES Users(Id),
-    FOREIGN KEY (EventId) REFERENCES Events(Id)
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE,
+    FOREIGN KEY (EventId) REFERENCES Events(Id) ON DELETE CASCADE
 );
 
 -- test data
