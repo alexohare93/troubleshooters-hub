@@ -17,6 +17,12 @@
             <!-- Navigation Bar -->
             <HBox fx:id="navBar" alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="800.0" spacing="15" styleClass="nav-bar hbox" BorderPane.alignment="CENTER">
                 <children>
+               <HBox alignment="CENTER">
+                  <children>
+                   <Button fx:id="backButton" onAction="#onBackButtonPressed" disable="true" mnemonicParsing="false" text="⮜" />
+                     <Button fx:id="forwardButton" onAction="#onForwardButtonPressed" disable="true" mnemonicParsing="false" text="⮞" />
+                  </children>
+               </HBox>
                     <!-- Logo -->
                     <Button mnemonicParsing="false" onAction="#onHomeButtonPressed" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: white; -fx-font-size: 24px;                     -fx-font-weight: bold; -fx-padding: 0; -fx-cursor: hand;" styleClass="logo-button" text="SOUNDLINK" />
                     <Region HBox.hgrow="ALWAYS" />

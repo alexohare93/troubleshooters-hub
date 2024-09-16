@@ -79,7 +79,7 @@ public class CreateEventController {
         // send to event service to validate and save
         var result = eventService.createEvent(createEventModel);
         if (result.isSuccess()) {
-            sceneManager.switchToOutletScene(Routes.HOME);
+            sceneManager.navigate(Routes.HOME);
             sceneManager.alert(new Alert(Alert.AlertType.INFORMATION, "Event created successfully.", ButtonType.OK));
             return;
         }
