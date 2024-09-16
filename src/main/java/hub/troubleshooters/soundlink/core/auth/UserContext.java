@@ -17,16 +17,20 @@ public class UserContext {
     /**
      * A list of all community memberships this user belongs to
      */
-    private final List<CommunityMember> communityUsers;
+    private final List<CommunityMember> communityMembers;
 
     public UserContext(User user, List<CommunityMember> communityUsers) {
         this.user = user;
-        this.communityUsers = communityUsers;
+        this.communityMembers = communityUsers;
     }
 
     public Set<Scope> getCurrentScopes(Community community) {
-        var communityUser = communityUsers.stream().filter(c -> c.getCommunityId() == community.getId()).findFirst();
+        var communityUser = communityMembers.stream().filter(c -> c.getCommunityId() == community.getId()).findFirst();
         return communityUser.map(communityUserModel -> ScopeUtils.deconstructScopes(communityUserModel.getPermission())).orElseGet(HashSet::new);
+    }
+
+    public List<CommunityMember> getCommunityMembers() {
+        return communityMembers;
     }
 
     public User getUser() {

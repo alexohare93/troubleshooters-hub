@@ -5,6 +5,7 @@ import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Optional;
 
 public class EventFactory extends ModelFactory<Event> {
@@ -59,19 +60,17 @@ public class EventFactory extends ModelFactory<Event> {
 
 	/**
 	 * Creates new Event
-	 * @param event the event object to be inserted
 	 * @throws SQLException if an error occurs while creating the event
 	 */
-	public void create(Event event) throws SQLException {
-		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled, Created) VALUES (?, ?, ?, ? ,? ,?, ?)";
+	public void create(String name, String description, int communityId, String venue, int capacity, Date scheduled) throws SQLException {
+		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (?, ?, ?, ? ,? ,?)";
 		connection.executeUpdate(sql, statement -> {
-			statement.setInt(1, event.getCommunityId());
-			statement.setString(2, event.getName());
-			statement.setString(3, event.getDescription());
-			statement.setString(4, event.getVenue());
-			statement.setInt(5, event.getCapacity());
-			statement.setDate(6, new java.sql.Date(event.getScheduled().getTime()));
-			statement.setDate(7, new java.sql.Date(event.getCreated().getTime()));
+			statement.setInt(1, communityId);
+			statement.setString(2, name);
+			statement.setString(3, description);
+			statement.setString(4, venue);
+			statement.setInt(5, capacity);
+			statement.setDate(6, new java.sql.Date(scheduled.getTime()));
 		}, rowsAffected -> {
 			if (rowsAffected != 1) {
 				throw new SQLException("Failed to create event. Rows Affected: " + rowsAffected);

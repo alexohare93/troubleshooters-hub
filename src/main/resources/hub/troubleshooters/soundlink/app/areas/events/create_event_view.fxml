@@ -1,44 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import hub.troubleshooters.soundlink.app.components.IntegerTextField?>
 
+<!-- Main content for event creation form -->
 
-  <!-- Main content for event creation form -->
-  <VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" prefWidth="504.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.event.CreateEventController">
       <children>
           <!-- Title -->
           <Label style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a New Event" />
+      <Label fx:id="errorLabel" text="* Validation Errors" textFill="RED" VBox.vgrow="ALWAYS">
+         <tooltip>
+            <Tooltip fx:id="errorTooltip" text="THIS IS AN EMPTY TOOLTIP" />
+         </tooltip>
+      </Label>
+      <VBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label style="-fx-font-size: 16px;" text="Event Name *" />
+            <TextField fx:id="nameTextField" promptText="Enter event name" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+         </children>
+      </VBox>
           
                                   <!-- Event Name -->
           <VBox alignment="CENTER_LEFT" spacing="10.0">
-              <Label style="-fx-font-size: 16px;" text="Event Name:" />
-              <TextField promptText="Enter event name" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+              <Label style="-fx-font-size: 16px;" text="Community *" />
+         <ChoiceBox fx:id="communityChoiceBox" prefWidth="150.0" />
           </VBox>
 
                             <!-- Date -->
           <VBox alignment="CENTER_LEFT" spacing="10.0">
-              <Label style="-fx-font-size: 16px;" text="Date:" />
-              <DatePicker promptText="dd/mm/yyyy" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+              <Label style="-fx-font-size: 16px;" text="Date *" />
+              <DatePicker fx:id="publishDatePicker" promptText="dd/mm/yyyy" style="-fx-background-color: white; -fx-border-color: lightgray;" />
           </VBox>
-
-                            <!-- Location -->
-          <VBox alignment="CENTER_LEFT" spacing="10.0">
-              <Label style="-fx-font-size: 16px;" text="Location:" />
-              <TextField promptText="Enter location" style="-fx-background-color: white; -fx-border-color: lightgray;" />
-          </VBox>
+      <HBox spacing="50.0">
+         <children>
+      
+                                  <!-- Location -->
+                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Label style="-fx-font-size: 16px;" text="Location *" />
+                    <TextField fx:id="locationTextField" prefHeight="27.0" prefWidth="231.0" promptText="Enter location" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+                </VBox>
+            <VBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  <Label style="-fx-font-size: 16px;" text="Capacity" />
+                  <IntegerTextField fx:id="capacityTextField" promptText="Unlimited" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
 
                             <!-- Description -->
           <VBox alignment="CENTER_LEFT" prefWidth="318.0" spacing="10.0">
-              <Label style="-fx-font-size: 16px;" text="Description:" />
-              <TextArea prefHeight="163.0" prefWidth="318.0" promptText="Enter event description" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+              <Label style="-fx-font-size: 16px;" text="Description *" />
+         <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" />
           </VBox>
 
                             <!-- Create Event Button -->
-          <Button mnemonicParsing="false" style="-fx-background-color: #fa8072; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Event" />
+          <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonClick" style="-fx-background-color: #fa8072; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Event" />
       </children>
   </VBox>

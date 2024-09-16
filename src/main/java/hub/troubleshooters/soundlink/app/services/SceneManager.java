@@ -1,5 +1,7 @@
 package hub.troubleshooters.soundlink.app.services;
 
+import javafx.scene.control.Alert;
+
 public interface SceneManager {
     /**
      * Switches the root scene to the scene specified by the fxml file name
@@ -21,4 +23,6 @@ public interface SceneManager {
      * @param fxmlFileName The name of the fxml file to act as the outlet scene
      */
     void switchToOutletScene(String fxmlFileName);
+
+    void alert(Alert alert);
 }

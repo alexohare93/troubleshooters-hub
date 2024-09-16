@@ -1,4 +1,6 @@
-package hub.troubleshooters.soundlink.core.auth;
+package hub.troubleshooters.soundlink.core.auth.services;
+
+import hub.troubleshooters.soundlink.core.auth.validation.AuthResult;
 
 public interface LoginService {
     /**

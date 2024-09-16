@@ -1,6 +1,8 @@
 package hub.troubleshooters.soundlink.core.auth;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.core.auth.services.LoginServiceImpl;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.models.User;

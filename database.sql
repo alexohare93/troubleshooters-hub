@@ -39,7 +39,7 @@ CREATE TABLE CommunityPosts (
 CREATE TABLE Events (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     CommunityId INTEGER NOT NULL,
-    Name TEXT NOT NULL UNIQUE,
+    Name TEXT NOT NULL,
     Description TEXT NOT NULL,
     Venue TEXT NOT NULL,
     Capacity INTEGER NOT NULL,
@@ -79,19 +79,19 @@ INSERT INTO Users (Username, HashedPassword) VALUES ('user', '$2a$12$2Sll4xwHPA4
 INSERT INTO Communities (Name, Genre, Description) VALUES ('Test Community', 'Test Rock', 'This is a test Community');
 
 -- 'admin' is a member of 'Test Community' and is superadmin
-INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (0, 0, 1);
+INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (1, 1, 1);
 -- 'user' is a member of 'Test Community' and can read and write events
-INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (0, 1, 6);
+INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (1, 2, 6);
 
 -- made by 'admin' in 'Test Community'
-INSERT INTO CommunityPosts (CommunityId, UserId, Title, Content) VALUES (0, 0, 'Test Post', 'This is a test Community Post');
+INSERT INTO CommunityPosts (CommunityId, UserId, Title, Content) VALUES (1, 1, 'Test Post', 'This is a test Community Post');
 
-INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (0, 'Test Event', 'This is a test Event', 'Not a real place', 100, '2025-01-01 00:00:00');
+INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (1, 'Test Event', 'This is a test Event', 'Not a real place', 100, '2025-01-01 00:00:00');
 
 -- 'admin' is attending 'Test Event' and is superadmin
-INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (0, 0, 1);
+INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (1, 1, 1);
 -- 'user' is attending 'Test Event' and can read and write event details and comments
-INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (0, 1, 6);
+INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (1, 2, 6);
 
 -- made by 'admin' in 'Test Event'
-INSERT INTO EventComments (UserId, EventId, Content) VALUES (0, 0, 'This is a test comment');
+INSERT INTO EventComments (UserId, EventId, Content) VALUES (1, 1, 'This is a test comment');

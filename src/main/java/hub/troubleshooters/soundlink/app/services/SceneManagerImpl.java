@@ -5,6 +5,7 @@ import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -20,7 +21,7 @@ public class SceneManagerImpl implements SceneManager {
     private SharedController sharedController = null;
 
     private final int STAGE_WIDTH = 1152;
-    private final int STAGE_HEIGHT = 810;
+    private final int STAGE_HEIGHT = 900;
 
     @Inject
     public SceneManagerImpl(Stage primaryStage, Injector injector) {
@@ -50,6 +51,7 @@ public class SceneManagerImpl implements SceneManager {
         switchToScene(fxmlFileName, "SoundLink", 768, 540);     // 768x540 is login stage's size
     }
 
+    @Override
     public void switchToOutletScene(String fxmlFileName) {
         try {
             var loader = new FXMLLoader(SoundLinkApplication.class.getResource(fxmlFileName));
@@ -62,6 +64,11 @@ public class SceneManagerImpl implements SceneManager {
         } catch (IOException e) {
             e.printStackTrace(); // TODO: replace with proper error handling
         }
+    }
+
+    @Override
+    public void alert(Alert alert) {
+        alert.showAndWait();
     }
 
     private void initializeSharedView() {

@@ -5,7 +5,7 @@ package hub.troubleshooters.soundlink.core;
  * @param <T> The type of the result.
  * @param <E> The type of the error.
  */
-public class CoreResult<T, E extends Exception> {
+public class CoreResult<T, E extends RuntimeException> {
     private final T result;
     private final E error;
 
