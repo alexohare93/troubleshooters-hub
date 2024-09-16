@@ -104,14 +104,7 @@ class EventFactoryTest {
         doNothing().when(mockConnection).executeUpdate(anyString(), any(), any());
 
         // Act
-        eventFactory.create(testEvent.getName(),
-                testEvent.getDescription(),
-                testEvent.getCommunityId(),
-                testEvent.getVenue(),
-                testEvent.getCapacity(),
-                testEvent.getScheduled(),
-                testEvent.getCreated()
-        );
+        eventFactory.create(testEvent);
 
         // Assert
         ArgumentCaptor<StatementPreparer> captor = ArgumentCaptor.forClass(StatementPreparer.class);
