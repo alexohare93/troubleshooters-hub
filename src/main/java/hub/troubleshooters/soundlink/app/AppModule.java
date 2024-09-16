@@ -9,6 +9,8 @@ import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.services.LoginService;
 import hub.troubleshooters.soundlink.core.auth.services.LoginServiceImpl;
+import hub.troubleshooters.soundlink.core.auth.validation.LoginModelValidator;
+import hub.troubleshooters.soundlink.core.auth.validation.RegisterModelValidator;
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.core.events.services.EventServiceImpl;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
@@ -44,6 +46,8 @@ public class AppModule extends AbstractModule {
 
         // validators
         bind(CreateEventModelValidator.class).in(Singleton.class);
+        bind(LoginModelValidator.class).in(Singleton.class);
+        bind(RegisterModelValidator.class).in(Singleton.class);
     }
 
     @Provides

@@ -3,6 +3,8 @@ package hub.troubleshooters.soundlink.app.areas.login;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
+import hub.troubleshooters.soundlink.core.auth.models.LoginModel;
+import hub.troubleshooters.soundlink.core.auth.models.RegisterModel;
 import hub.troubleshooters.soundlink.core.auth.services.LoginService;
 import javafx.fxml.*;
 import javafx.scene.control.Label;
@@ -27,11 +29,7 @@ public class LoginController {
 
     @FXML
     protected void onLoginButtonClick() {
-        if (usernameInput.getText().isEmpty() || passwordInput.getText().isEmpty()) {
-            logError("Username and password are required");
-            return;
-        }
-        var loginResult = loginService.login(usernameInput.getText(), passwordInput.getText());
+        var loginResult = loginService.login(new LoginModel(usernameInput.getText(), passwordInput.getText()));
         if (loginResult.isSuccess()) {
             sceneManager.switchToOutletScene(Routes.HOME);
         } else {
@@ -41,11 +39,7 @@ public class LoginController {
 
     @FXML
     protected void onRegisterButtonClick() {
-        if (usernameInput.getText().isEmpty() || passwordInput.getText().isEmpty()) {
-            logError("Username and password are required");
-            return;
-        }
-        var result = loginService.register(usernameInput.getText(), passwordInput.getText());
+        var result = loginService.register(new RegisterModel(usernameInput.getText(), passwordInput.getText()));
         if (result.isSuccess()) {
             log("Successfully registered");
         } else {
