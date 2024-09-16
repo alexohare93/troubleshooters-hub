@@ -109,7 +109,8 @@ class EventFactoryTest {
                 testEvent.getCommunityId(),
                 testEvent.getVenue(),
                 testEvent.getCapacity(),
-                testEvent.getScheduled()
+                testEvent.getScheduled(),
+                testEvent.getCreated()
         );
 
         // Assert
