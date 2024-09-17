@@ -1,8 +1,14 @@
 package hub.troubleshooters.soundlink.core.auth;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import hub.troubleshooters.soundlink.core.auth.models.LoginModel;
+import hub.troubleshooters.soundlink.core.auth.models.RegisterModel;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.services.LoginServiceImpl;
+import hub.troubleshooters.soundlink.core.auth.validation.LoginModelValidator;
+import hub.troubleshooters.soundlink.core.auth.validation.RegisterModelValidator;
+import hub.troubleshooters.soundlink.core.validation.ValidationError;
+import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.models.User;
@@ -30,6 +36,10 @@ class LoginServiceImplTest {
     private CommunityMemberFactory communityMemberFactory;
     @Mock
     private IdentityService identityService;
+    @Mock
+    private LoginModelValidator loginModelValidator;
+    @Mock
+    private RegisterModelValidator registerModelValidator;
 
     // providing our mocked dependencies to our service we are actually testing
     @InjectMocks
@@ -47,6 +57,9 @@ class LoginServiceImplTest {
         user = new User(0);
         user.setUsername(username);
         user.setHashedPassword(hashedPassword);
+
+        when(loginModelValidator.validate(any())).thenReturn(new ValidationResult());
+        when(registerModelValidator.validate(any())).thenReturn(new ValidationResult());
     }
 
     @Test
@@ -54,7 +67,7 @@ class LoginServiceImplTest {
         // whenever our mocked userFactory.get method is called, it will always return Optional.of(user).
         when(userFactory.get(user.getUsername())).thenReturn(Optional.of(user));
 
-        var result = loginServiceImpl.login(user.getUsername(), PASSWORD);  // performing the actual test
+        var result = loginServiceImpl.login(new LoginModel(user.getUsername(), PASSWORD));  // performing the actual test
 
         assertTrue(result.isSuccess());
         assertNull(result.getError());
@@ -68,64 +81,64 @@ class LoginServiceImplTest {
         // whenever our mocked userFactory.get method is called, it will always return Optional.empty to simulate an invalid username
         when(userFactory.get(user.getUsername())).thenReturn(Optional.empty());
 
-        var result = loginServiceImpl.login(user.getUsername(), PASSWORD);  // performing the actual test
+        var result = loginServiceImpl.login(new LoginModel(user.getUsername(), PASSWORD));  // performing the actual test
 
         assertFalse(result.isSuccess());
         assertEquals(result.getError().getMessage(), "Incorrect username or password");
     }
 
-    // Test for correct username but incorrect password
     @Test
     void testLogin_IncorrectPassword() throws SQLException {
         when(userFactory.get(user.getUsername())).thenReturn(Optional.of(user));
-        var result = loginServiceImpl.login(user.getUsername(), INCORRECT_PASSWORD);
+
+        var result = loginServiceImpl.login(new LoginModel(user.getUsername(), INCORRECT_PASSWORD));
+
         assertFalse(result.isSuccess());
         assertEquals(result.getError().getMessage(), "Incorrect username or password");
     }
 
-    // Test for null username
     @Test
-    void testLogin_NullUsername() throws SQLException {
-        // Simulate that the userFactory returns Optional.empty() when null is passed
-        when(userFactory.get(null)).thenReturn(Optional.empty());
-        var result = loginServiceImpl.login(null, PASSWORD);
-        // Assert that the result is a failure and the error message matches your expectations
+    void testLogin_NullUsername() {
+        when(loginModelValidator.validate(any())).thenReturn(new ValidationResult(new ValidationError("")));
+
+        var result = loginServiceImpl.login(new LoginModel(null, PASSWORD));
+
         assertFalse(result.isSuccess());
-        assertEquals("Incorrect username or password", result.getError().getMessage());  // Expecting this behavior for null username
+        assertEquals("Username and password must have values", result.getError().getMessage());
     }
 
-    // Test for null password
     @Test
     void testLogin_NullPassword() throws SQLException {
-        // Mock the userFactory to return a valid user
-        when(userFactory.get(user.getUsername())).thenReturn(Optional.of(user));
-        // Perform the login action with a null password
-        try {
-            var result = loginServiceImpl.login(user.getUsername(), null);
-            // The following assertions are expected if no exception occurs
-            assertFalse(result.isSuccess());
-            assertEquals("Incorrect username or password", result.getError().getMessage());
-        } catch (NullPointerException e) {
-            // Catch the NullPointerException and assert that it occurred due to the null password
-            assertTrue(e.getMessage().contains("password"));
-        }
-        // Verify that the userFactory.get was called, but no save operation occurred
-        verify(userFactory).get(user.getUsername());
-        verify(userFactory, never()).save(any());
+        when(loginModelValidator.validate(any())).thenReturn(new ValidationResult(new ValidationError("")));
+
+        var result = loginServiceImpl.login(new LoginModel(user.getUsername(), null));
+
+        assertFalse(result.isSuccess());
+        assertEquals("Username and password must have values", result.getError().getMessage());
     }
 
-    // Test for user registration
     @Test
     void testRegisterUser_Successful() throws SQLException {
         // Mock the userFactory to return empty, indicating the user does not exist
         when(userFactory.get(user.getUsername())).thenReturn(Optional.empty());
+
         // Perform the registration with valid username and password
-        var result = loginServiceImpl.register(user.getUsername(), PASSWORD);
+        var result = loginServiceImpl.register(new RegisterModel(user.getUsername(), PASSWORD));
+
         // Assert that the registration is successful and no error is returned
         assertTrue(result.isSuccess());
         assertNull(result.getError());
+
         // Verify that the create method is called on userFactory with correct parameters
         verify(userFactory).create(eq(user.getUsername()), any(String.class));
+    }
+
+    @Test
+    void testRegisterUser_UserAlreadyExists() throws SQLException {
+        when(userFactory.get(user.getUsername())).thenReturn(Optional.of(user));
+        var result = loginServiceImpl.register(new RegisterModel(user.getUsername(), PASSWORD));
+        assertFalse(result.isSuccess());
+        assertEquals(result.getError().getMessage(), "User already exists");
     }
 
     private String hashPassword(String password) {

@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.services;
 
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
 
 public class SceneManagerImpl implements SceneManager {
     private final Stage primaryStage;
@@ -22,6 +23,12 @@ public class SceneManagerImpl implements SceneManager {
 
     private final int STAGE_WIDTH = 1152;
     private final int STAGE_HEIGHT = 900;
+
+    private Stack<String> backStack = new Stack<>();
+    private Stack<String> forwardStack = new Stack<>();
+    private String currentRoute = Routes.LOGIN;  // program starts at the login route
+
+    private final List<NavigationListener> listeners = new ArrayList<>();
 
     @Inject
     public SceneManagerImpl(Stage primaryStage, Injector injector) {
@@ -40,6 +47,12 @@ public class SceneManagerImpl implements SceneManager {
             primaryStage.setTitle(sceneName);
             primaryStage.setWidth(width);
             primaryStage.setHeight(height);
+
+            // remove all history + future since this is total context change
+            currentRoute = sceneName;
+            backStack = new Stack<>();
+            forwardStack = new Stack<>();
+
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace(); // TODO: replace with proper error handling
@@ -61,6 +74,7 @@ public class SceneManagerImpl implements SceneManager {
                 initializeSharedView();
             }
             sharedController.setOutlet(outletContent);
+            currentRoute = fxmlFileName;
         } catch (IOException e) {
             e.printStackTrace(); // TODO: replace with proper error handling
         }
@@ -69,6 +83,59 @@ public class SceneManagerImpl implements SceneManager {
     @Override
     public void alert(Alert alert) {
         alert.showAndWait();
+    }
+
+    @Override
+    public void navigate(String newRoute) {
+        if (!newRoute.equals(currentRoute)) {
+            backStack.push(currentRoute);
+            forwardStack.clear();       // clear forward stack as we're navigating somewhere new
+            currentRoute = newRoute;
+            switchToOutletScene(currentRoute);
+            notifyListeners();
+        }
+    }
+
+    @Override
+    public void navigateBack() {
+        if (!backStack.isEmpty()) {
+            forwardStack.push(currentRoute);
+            currentRoute = backStack.pop();
+            switchToOutletScene(currentRoute);
+            notifyListeners();
+        }
+    }
+
+    @Override
+    public void navigateForward() {
+        if (!forwardStack.isEmpty()) {
+            backStack.push(currentRoute);
+            currentRoute = forwardStack.pop();
+            switchToOutletScene(currentRoute);
+            notifyListeners();
+        }
+    }
+
+    @Override
+    public boolean hasHistory() {
+        return !backStack.isEmpty();
+    }
+
+    @Override
+    public boolean hasFuture() {
+        return !forwardStack.isEmpty();
+    }
+
+    @Override
+    public void addNavigationListener(NavigationListener listener) {
+        listeners.add(listener);
+    }
+
+    // Notify all listeners about a state change
+    private void notifyListeners() {
+        for (NavigationListener listener : listeners) {
+            listener.onNavigationStateChange();
+        }
     }
 
     private void initializeSharedView() {
