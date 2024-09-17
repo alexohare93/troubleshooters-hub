@@ -105,8 +105,7 @@ class ModelValidatorTest {
         assertTrue(result.isPresent(), "Expected error for a non-positive number.");
         assertEquals("number is not greater than 0", result.get().getMessage());
     }
-
-    // I am not 100% sure on this test. Does it make sense?
+  
     @Test
     void testCommunityExistsSuccess() throws SQLException {
         community = new Community(1, "test", "test", "test", Date.from(Instant.now()));
