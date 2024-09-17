@@ -58,11 +58,11 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
      * @return
      * @throws SQLException
      */
-    public Optional<CommunityMember> get(int userId, int communityId) throws SQLException {
-        final String sql = "SELECT * FROM CommunityMembers WHERE UserId = ? AND CommunityId = ?;";
+    public Optional<CommunityMember> get(int communityId, int userId) throws SQLException {
+        final String sql = "SELECT * FROM CommunityMembers WHERE CommunityId = ? AND UserId = ?;";
         var communityMember = connection.executeQuery(sql, statement -> {
-                statement.setInt(1, userId);
-                statement.setInt(2, communityId);
+                statement.setInt(1, communityId);
+                statement.setInt(2, userId);
             }, executor -> {
             if (executor.next()) {
                 return new CommunityMember(
@@ -101,6 +101,25 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
                 ));
             }
             return commUsers;
+        });
+    }
+
+    /**
+     * Creates a CommunityMember
+     * @param communityId
+     * @param userId
+     * @param permission
+     * @throws SQLException
+     */
+    public void create(int communityId, int userId, int permission) throws SQLException {
+        final String sql = "INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (?, ?, ?);";
+        connection.executeUpdate(sql, statement -> {
+            statement.setInt(1, communityId);
+            statement.setInt(2, userId);
+            statement.setInt(3, permission);
+        }, rowsAffected -> {
+            if (rowsAffected != 1)
+                throw new SQLException("Failed to create Community Member. Rows affected" + rowsAffected);
         });
     }
 }

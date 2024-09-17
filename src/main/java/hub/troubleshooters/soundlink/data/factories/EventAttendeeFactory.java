@@ -126,4 +126,23 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 			return list;
 		});
 	}
+
+	/**
+	 * Creates a EventAttendee
+	 * @param eventId
+	 * @param userId
+	 * @param permission
+	 * @throws SQLException
+	 */
+	void create(int eventId, int userId, int permission) throws SQLException {
+		final String sql = "INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (?, ?, ?);";
+		connection.executeUpdate(sql, statement -> {
+			statement.setInt(1, eventId);
+			statement.setInt(2, userId);
+			statement.setInt(3, permission);
+		}, rowsAffected -> {
+			if (rowsAffected != 1)
+				throw new SQLException("Failed to create EventAttendee. Rows affected" + rowsAffected);
+		});
+	}
 }

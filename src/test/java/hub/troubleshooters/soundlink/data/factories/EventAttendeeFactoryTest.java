@@ -136,5 +136,23 @@ public class EventAttendeeFactoryTest {
 		// Assert that the result contains the expected EventAttendee
 		assertEquals(0, result.size());
 	}
+
+	@Test
+	void CreateEventAttendee_Success() throws SQLException {
+		// Simulate a successful database insertion (1 row affected)
+		doAnswer(invocation -> 1).when(databaseConnection).executeUpdate(anyString(), any(), any());
+
+		// Call the create method and assert that no exception is thrown
+		assertDoesNotThrow(() -> eventAttendeeFactory.create(1, 1, 2));
+	}
+
+	@Test
+	void CreateEventAttendee_Failure() throws SQLException {
+		// Simulate an SQLException being thrown during the update
+		doThrow(new SQLException()).when(databaseConnection).executeUpdate(anyString(), any(), any());
+
+		// Call the save method and assert that an SQLException is thrown
+		assertThrows(SQLException.class, () -> eventAttendeeFactory.create(1, 1, 2));
+	}
 }
 

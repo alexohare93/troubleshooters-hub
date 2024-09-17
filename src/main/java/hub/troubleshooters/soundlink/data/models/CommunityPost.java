@@ -1,2 +1,4 @@
-package hub.troubleshooters.soundlink.data.models;public class CommunityPost {
+package hub.troubleshooters.soundlink.data.models;
+
+public class CommunityPost {
 }
