@@ -52,6 +52,36 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
     }
 
     /**
+     * Gets a CommunityMember object by the unique userId and communityId
+     * @param userId
+     * @param communityId
+     * @return
+     * @throws SQLException
+     */
+    public Optional<CommunityMember> get(int userId, int communityId) throws SQLException {
+        final String sql = "SELECT * FROM CommunityMembers WHERE UserId = ? AND CommunityId = ?;";
+        var communityMember = connection.executeQuery(sql, statement -> {
+                statement.setInt(1, userId);
+                statement.setInt(2, communityId);
+            }, executor -> {
+            if (executor.next()) {
+                return new CommunityMember(
+                        executor.getInt("Id"),
+                        executor.getInt("CommunityId"),
+                        executor.getInt("UserId"),
+                        executor.getDate("Created"),
+                        executor.getInt("Permission")
+                );
+            }
+            return null;
+        });
+        if (communityMember == null) {
+            return Optional.empty();
+        }
+        return Optional.of(communityMember);
+    }
+
+    /**
      * Gets all community memberships for a given user
      * @param user
      * @return
@@ -73,5 +103,4 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
             return commUsers;
         });
     }
-    // TODO: add get(int userId, int communityId)
 }

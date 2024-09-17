@@ -10,8 +10,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -65,6 +67,32 @@ public class CommunityMemberFactoryTest {
     }
 
     @Test
+    void testGetCommunityMemberByUserIdAndCommunityId_Success() throws SQLException {
+        // Mock the database query to return a specific CommunityMember
+        when(databaseConnection.executeQuery(anyString(), any(), any())).thenReturn(communityMember);
+
+        // Call the method to retrieve a CommunityMember by UserId and CommunityId
+        var result = communityMemberFactory.get(1, 1);
+
+        // Assert that the result is present and matches the expected CommunityMember
+        assertTrue(result.isPresent());
+        assertEquals(communityMember, result.get());
+    }
+
+    @Test
+    void testGetCommunityMemberByUserIdAndCommunityId_NotFound() throws SQLException {
+
+        // Mock the database query to return a specific CommunityMember
+        when(databaseConnection.executeQuery(anyString(), any(), any())).thenReturn(null);
+
+        // Call the method to retrieve a CommunityMember by non-existent UserId and CommunityId
+        var result = communityMemberFactory.get(999, 999);
+
+        // Assert that no result is found (empty Optional)
+        assertFalse(result.isPresent());
+    }
+
+    @Test
     void testGetCommunityMembersByUser_Success() throws SQLException {
         // Mock the database query to return a list containing one CommunityMember
         when(databaseConnection.executeQuery(anyString(), any(), any())).thenReturn(List.of(communityMember));
@@ -75,6 +103,18 @@ public class CommunityMemberFactoryTest {
         // Assert that the result contains the expected CommunityMember
         assertEquals(1, result.size());
         assertTrue(result.contains(communityMember));
+    }
+
+    @Test
+    void testGetCommunityMembersByUser_NotFound() throws SQLException {
+        // Mock the database query to return an empty list
+        when(databaseConnection.executeQuery(anyString(), any(), any())).thenReturn(new ArrayList<CommunityMember>());
+
+        // Call method to retrieve all Community Members for this non-existent User (or user that with no communities)
+        var result = communityMemberFactory.get(user);
+
+        // Assert that the result contains the expected CommunityMember
+        assertEquals(0, result.size());
     }
 
     @Test
