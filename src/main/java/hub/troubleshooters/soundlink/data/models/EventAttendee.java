@@ -7,7 +7,7 @@ public class EventAttendee {
 	private final int id;
 	private final int eventId;
 	private final int userId;
-	private Date created;
+	private final Date created;
 	private int permission;
 
 	public EventAttendee(int id, int eventId, int userId, Date created, int permission) {
@@ -32,10 +32,6 @@ public class EventAttendee {
 
 	public Date getCreated() {
 		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
 	}
 
 	public int getPermission() {

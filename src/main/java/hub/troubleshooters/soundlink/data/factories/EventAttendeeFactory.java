@@ -14,12 +14,12 @@ import java.util.Optional;
 public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	@Inject
 	public EventAttendeeFactory(DatabaseConnection connection) {
-		super(connection, "CommunityMembers");
+		super(connection, "EventAttendees");
 	}
 
 	@Override
 	public void save(EventAttendee eventAttendee) throws SQLException {
-		String sql = "UPDATE EventAttendees SET Permission = ? WHERE id = ?;";
+		final String sql = "UPDATE EventAttendees SET Permission = ? WHERE id = ?;";
 		connection.executeUpdate(sql, statement -> {
 			statement.setInt(1, eventAttendee.getPermission());
 			statement.setInt(2, eventAttendee.getId());
@@ -32,7 +32,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 
 	@Override
 	public Optional<EventAttendee> get(int id) throws SQLException {
-		String sql = "SELECT * FROM EventAttendees WHERE Id = ?;";
+		final String sql = "SELECT * FROM EventAttendees WHERE Id = ?;";
 		var eventAttendee = connection.executeQuery(sql, statement -> statement.setInt(1, id), executor -> {
 			if (executor.next()) {
 				return new EventAttendee(
@@ -58,7 +58,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	 * @throws SQLException
 	 */
 	public Optional<EventAttendee> get(int eventId, int userId) throws SQLException {
-		String sql = "SELECT * FROM EventAttendees WHERE EventId = ? AND UserId;";
+		final String sql = "SELECT * FROM EventAttendees WHERE EventId = ? AND UserId;";
 		var eventAttendee = connection.executeQuery(sql, statement ->{
 			statement.setInt(1, eventId);
 			statement.setInt(2, userId);
@@ -86,7 +86,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	 * @throws SQLException
 	 */
 	public List<EventAttendee> get(User user) throws SQLException {
-		String sql = "SELECT * FROM EventAttendees WHERE UserId = ?;";
+		final String sql = "SELECT * FROM EventAttendees WHERE UserId = ?;";
 		return connection.executeQuery(sql, statement -> statement.setInt(1, user.getId()), executor -> {
 			List<EventAttendee> list = new ArrayList<>();
 			while (executor.next()) {
@@ -110,7 +110,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	 * @throws SQLException
 	 */
 	public List<EventAttendee> get(Event event) throws SQLException {
-		String sql = "SELECT * FROM EventAttendees WHERE EventId = ?;";
+		final String sql = "SELECT * FROM EventAttendees WHERE EventId = ?;";
 		return connection.executeQuery(sql, statement -> statement.setInt(1, event.getId()), executor -> {
 			List<EventAttendee> list = new ArrayList<>();
 			while (executor.next()) {

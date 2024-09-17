@@ -10,7 +10,7 @@ public class Event {
 	private String venue;
 	private int capacity;
 	private Date scheduled;
-	private Date created;
+	private final Date created;
 
 	public Event(int id, int communityId, String name, String description, String venue, int capacity, Date scheduled, Date created) {
 		this.id = id;
@@ -50,6 +50,4 @@ public class Event {
 	public void setScheduled(Date scheduled) { this.scheduled = scheduled; }
 
 	public Date getCreated() { return created; }
-
-	public void setCreated(Date created) { this.created = created; }
 }

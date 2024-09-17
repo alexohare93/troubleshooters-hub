@@ -6,7 +6,7 @@ public class CommunityMember {
     private int id;
     private int communityId;
     private int userId;
-    private Date created;
+    private final Date created;
     private int permission;
 
     public CommunityMember(int id, int communityId, int userId, Date created, int permission) {
@@ -51,9 +51,5 @@ public class CommunityMember {
 
     public Date getCreated() {
         return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
     }
 }
