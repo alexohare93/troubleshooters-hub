@@ -2,6 +2,8 @@ package hub.troubleshooters.soundlink.app.services;
 
 import javafx.scene.control.Alert;
 
+import java.io.File;
+
 public interface SceneManager {
     /**
      * Switches the root scene to the scene specified by the fxml file name. Erases all history and future.
@@ -65,4 +67,6 @@ public interface SceneManager {
      * @param listener The listener method that is called when the subscribed class is notified
      */
     void addNavigationListener(NavigationListener listener);
+
+    File openFileDialog();
 }
