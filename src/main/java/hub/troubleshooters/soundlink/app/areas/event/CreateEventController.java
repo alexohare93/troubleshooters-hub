@@ -40,6 +40,7 @@ public class CreateEventController {
     @FXML private DatePicker publishDatePicker;
     @FXML private IntegerTextField capacityTextField;
     @FXML private Label fileNameLabel;
+    @FXML private Button clearImageButton;
 
     @FXML private Label errorLabel;
     @FXML private Tooltip errorTooltip;
@@ -74,6 +75,7 @@ public class CreateEventController {
 
         fileNameLabel.setText(file.getName());
         bannerImageFile = file;
+        clearImageButton.setVisible(true);
     }
 
     @FXML
@@ -105,5 +107,12 @@ public class CreateEventController {
                 .map(err -> "• " + err.getMessage() + "\n")
                 .reduce("", (a, b) -> a + b)
         );
+    }
+
+    @FXML
+    protected void onClearImageButtonClick() {
+        bannerImageFile = null;
+        clearImageButton.setVisible(false);
+        fileNameLabel.setText("No file selected");
     }
 }
