@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
 
 public class SharedController implements NavigationListener {
@@ -62,16 +61,16 @@ public class SharedController implements NavigationListener {
     }
 
     @FXML
-    protected void createEventsPressed()  {sceneManager.navigate(Routes.CREATEEVENTS);}
+    protected void createEventsPressed()  {sceneManager.navigate(Routes.CREATE_EVENT);}
 
     @FXML
-    protected void searchEventsPressed()  {sceneManager.navigate(Routes.SEARCHEVENTS);}
+    protected void searchEventsPressed()  {sceneManager.navigate(Routes.SEARCH_EVENTS);}
 
     @FXML
-    protected void createCommunitiesPressed()  {sceneManager.navigate(Routes.CREATECOMMUNITIES);}
+    protected void createCommunitiesPressed()  {sceneManager.navigate(Routes.CREATE_COMMUNITY);}
 
     @FXML
-    protected void searchCommunitiesPressed()  {sceneManager.navigate(Routes.SEARCHCOMMUNITIES);}
+    protected void searchCommunitiesPressed()  {sceneManager.navigate(Routes.SEARCH_COMMUNITIES);}
 
     @FXML
     protected void onProfileButtonPressed()  {sceneManager.navigate(Routes.PROFILE);}
