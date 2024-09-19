@@ -1,0 +1,61 @@
+
+/* Colours */
+.root {
+    -color-primary: #fa8072;
+    -color-warning: #ffc107;
+    -color-info: #c7e1ff;
+    -color-danger: #dc3545;
+}
+
+.form {
+    -fx-padding: 40px;
+    -fx-background-color: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.h1 {
+    -fx-font-size: 28;
+    -fx-text-fill: -color-primary;
+    -fx-font-weight: bold;
+}
+
+.form-label {
+    -fx-font-size: 16px;
+}
+
+.alert {
+    -fx-padding: 10px;
+    -fx-background-radius: 5px;
+}
+
+.alert-warning {
+    -fx-background-color: -color-warning;
+}
+
+.alert-info {
+    -fx-background-color: -color-info;
+}
+
+.alert-danger {
+    -fx-background-color: -color-danger;
+}
+
+.alert-primary {
+    -fx-background-color: -color-primary;
+}
+
+.btn {
+    -fx-font-size: 16px;
+    -fx-padding: 10 20;
+}
+
+.btn-primary {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+}
+
+.transparent {
+    -fx-background-color: transparent;
+}
