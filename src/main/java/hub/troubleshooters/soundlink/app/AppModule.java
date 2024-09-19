@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.app.services.SceneManagerImpl;
+import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.services.LoginService;
@@ -53,6 +54,9 @@ public class AppModule extends AbstractModule {
         bind(CreateEventModelValidator.class).in(Singleton.class);
         bind(LoginModelValidator.class).in(Singleton.class);
         bind(RegisterModelValidator.class).in(Singleton.class);
+
+        // mapper (potentially in future have mapper profiles?)
+        bind(Map.class).in(Singleton.class);
     }
 
     @Provides

@@ -61,19 +61,29 @@ public class SharedController implements NavigationListener {
     }
 
     @FXML
-    protected void createEventsPressed()  {sceneManager.navigate(Routes.CREATE_EVENT);}
+    protected void createEventsPressed()  {
+        sceneManager.navigate(Routes.CREATE_EVENT);
+    }
 
     @FXML
-    protected void searchEventsPressed()  {sceneManager.navigate(Routes.SEARCH_EVENTS);}
+    protected void searchEventsPressed()  {
+        sceneManager.navigate(Routes.SEARCH_EVENTS);
+    }
 
     @FXML
-    protected void createCommunitiesPressed()  {sceneManager.navigate(Routes.CREATE_COMMUNITY);}
+    protected void createCommunitiesPressed() {
+        sceneManager.navigate(Routes.CREATE_COMMUNITY);
+    }
 
     @FXML
-    protected void searchCommunitiesPressed()  {sceneManager.navigate(Routes.SEARCH_COMMUNITIES);}
+    protected void searchCommunitiesPressed() {
+        sceneManager.navigate(Routes.SEARCH_COMMUNITIES);
+    }
 
     @FXML
-    protected void onProfileButtonPressed()  {sceneManager.navigate(Routes.PROFILE);}
+    protected void onProfileButtonPressed() {
+        sceneManager.navigate(Routes.PROFILE);
+    }
 
     @FXML
     protected void onBackButtonPressed() {

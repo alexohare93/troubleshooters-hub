@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.app.services;
 
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
 import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.areas.events.EventDetailsController;
 import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,7 @@ import com.google.inject.Injector;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class SceneManagerImpl implements SceneManager {
     private final Stage primaryStage;
@@ -69,17 +71,30 @@ public class SceneManagerImpl implements SceneManager {
 
     @Override
     public void switchToOutletScene(String fxmlFileName) {
+        switchToOutletScene(fxmlFileName, controller -> {
+            // No additional logic for the controller
+        });
+    }
+
+    @Override
+    public <T> void switchToOutletScene(String fxmlFileName, Consumer<T> controllerConsumer) {
         try {
-            var loader = new FXMLLoader(SoundLinkApplication.class.getResource(fxmlFileName));
+            FXMLLoader loader = new FXMLLoader(SoundLinkApplication.class.getResource(fxmlFileName));
             loader.setControllerFactory(injector::getInstance);
             Parent outletContent = loader.load();
+
             if (sharedController == null || root == null || !Objects.equals(root.getId(), "root")) {
                 initializeSharedView();
             }
+
             sharedController.setOutlet(outletContent);
             currentRoute = fxmlFileName;
+
+            T controller = loader.getController();
+            controllerConsumer.accept(controller);
+
         } catch (IOException e) {
-            e.printStackTrace(); // TODO: replace with proper error handling
+            e.printStackTrace();  // TODO: replace with proper error handling
         }
     }
 
@@ -138,6 +153,14 @@ public class SceneManagerImpl implements SceneManager {
     public File openFileDialog() {
         var fileChooser = new FileChooser();
         return fileChooser.showOpenDialog(primaryStage);
+    }
+
+    // TODO: this doesn't actually use navigation; need to change the stack objects to include parameter Object info
+    @Override
+    public void navigateToEventDetailsView(int eventId) {
+        switchToOutletScene(Routes.EVENT_DETAILS, (EventDetailsController controller) -> {
+            controller.loadEventDetails(eventId);  // pass the eventId to the controller
+        });
     }
 
     // Notify all listeners about a state change

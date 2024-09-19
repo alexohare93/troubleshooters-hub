@@ -3,6 +3,7 @@ package hub.troubleshooters.soundlink.app.services;
 import javafx.scene.control.Alert;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 public interface SceneManager {
     /**
@@ -25,6 +26,8 @@ public interface SceneManager {
      * @param fxmlFileName The name of the fxml file to act as the outlet scene
      */
     void switchToOutletScene(String fxmlFileName);
+
+    <T> void switchToOutletScene(String fxmlFileName, Consumer<T> controllerConsumer);
 
     /**
      * Sends an alert dialogue to the front stage and waits for interaction.
@@ -69,4 +72,6 @@ public interface SceneManager {
     void addNavigationListener(NavigationListener listener);
 
     File openFileDialog();
+
+    void navigateToEventDetailsView(int eventId);
 }

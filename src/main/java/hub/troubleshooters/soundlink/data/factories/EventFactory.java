@@ -17,7 +17,7 @@ public class EventFactory extends ModelFactory<Event> {
 
 	@Override
 	public void save(Event event) throws SQLException {
-		final String sql = "UPDATE Events SET CommunityId = ?, Name = ?, Description = ?, Venue = ?, Capacity = ?, Scheduled = ?, Created = ? WHERE Id = ?";
+		final String sql = "UPDATE Events SET CommunityId = ?, Name = ?, Description = ?, Venue = ?, Capacity = ?, Scheduled = ?, Created = ?, BannerImageId = ? WHERE Id = ?";
 		connection.executeUpdate(sql, statement -> {
 			statement.setInt(1, event.getCommunityId());
 			statement.setString(2, event.getName());
@@ -26,7 +26,8 @@ public class EventFactory extends ModelFactory<Event> {
 			statement.setInt(5, event.getCapacity());
 			statement.setDate(6, new java.sql.Date(event.getScheduled().getTime()));
 			statement.setDate(7, new java.sql.Date(event.getCreated().getTime()));
-			statement.setInt(8, event.getId());
+			statement.setObject(8, event.getBannerImageId().orElse(null));	// setObject so that we can set null
+			statement.setInt(9, event.getId());
 		}, rowsAffected -> {
 			if (rowsAffected != 1) {
 				throw new SQLException("Failed to update event. Rows Affected: " + rowsAffected);
@@ -39,6 +40,7 @@ public class EventFactory extends ModelFactory<Event> {
 		final String sql = "SELECT * FROM Events WHERE Id = ?";
 		var event = connection.executeQuery(sql, statement -> statement.setInt(1, id), executor -> {
 			if (executor.next()) {
+				var bannerId = executor.getInt("BannerImageId");
 				return new Event(
 						executor.getInt("Id"),
 						executor.getInt("CommunityId"),
@@ -47,7 +49,8 @@ public class EventFactory extends ModelFactory<Event> {
 						executor.getString("Venue"),
 						executor.getInt("Capacity"),
 						executor.getDate("Scheduled"),
-						executor.getDate("Created")
+						executor.getDate("Created"),
+						bannerId == 0 ? null : bannerId
 				);
 			}
 			return null;
@@ -62,8 +65,26 @@ public class EventFactory extends ModelFactory<Event> {
 	 * Creates new Event
 	 * @throws SQLException if an error occurs while creating the event
 	 */
+	public void create(String name, String description, int communityId, String venue, int capacity, Date scheduled, int bannerImageId) throws SQLException {
+		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled, BannerImageId) VALUES (?, ?, ?, ? ,?, ?, ?)";
+		connection.executeUpdate(sql, statement -> {
+			statement.setInt(1, communityId);
+			statement.setString(2, name);
+			statement.setString(3, description);
+			statement.setString(4, venue);
+			statement.setInt(5, capacity);
+			statement.setDate(6, new java.sql.Date(scheduled.getTime()));
+			statement.setInt(7, bannerImageId);
+		}, rowsAffected -> {
+			if (rowsAffected != 1) {
+				throw new SQLException("Failed to create event. Rows Affected: " + rowsAffected);
+			}
+		});
+	}
+
+	// TODO: DRY; these factories are already getting pretty unmaintainable
 	public void create(String name, String description, int communityId, String venue, int capacity, Date scheduled) throws SQLException {
-		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (?, ?, ?, ? ,? ,?)";
+		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (?, ?, ?, ? ,?, ?)";
 		connection.executeUpdate(sql, statement -> {
 			statement.setInt(1, communityId);
 			statement.setString(2, name);
