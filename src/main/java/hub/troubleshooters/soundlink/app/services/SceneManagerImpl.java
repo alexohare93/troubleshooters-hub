@@ -45,6 +45,7 @@ public class SceneManagerImpl implements SceneManager {
             loader.setControllerFactory(injector::getInstance);
             root = loader.load();
             var scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/hub/troubleshooters/soundlink/app/areas/common.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle(sceneName);
             primaryStage.setWidth(width);
@@ -153,6 +154,7 @@ public class SceneManagerImpl implements SceneManager {
             root = loader.load();
             sharedController = loader.getController();
             var scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/hub/troubleshooters/soundlink/app/areas/common.css").toExternalForm());
             primaryStage.setScene(scene);
             // first time changing to the shared view will resize the window.
             primaryStage.setWidth(STAGE_WIDTH);

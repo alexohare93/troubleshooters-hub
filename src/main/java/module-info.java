@@ -22,7 +22,7 @@ module hub.troubleshooters.soundlink {
     exports hub.troubleshooters.soundlink.data.models;
     exports hub.troubleshooters.soundlink.app.areas.shared;
     opens hub.troubleshooters.soundlink.app.areas.shared to javafx.fxml;
-    opens hub.troubleshooters.soundlink.app.areas.event to javafx.fxml, com.google.guice;
+    opens hub.troubleshooters.soundlink.app.areas.events to javafx.fxml, com.google.guice;
     exports hub.troubleshooters.soundlink.core.validation;
     exports hub.troubleshooters.soundlink.core.auth.services;
     exports hub.troubleshooters.soundlink.core.auth.validation;
