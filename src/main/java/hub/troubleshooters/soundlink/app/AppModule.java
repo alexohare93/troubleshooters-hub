@@ -14,8 +14,11 @@ import hub.troubleshooters.soundlink.core.auth.validation.RegisterModelValidator
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.core.events.services.EventServiceImpl;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderServiceImpl;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
+import hub.troubleshooters.soundlink.data.factories.ImageFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
@@ -38,11 +41,13 @@ public class AppModule extends AbstractModule {
         bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
         bind(EventService.class).to(EventServiceImpl.class).in(Singleton.class);
         bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
+        bind(ImageUploaderService.class).to(ImageUploaderServiceImpl.class).in(Singleton.class);
 
         // data factories
         bind(UserFactory.class).in(Singleton.class);
         bind(CommunityFactory.class).in(Singleton.class);
         bind(CommunityMemberFactory.class).in(Singleton.class);
+        bind(ImageFactory.class).in(Singleton.class);
 
         // validators
         bind(CreateEventModelValidator.class).in(Singleton.class);

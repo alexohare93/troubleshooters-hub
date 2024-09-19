@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.core.validation;
 
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -20,6 +21,26 @@ public abstract class ModelValidator<T> {
      * @return a ValidationResult which can contain potentially many validation errors that occurred during validation.
      */
     public abstract ValidationResult validate(T model);
+
+    public interface ValidationFunction {
+        Optional<ValidationError> apply(String name, Object value);
+    }
+
+    protected final Optional<ValidationError> ifPresent(String name, Object value, ValidationFunction function) {
+        return value == null ? Optional.empty() : function.apply(name, value);
+    }
+
+    protected final Optional<ValidationError> isImage(String name, File value) {
+        if (value == null) {
+            return Optional.of(new ValidationError(name + " is null"));
+        }
+
+        if (value.getName().endsWith(".png") || value.getName().endsWith(".jpg") || value.getName().endsWith(".jpeg")) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new ValidationError(name + " is not an image"));
+        }
+    }
 
     /**
      * Performs a list of checks and ensure they all pass. If any does not pass, then it is added to the returning ValidationResult's error list.
