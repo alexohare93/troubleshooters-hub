@@ -5,6 +5,7 @@ import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
 import hub.troubleshooters.soundlink.core.validation.ModelValidator;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
+import hub.troubleshooters.soundlink.data.factories.EventFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 
 import java.util.Optional;
@@ -12,10 +13,12 @@ import java.util.Optional;
 public class SearchEventModelValidator extends ModelValidator<SearchEventModel> {
 
     private final EventFactory eventFactory;
+    private final CommunityFactory communityFactory;
 
     @Inject
-    public SearchEventModelValidator(EventFactory eventFactory) {
-        this.eventFactory= eventFactory;
+    public SearchEventModelValidator(EventFactory eventFactory, CommunityFactory communityFactory) {
+        this.eventFactory = eventFactory;
+        this.communityFactory = communityFactory;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class SearchEventModelValidator extends ModelValidator<SearchEventModel> 
             notEmpty("Name", searchEventModel.name()),
             notEmpty("Description", searchEventModel.description()),
             isFuture("Scheduled date", searchEventModel.scheduledDate()),
-            notEmpty("Venue", searchEventModel.venue()),
+            notEmpty("Venue", searchEventModel.Venue()),
             isPositive("Capacity", searchEventModel.capacity()),
             communityExists(searchEventModel.communityId())
         );

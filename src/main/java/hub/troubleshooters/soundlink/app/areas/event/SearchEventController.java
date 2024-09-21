@@ -1,9 +1,9 @@
 package hub.troubleshooters.soundlink.app.areas.event;
-package hub.troubleshooters.soundlink.app.controllers;
 
 import hub.troubleshooters.soundlink.data.factories.SearchEventFactory;
 import hub.troubleshooters.soundlink.data.models.SearchEvent;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.core.auth.UserContext;
 import com.google.inject.Inject;
 
 import java.sql.SQLException;
@@ -32,7 +32,7 @@ public class SearchEventController {
      * @throws SQLException if a database error occurs
      */
     public List<SearchEvent> listUpcomingEvents() throws SQLException {
-        int userId = identityService.getCurrentUserId();
+        int userId = identityService.getUserContext().getUser().getId();
         
         // Fetch events from communities the user is a member of
         List<SearchEvent> userCommunityEvents = searchEventFactory.findUserCommunityEvents(userId);

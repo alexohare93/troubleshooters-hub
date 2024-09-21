@@ -18,7 +18,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
     }
 
 // TODO: either remove this or adjust the save method so it potentially saves users' search history
-/*
+
     @Override
     public void save(SearchEvent model) throws SQLException {
         final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled, Created) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -28,7 +28,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
             statement.setString(3, model.getDescription());
             statement.setString(4, model.getVenue());
             statement.setInt(5, model.getCapacity());
-            statement.setDate(6, new java.sql.Date(model.getScheduled().getTime()));
+            statement.setDate(6, new java.sql.Date(model.getScheduledDate().getTime()));
             statement.setDate(7, new java.sql.Date(new Date().getTime())); // Assuming Created is current date
         }, rowsAffected -> {
             if (rowsAffected != 1) {
@@ -36,7 +36,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
             }
         });
     }
-*/
+
     @Override
     public Optional<SearchEvent> get(int id) throws SQLException {
         final String sql = "SELECT * FROM Events WHERE Id = ?";
