@@ -86,19 +86,23 @@ public class SearchEventController {
         VBox eventCard = new VBox();
         eventCard.setSpacing(10.0);
         eventCard.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
-
+    
         Label nameLabel = new Label(event.getName());
         nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
-
+    
         Label locationLabel = new Label("Location: " + event.getVenue());
         Label dateLabel = new Label("Date: " + event.getScheduledDate().toString());
-
+    
         Button signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
-
+        
+        // Handle Sign Up button action
+        signUpButton.setOnAction(e -> handleSignUp(event));
+    
         eventCard.getChildren().addAll(nameLabel, locationLabel, dateLabel, signUpButton);
         return eventCard;
     }
+
 
     /**
      * Fetches the list of upcoming events for the user
