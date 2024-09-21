@@ -17,6 +17,8 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
         super(connection, "Event");
     }
 
+// TODO: either remove this or adjust the save method so it potentially saves users' search history
+/*
     @Override
     public void save(SearchEvent model) throws SQLException {
         final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled, Created) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -34,7 +36,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
             }
         });
     }
-
+*/
     @Override
     public Optional<SearchEvent> get(int id) throws SQLException {
         final String sql = "SELECT * FROM Events WHERE Id = ?";
