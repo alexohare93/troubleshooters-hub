@@ -9,17 +9,17 @@ public class SearchEvent {
     private String description;
     private String venue;
     private int capacity;
-    private Date scheduled;
+    private Date scheduledDate;
 
     // Constructor
-    public SearchEvent(int id, int communityId, String name, String description, String venue, int capacity, Date scheduled) {
+    public SearchEvent(int id, int communityId, String name, String description, String venue, int capacity, Date scheduledDate) {
         this.id = id;
         this.communityId = communityId;
         this.name = name;
         this.description = description;
         this.venue = venue;
         this.capacity = capacity;
-        this.scheduled = scheduled;
+        this.scheduledDate = scheduledDate;
     }
 
     // Getters and setters
@@ -46,8 +46,8 @@ public class SearchEvent {
     public int getCapacity() {
         return capacity;
     }
-    public Date getScheduled() {
-        return scheduled;
+    public Date getScheduledDate() {
+        return scheduledDate;
     }
 }
 
