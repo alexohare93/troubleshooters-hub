@@ -123,4 +123,43 @@ public class SearchEventController {
 
         return userCommunityEvents;
     }
+
+
+  private void handleSignUp(SearchEvent event) {
+    int userId = identityService.getUserContext().getUser().getId();  // Fetch the logged-in user ID
+    int eventId = event.getId();  // Get the event ID
+
+    try {
+        // Create the EventAttendee using the factory
+        EventAttendeeFactory attendeeFactory = new EventAttendeeFactory(connection);
+        Optional<EventAttendee> existingAttendee = attendeeFactory.get(eventId, userId);
+        
+        if (existingAttendee.isPresent()) {
+            EventAttendee attendee = existingAttendee.get();
+            attendeeFactory.save(attendee);
+
+            // Display a success alert to the user
+            showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
+        } else {
+            // Create a new attendee and save it
+            // I do not think this is needed. I'm not sure.
+            EventAttendee newAttendee = new EventAttendee(userId, eventId);
+            attendeeFactory.save(newAttendee);
+            showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
+        }
+    } catch (SQLException e) {
+            // Log the error and show a user-friendly alert
+            logError("SQL Error while signing up", e);
+            showAlert(AlertType.ERROR, "Error", "Failed to sign up for the event. Please try again.");
+        }
+    }
+
+    // Helper method to display alerts
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
 }
