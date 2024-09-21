@@ -6,6 +6,7 @@ import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelVali
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
+import hub.troubleshooters.soundlink.data.factories.SearchEventFactory;
 
 import java.sql.SQLException;
 

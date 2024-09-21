@@ -2,6 +2,10 @@ package hub.troubleshooters.soundlink.core.events.services;
 
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
+import hub.troubleshooters.soundlink.data.models.SearchEvent;
+import hub.troubleshooters.soundlink.data.factories.SearchEventFactory;
+
+import java.util.List;
 
 /**
  * Contains all the methods involved in event CRUD operations
@@ -9,3 +13,4 @@ import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 public interface EventService {
     ValidationResult createEvent(CreateEventModel model);
 }
+
