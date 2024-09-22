@@ -8,7 +8,7 @@ public class Community {
 	private String name;
 	private String genre;
 	private String description;
-	private Date created;
+	private final Date created;
 
 	public Community(int id, String name, String description, String genre, Date created) {
 		this.name = name;
@@ -33,6 +33,4 @@ public class Community {
 	public void setDescription(String description) { this.description = description; }
 
 	public Date getCreated() { return created; }
-
-	public void setCreated(Date created) { this.created = created; }
 }

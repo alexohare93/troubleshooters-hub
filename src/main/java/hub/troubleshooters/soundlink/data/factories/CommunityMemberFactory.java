@@ -52,6 +52,36 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
     }
 
     /**
+     * Gets a CommunityMember object by the unique userId and communityId
+     * @param userId
+     * @param communityId
+     * @return
+     * @throws SQLException
+     */
+    public Optional<CommunityMember> get(int communityId, int userId) throws SQLException {
+        final String sql = "SELECT * FROM CommunityMembers WHERE CommunityId = ? AND UserId = ?;";
+        var communityMember = connection.executeQuery(sql, statement -> {
+                statement.setInt(1, communityId);
+                statement.setInt(2, userId);
+            }, executor -> {
+            if (executor.next()) {
+                return new CommunityMember(
+                        executor.getInt("Id"),
+                        executor.getInt("CommunityId"),
+                        executor.getInt("UserId"),
+                        executor.getDate("Created"),
+                        executor.getInt("Permission")
+                );
+            }
+            return null;
+        });
+        if (communityMember == null) {
+            return Optional.empty();
+        }
+        return Optional.of(communityMember);
+    }
+
+    /**
      * Gets all community memberships for a given user
      * @param user
      * @return
@@ -73,5 +103,23 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
             return commUsers;
         });
     }
-    // TODO: add get(int userId, int communityId)
+
+    /**
+     * Creates a CommunityMember
+     * @param communityId
+     * @param userId
+     * @param permission
+     * @throws SQLException
+     */
+    public void create(int communityId, int userId, int permission) throws SQLException {
+        final String sql = "INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (?, ?, ?);";
+        connection.executeUpdate(sql, statement -> {
+            statement.setInt(1, communityId);
+            statement.setInt(2, userId);
+            statement.setInt(3, permission);
+        }, rowsAffected -> {
+            if (rowsAffected != 1)
+                throw new SQLException("Failed to create Community Member. Rows affected" + rowsAffected);
+        });
+    }
 }

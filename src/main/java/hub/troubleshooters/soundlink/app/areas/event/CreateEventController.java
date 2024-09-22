@@ -12,8 +12,11 @@ import hub.troubleshooters.soundlink.data.models.Community;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -26,6 +29,7 @@ public class CreateEventController {
     private final SceneManager sceneManager;
 
     private List<Community> communities;
+    private File bannerImageFile;
 
     @FXML
     private ChoiceBox<String> communityChoiceBox;
@@ -35,6 +39,8 @@ public class CreateEventController {
     @FXML private TextField locationTextField;
     @FXML private DatePicker publishDatePicker;
     @FXML private IntegerTextField capacityTextField;
+    @FXML private Label fileNameLabel;
+    @FXML private Button clearImageButton;
 
     @FXML private Label errorLabel;
     @FXML private Tooltip errorTooltip;
@@ -62,6 +68,17 @@ public class CreateEventController {
     }
 
     @FXML
+    protected void onUploadButtonClick() {
+        // open file dialog
+        var file = sceneManager.openFileDialog();
+        if (file == null) return;
+
+        fileNameLabel.setText(file.getName());
+        bannerImageFile = file;
+        clearImageButton.setVisible(true);
+    }
+
+    @FXML
     protected void onCreateButtonClick() {
         // create model
         var name = nameTextField.getText();
@@ -74,7 +91,7 @@ public class CreateEventController {
         int communityId = communityOption.map(Community::getId).orElse(0);  // id of 0 will always result in a validation error due to autoincrement
         var capacity = capacityTextField.getText().isEmpty() ? Integer.MAX_VALUE : Integer.parseInt(capacityTextField.getText());   // should never throw due to the applied TextFormatter
 
-        var createEventModel = new CreateEventModel(name, description, publishDate, location, capacity, communityId);
+        var createEventModel = new CreateEventModel(name, description, publishDate, location, capacity, communityId, bannerImageFile);
 
         // send to event service to validate and save
         var result = eventService.createEvent(createEventModel);
@@ -90,5 +107,12 @@ public class CreateEventController {
                 .map(err -> "• " + err.getMessage() + "\n")
                 .reduce("", (a, b) -> a + b)
         );
+    }
+
+    @FXML
+    protected void onClearImageButtonClick() {
+        bannerImageFile = null;
+        clearImageButton.setVisible(false);
+        fileNameLabel.setText("No file selected");
     }
 }

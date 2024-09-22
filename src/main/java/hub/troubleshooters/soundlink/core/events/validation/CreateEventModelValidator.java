@@ -7,6 +7,7 @@ import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 
+import java.io.File;
 import java.util.Optional;
 
 public class CreateEventModelValidator extends ModelValidator<CreateEventModel> {
@@ -30,7 +31,8 @@ public class CreateEventModelValidator extends ModelValidator<CreateEventModel> 
                 isFuture("Scheduled date", createEventModel.scheduledDate()),
                 notEmpty("Location", createEventModel.location()),
                 isPositive("Capacity", createEventModel.capacity()),
-                communityExists(createEventModel.communityId())
+                communityExists(createEventModel.communityId()),
+                ifPresent("Banner image", createEventModel.bannerImage(), (name, value) -> isImage(name, (File) value))
         );
     }
 

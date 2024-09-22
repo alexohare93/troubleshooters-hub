@@ -52,10 +52,6 @@ public class User {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public Date getLastLogin() {
         return lastLogin;
     }

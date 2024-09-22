@@ -63,6 +63,16 @@
          <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" />
           </VBox>
 
+                            <!-- Banner Image -->
+          <VBox alignment="CENTER_LEFT" spacing="10.0">
+              <Label style="-fx-font-size: 16px;" text="Banner Image" />
+              <HBox spacing="10.0">
+                  <Button mnemonicParsing="false" onAction="#onUploadButtonClick" style="-fx-background-color: #fa8072; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Upload" />
+                    <Label fx:id="fileNameLabel" style="-fx-font-size: 16px;" text="No file selected" />
+                    <Button fx:id="clearImageButton" style="-fx-background-color: transparent" mnemonicParsing="false" onAction="#onClearImageButtonClick" text="🗙" visible="false" />
+              </HBox>
+          </VBox>
+
                             <!-- Create Event Button -->
           <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonClick" style="-fx-background-color: #fa8072; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Event" />
       </children>
