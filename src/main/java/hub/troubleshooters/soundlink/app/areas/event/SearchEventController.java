@@ -1,8 +1,12 @@
 package hub.troubleshooters.soundlink.app.areas.event;
 
 import hub.troubleshooters.soundlink.data.factories.SearchEventFactory;
+import hub.troubleshooters.soundlink.data.factories.EventAttendeeFactory;
+import hub.troubleshooters.soundlink.data.models.EventAttendee;
 import hub.troubleshooters.soundlink.data.models.SearchEvent;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.data.DatabaseConnection;
+
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,7 +14,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
+import java.util.Optional;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -34,12 +40,16 @@ public class SearchEventController {
 
     private final SearchEventFactory searchEventFactory;
     private final IdentityService identityService;
+    private final EventAttendeeFactory eventAttendeeFactory;
+
 
     @Inject
-    public SearchEventController(SearchEventFactory searchEventFactory, IdentityService identityService) {
+    public SearchEventController(SearchEventFactory searchEventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory) {
         this.searchEventFactory = searchEventFactory;
         this.identityService = identityService;
+        this.eventAttendeeFactory = eventAttendeeFactory;  // Inject EventAttendeeFactory
     }
+
 
     @FXML
     public void initialize() {
@@ -131,25 +141,17 @@ public class SearchEventController {
 
     try {
         // Create the EventAttendee using the factory
-        EventAttendeeFactory attendeeFactory = new EventAttendeeFactory(connection);
-        Optional<EventAttendee> existingAttendee = attendeeFactory.get(eventId, userId);
-        
-        if (existingAttendee.isPresent()) {
-            EventAttendee attendee = existingAttendee.get();
-            attendeeFactory.save(attendee);
 
-            // Display a success alert to the user
-            showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
-        } else {
-            // Create a new attendee and save it
-            // I do not think this is needed. I'm not sure.
-            EventAttendee newAttendee = new EventAttendee(userId, eventId);
-            attendeeFactory.save(newAttendee);
-            showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
-        }
+        Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId);
+
+        EventAttendee attendee = existingAttendee.get();
+        eventAttendeeFactory.save(attendee);
+
+        // Display a success alert to the user
+        showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
+
     } catch (SQLException e) {
-            // Log the error and show a user-friendly alert
-            logError("SQL Error while signing up", e);
+            // Show a user-friendly alert
             showAlert(AlertType.ERROR, "Error", "Failed to sign up for the event. Please try again.");
         }
     }
@@ -161,5 +163,4 @@ public class SearchEventController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
 }
