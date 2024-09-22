@@ -134,7 +134,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	 * @param permission
 	 * @throws SQLException
 	 */
-	void create(int eventId, int userId, int permission) throws SQLException {
+	public void create(int eventId, int userId, int permission) throws SQLException {
 		final String sql = "INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (?, ?, ?);";
 		connection.executeUpdate(sql, statement -> {
 			statement.setInt(1, eventId);
