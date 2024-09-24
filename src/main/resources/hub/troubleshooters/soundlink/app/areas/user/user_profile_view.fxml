@@ -1,48 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom right, #f7f7f7, #e2e2e2);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.profile.UserProfileController">
     <children>
-        <!-- User Profile Content -->
-        <VBox alignment="CENTER" layoutX="50.0" layoutY="100.0" spacing="20.0">
-            <!-- Username and description pane -->
-            <Pane prefHeight="200.0" prefWidth="700.0" style="-fx-background-color: #fa8072;">
-                <children>
-                    <!-- Username and description -->
-                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="700.0" spacing="10.0">
-                        <Label style="-fx-font-size: 36px; -fx-text-fill: white;" text="Jim Bob" />
-                        <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="I love country music!" />
-                    </VBox>
-                </children>
-            </Pane>
 
-            <!-- Music Communities and Events section -->
-            <HBox alignment="CENTER" spacing="40.0">
-                <!-- Music Communities Card -->
-                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Music Communities" />
-                    <Label style="-fx-font-size: 14px;" text="Rock Enthusiasts" />
-                    <Label style="-fx-font-size: 14px;" text="Indie Music Lovers" />
-                    <Label style="-fx-font-size: 14px;" text="Jazz Fans" />
-                </VBox>
-                <!-- Upcoming Events Card -->
-                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10;">
-                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Upcoming Events" />
-                    <Label style="-fx-font-size: 14px;" text="Rock Music Fest - 19 December 2024" />
-                    <Label style="-fx-font-size: 14px;" text="Indie Night at The Club - 15 January 2025" />
-                    <Label style="-fx-font-size: 14px;" text="Jazz Under the Stars - 10 February 2025" />
-                </VBox>
+        <!-- User Details with Image -->
+        <HBox spacing="30.0" layoutX="50.0" layoutY="100.0" alignment="CENTER_LEFT">
+            <VBox spacing="15.0">
+                <ImageView fx:id="userImageView" fitHeight="120.0" fitWidth="120.0"
+                           style="-fx-background-color: #555555; -fx-border-color: #FF6F61; -fx-border-width: 3px; -fx-border-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75), 10, 0, 0, 5);" />
+                <Button text="Change Image" onAction="#changeImage" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+            </VBox>
+            <VBox spacing="15.0">
+                <HBox spacing="10.0">
+                    <Label text="Name:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                    <TextField fx:id="nameField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
+                    <Button text="Edit" onAction="#editName" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                    <Button text="Save" onAction="#saveName" fx:id="saveNameButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                </HBox>
+                <HBox spacing="10.0">
+                    <Label text="Short Bio:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                    <TextField fx:id="bioField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
+                    <Button text="Edit" onAction="#editBio" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                    <Button text="Save" onAction="#saveBio" fx:id="saveBioButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                </HBox>
+                <HBox spacing="10.0">
+                    <Label text="My Preferences:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                    <TextField fx:id="preferencesField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
+                    <Button text="Edit" onAction="#editPreferences" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                    <Button text="Save" onAction="#savePreferences" fx:id="savePreferencesButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <!-- Post/Event/Community Section -->
+        <VBox spacing="20.0" layoutX="50.0" layoutY="350.0" style="-fx-background-color: #FFFFFF; -fx-padding: 20; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 5);">
+            <HBox spacing="10.0">
+                <Label text="My Posts:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                <TextField fx:id="postsField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
+                <Button text="Edit" onAction="#editPosts" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                <Button text="Save" onAction="#savePosts" fx:id="savePostsButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+            </HBox>
+            <HBox spacing="10.0">
+                <Label text="My Events:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                <TextField fx:id="eventsField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
+                <Button text="Edit" onAction="#editEvents" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                <Button text="Save" onAction="#saveEvents" fx:id="saveEventsButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+            </HBox>
+            <HBox spacing="10.0">
+                <Label text="My Communities:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                <TextField fx:id="communitiesField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
+                <Button text="Edit" onAction="#editCommunities" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
+                <Button text="Save" onAction="#saveCommunities" fx:id="saveCommunitiesButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
             </HBox>
         </VBox>
 
         <!-- Footer -->
-        <Label layoutX="300.0" layoutY="570.0" style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
+        <Label layoutX="310.0" layoutY="570.0" text="© 2024 SoundLink. All rights reserved." style="-fx-text-fill: #999999;" />
+
     </children>
 </AnchorPane>
+
+
+
