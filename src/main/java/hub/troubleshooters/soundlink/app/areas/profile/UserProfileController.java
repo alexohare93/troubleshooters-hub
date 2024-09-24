@@ -40,7 +40,6 @@ public class UserProfileController {
 
     @FXML
     public void initialize() {
-        // 初始化
     }
 
     @FXML
