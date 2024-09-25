@@ -5,7 +5,6 @@ import hub.troubleshooters.soundlink.data.factories.EventAttendeeFactory;
 import hub.troubleshooters.soundlink.data.models.EventAttendee;
 import hub.troubleshooters.soundlink.data.models.SearchEvent;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
-import hub.troubleshooters.soundlink.data.DatabaseConnection;
 
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
@@ -14,12 +13,16 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import java.util.Optional;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
-
-import java.sql.SQLException;
+import javafx.collections.ObservableList;
+import javafx.scene.input.KeyEvent;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.sql.SQLException;
 
 public class SearchEventController {
 
@@ -27,13 +30,19 @@ public class SearchEventController {
     private VBox eventListVBox;
 
     @FXML
-    private ComboBox<String> eventTypeComboBox;
+    private ComboBox<String> nameComboBox;
 
     @FXML
-    private ComboBox<String> locationComboBox;
+    private ComboBox<String> descriptionComboBox;
 
     @FXML
-    private DatePicker datePicker;
+    private ComboBox<String> venueComboBox;
+
+    @FXML
+    private ComboBox<String> capacityComboBox;
+
+    @FXML
+    private DatePicker scheduledDatePicker;
 
     @FXML
     private Button searchButton;
@@ -47,7 +56,7 @@ public class SearchEventController {
     public SearchEventController(SearchEventFactory searchEventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory) {
         this.searchEventFactory = searchEventFactory;
         this.identityService = identityService;
-        this.eventAttendeeFactory = eventAttendeeFactory;  // Inject EventAttendeeFactory
+        this.eventAttendeeFactory = eventAttendeeFactory;
     }
 
 
@@ -60,13 +69,101 @@ public class SearchEventController {
         }
 
         searchButton.setOnAction(event -> {
-            // Perform filtering logic based on selected filters
             try {
-                populateEventList();
+                searchEvents();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
+
+        // Add listener for name search
+        nameComboBox.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            try {
+                handleNameSearch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Add listener for description search
+        descriptionComboBox.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            try {
+                handleDescriptionSearch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Add listener for venue search
+        venueComboBox.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            try {
+                handleVenueSearch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Add listener for capacity search
+        capacityComboBox.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+            try {
+                handleCapacitySearch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Add listener for scheduled date selection
+        scheduledDatePicker.setOnAction(event -> {
+            try {
+                handleScheduledDateSelection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void handleNameSearch() throws SQLException {
+        String searchTerm = nameComboBox.getEditor().getText();
+        if (!searchTerm.isEmpty()) {
+            ObservableList<String> names = searchEventFactory.searchEventNames(searchTerm);
+            nameComboBox.setItems(names);
+            nameComboBox.show();
+        }
+    }
+
+    private void handleDescriptionSearch() throws SQLException {
+        String searchTerm = descriptionComboBox.getEditor().getText();
+        if (!searchTerm.isEmpty()) {
+            ObservableList<String> descriptions = searchEventFactory.searchEventDescriptions(searchTerm);
+            descriptionComboBox.setItems(descriptions);
+            descriptionComboBox.show();
+        }
+    }
+
+    private void handleVenueSearch() throws SQLException {
+        String searchTerm = venueComboBox.getEditor().getText();
+        if (!searchTerm.isEmpty()) {
+            ObservableList<String> venues = searchEventFactory.searchEventVenues(searchTerm);
+            venueComboBox.setItems(venues);
+            venueComboBox.show();
+        }
+    }
+
+    private void handleCapacitySearch() throws SQLException {
+        String searchTerm = capacityComboBox.getEditor().getText();
+        if (!searchTerm.isEmpty()) {
+            ObservableList<String> capacities = searchEventFactory.searchEventCapacities(searchTerm);
+            capacityComboBox.setItems(capacities);
+            capacityComboBox.show();
+        }
+    }
+
+    private void handleScheduledDateSelection() throws SQLException {
+        LocalDate selectedDate = scheduledDatePicker.getValue();
+        if (selectedDate != null) {
+            ObservableList<SearchEvent> eventsOnDate = searchEventFactory.searchEventsByScheduledDate(selectedDate);
+            updateEventList(eventsOnDate);
+        }
     }
 
     /**
@@ -74,93 +171,100 @@ public class SearchEventController {
      * @throws SQLException if a database error occurs
      */
     private void populateEventList() throws SQLException {
-        // Clear the previous event list
         eventListVBox.getChildren().clear();
 
         // Fetch upcoming events for the user
         List<SearchEvent> events = listUpcomingEvents();
 
-        // Dynamically add event cards to the VBox
         for (SearchEvent event : events) {
             VBox eventCard = createEventCard(event);
             eventListVBox.getChildren().add(eventCard);
         }
     }
 
-    /**
-     * Creates an event card for each event to display in the VBox.
-     * @param event The event to display
-     * @return A VBox containing the event card
-     */
     private VBox createEventCard(SearchEvent event) {
         VBox eventCard = new VBox();
         eventCard.setSpacing(10.0);
         eventCard.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
-    
+
         Label nameLabel = new Label(event.getName());
         nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
-    
+
+        // Format the date as day-month-year using SimpleDateFormat
+        Date scheduledDate = event.getScheduledDate();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = formatter.format(scheduledDate);
+
+        Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
-        Label dateLabel = new Label("Date: " + event.getScheduledDate().toString());
-    
+        Label dateLabel = new Label("Date: " + formattedDate);
+        Label capacityLabel = new Label("Capacity: " + event.getCapacity());
+
         Button signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
-        
-        // Handle Sign Up button action
         signUpButton.setOnAction(e -> handleSignUp(event));
-    
-        eventCard.getChildren().addAll(nameLabel, locationLabel, dateLabel, signUpButton);
+
+        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel, signUpButton);
+
         return eventCard;
     }
 
-
-    /**
-     * Fetches the list of upcoming events for the user
-     * @return a list of SearchEvent objects
-     * @throws SQLException if a database error occurs
-     */
     public List<SearchEvent> listUpcomingEvents() throws SQLException {
         int userId = identityService.getUserContext().getUser().getId();
 
-        // Fetch events from communities the user is a member of
         List<SearchEvent> userCommunityEvents = searchEventFactory.findUserCommunityEvents(userId);
-
-        // Fetch public events from communities the user is not a member of
         List<SearchEvent> publicEvents = searchEventFactory.findPublicCommunityEvents(userId);
 
-        // Combine both lists
         userCommunityEvents.addAll(publicEvents);
-
         return userCommunityEvents;
     }
 
+    private void handleSignUp(SearchEvent event) {
+        int userId = identityService.getUserContext().getUser().getId();
+        int eventId = event.getId();
 
-  private void handleSignUp(SearchEvent event) {
-    int userId = identityService.getUserContext().getUser().getId();  // Fetch the logged-in user ID
-    int eventId = event.getId();  // Get the event ID
-
-    try {
-        // Create the EventAttendee using the factory
-
-        Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId);
-
-        EventAttendee attendee = existingAttendee.get();
-        eventAttendeeFactory.save(attendee);
-
-        // Display a success alert to the user
-        showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
-
-    } catch (SQLException e) {
-            // Show a user-friendly alert
+        try {
+            Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId, userId);
+            if (existingAttendee.isPresent()) {
+                showAlert(AlertType.INFORMATION, "Already Signed Up", "You have already signed up for this event.");
+            } else {
+                int permission = 6;  // Permission for comment ability
+                eventAttendeeFactory.create(eventId, userId, permission);
+                showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
+            }
+        } catch (SQLException e) {
             showAlert(AlertType.ERROR, "Error", "Failed to sign up for the event. Please try again.");
         }
     }
 
-    // Helper method to display alerts
     private void showAlert(AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void searchEvents() throws SQLException {
+        // Get values from the ComboBoxes and DatePicker
+        String name = nameComboBox.getEditor().getText();
+        String description = descriptionComboBox.getEditor().getText();
+        String venue = venueComboBox.getEditor().getText();
+        String capacity = capacityComboBox.getEditor().getText();
+        LocalDate scheduledDate = scheduledDatePicker.getValue();
+
+        // Perform the search based on user input
+        ObservableList<SearchEvent> searchResults = searchEventFactory.searchEvents(name, description, venue, capacity, scheduledDate);
+
+        // Update the event list with the results
+        updateEventList(searchResults);
+    }
+
+    private void updateEventList(ObservableList<SearchEvent> searchResults) {
+        eventListVBox.getChildren().clear();
+
+        for (SearchEvent event : searchResults) {
+            VBox eventCard = createEventCard(event);
+            eventListVBox.getChildren().add(eventCard);
+        }
     }
 }
