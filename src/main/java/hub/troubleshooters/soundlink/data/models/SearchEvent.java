@@ -46,6 +46,7 @@ public class SearchEvent {
     public int getCapacity() {
         return capacity;
     }
+
     public Date getScheduledDate() {
         return scheduledDate;
     }

@@ -118,91 +118,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
         });
     }
 
-    public ObservableList<String> searchEventNames(String searchTerm) throws SQLException {
-        String sql = "SELECT DISTINCT name FROM Events WHERE name LIKE ? LIMIT 10";
-        List<String> results = connection.executeQuery(sql, statement -> {
-            statement.setString(1, "%" + searchTerm + "%");
-        }, resultSet -> {
-            ObservableList<String> names = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                names.add(resultSet.getString("name"));
-            }
-            return names;
-        });
-        return FXCollections.observableArrayList(results);
-    }
-
-    public ObservableList<String> searchEventDescriptions(String searchTerm) throws SQLException {
-        String sql = "SELECT DISTINCT description FROM Events WHERE description LIKE ? LIMIT 10";
-        List<String> results = connection.executeQuery(sql, statement -> {
-            statement.setString(1, "%" + searchTerm + "%");
-        }, resultSet -> {
-            ObservableList<String> descriptions = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                descriptions.add(resultSet.getString("description"));
-            }
-            return descriptions;
-        });
-        return FXCollections.observableArrayList(results);
-    }
-
-    public ObservableList<String> searchEventVenues(String searchTerm) throws SQLException {
-        String sql = "SELECT DISTINCT venue FROM Events WHERE venue LIKE ? LIMIT 10";
-        List<String> results = connection.executeQuery(sql, statement -> {
-            statement.setString(1, "%" + searchTerm + "%");
-        }, resultSet -> {
-            ObservableList<String> venues = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                venues.add(resultSet.getString("venue"));
-            }
-            return venues;
-        });
-        return FXCollections.observableArrayList(results);
-    }
-
-    public ObservableList<String> searchEventCapacities(String searchTerm) throws SQLException {
-        String sql = "SELECT DISTINCT CAST(capacity AS CHAR) AS capacity FROM Events WHERE CAST(capacity AS CHAR) LIKE ? LIMIT 10";
-        List<String> results = connection.executeQuery(sql, statement -> {
-            statement.setString(1, "%" + searchTerm + "%");
-        }, resultSet -> {
-            ObservableList<String> capacities = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                capacities.add(resultSet.getString("capacity"));
-            }
-            return capacities;
-        });
-        return FXCollections.observableArrayList(results);
-    }
-
-    /**
-     * Searches for events based on the scheduled date.
-     * @param scheduled The date selected by the user.
-     * @return A list of events matching the selected date.
-     * @throws SQLException If the query fails.
-     */
-    public ObservableList<SearchEvent> searchEventsByScheduledDate(LocalDate scheduled) throws SQLException {
-        String sql = "SELECT * FROM Events WHERE DATE(scheduled) = ?";
-
-        return connection.executeQuery(sql, statement -> {
-            statement.setDate(1, java.sql.Date.valueOf(scheduled));  // Convert LocalDate to java.sql.Date
-        }, resultSet -> {
-            ObservableList<SearchEvent> events = FXCollections.observableArrayList();
-            while (resultSet.next()) {
-                events.add(new SearchEvent(
-                        resultSet.getInt("Id"),  // Assuming column is "Id"
-                        resultSet.getInt("CommunityId"),  // Assuming column is "CommunityId"
-                        resultSet.getString("Name"),
-                        resultSet.getString("Description"),
-                        resultSet.getString("Venue"),
-                        resultSet.getInt("Capacity"),
-                        resultSet.getDate("Scheduled")  // Assuming this is java.sql.Date
-                ));
-            }
-            return events;
-        });
-    }
-
-    public ObservableList<SearchEvent> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduledDate) throws SQLException {
+    public ObservableList<SearchEvent> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduled) throws SQLException {
         String sql = "SELECT * FROM Events WHERE 1=1";
         if (name != null && !name.isEmpty()) {
             sql += " AND name LIKE ?";
@@ -216,8 +132,8 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
         if (capacity != null && !capacity.isEmpty()) {
             sql += " AND capacity = ?";
         }
-        if (scheduledDate != null) {
-            sql += " AND DATE(scheduledDate) = ?";
+        if (scheduled != null) {
+            sql += " AND DATE(scheduled) = ?";
         }
 
         return connection.executeQuery(sql, statement -> {
@@ -234,8 +150,8 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
             if (capacity != null && !capacity.isEmpty()) {
                 statement.setString(paramIndex++, capacity);
             }
-            if (scheduledDate != null) {
-                statement.setDate(paramIndex++, java.sql.Date.valueOf(scheduledDate));
+            if (scheduled != null) {
+                statement.setDate(paramIndex++, java.sql.Date.valueOf(scheduled));
             }
         }, resultSet -> {
             ObservableList<SearchEvent> events = FXCollections.observableArrayList();
