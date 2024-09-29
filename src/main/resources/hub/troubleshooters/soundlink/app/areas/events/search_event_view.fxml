@@ -12,7 +12,7 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.TextField?>
 
-        <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.event.SearchEventController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.event.SearchEventController">
     <children>
         <HBox layoutX="20.0" layoutY="100.0" spacing="30.0">
             <VBox prefWidth="250.0" style="-fx-background-color: white; -fx-padding: 20px; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-border-radius: 5px;">
@@ -31,6 +31,17 @@
 
                 <Label text="Capacity:" style="-fx-padding: 10 0 0 0;" />
                 <TextField fx:id="capacityTextField" prefWidth="200.0" />
+
+                <Label text="Event Type:" style="-fx-padding: 10 0 0 0;" />
+                <ComboBox fx:id="eventTypeComboBox" prefWidth="200.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="All Events" />
+                            <String fx:value="Community Events" />
+                            <String fx:value="Public Events" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
 
                 <Button fx:id="searchButton" text="Search" style="-fx-background-color: #ffcc00; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px;">
                     <VBox.margin>

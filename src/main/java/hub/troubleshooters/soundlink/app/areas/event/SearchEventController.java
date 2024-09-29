@@ -46,6 +46,9 @@ public class SearchEventController {
     private DatePicker scheduledDatePicker;
 
     @FXML
+    private ComboBox<String> eventTypeComboBox;
+
+    @FXML
     private Button searchButton;
 
     private final SearchEventFactory searchEventFactory;
@@ -92,6 +95,7 @@ public class SearchEventController {
 
         // Fetch upcoming events for the user
         List<SearchEvent> events = listUpcomingEvents();
+        System.out.println("Events:" + events);
 
         for (SearchEvent event : events) {
             VBox eventCard = createEventCard(event);
@@ -130,10 +134,29 @@ public class SearchEventController {
     public List<SearchEvent> listUpcomingEvents() throws SQLException {
         int userId = identityService.getUserContext().getUser().getId();
 
+        // Fetching user community events
         List<SearchEvent> userCommunityEvents = searchEventFactory.findUserCommunityEvents(userId);
-        List<SearchEvent> publicEvents = searchEventFactory.findPublicCommunityEvents(userId);
+        if (userCommunityEvents == null || userCommunityEvents.isEmpty()) {
+            System.out.println("No user community events found.");
+        } else {
+            System.out.println("User community events found: " + userCommunityEvents.size());
+        }
 
-        userCommunityEvents.addAll(publicEvents);
+        // Fetching public events
+        List<SearchEvent> publicEvents = searchEventFactory.findPublicCommunityEvents(userId);
+        if (publicEvents == null || publicEvents.isEmpty()) {
+            System.out.println("No public events found.");
+        } else {
+            System.out.println("Public events found: " + publicEvents.size());
+        }
+
+        // Combine both lists
+        if (userCommunityEvents != null) {
+            userCommunityEvents.addAll(publicEvents);
+        } else {
+            userCommunityEvents = publicEvents;
+        }
+
         return userCommunityEvents;
     }
 
@@ -169,13 +192,14 @@ public class SearchEventController {
         String venue = venueTextField.getText();
         String capacity = capacityTextField.getText();
         LocalDate scheduledDate = scheduledDatePicker.getValue();
+        String eventType = eventTypeComboBox.getValue();
 
         // Log inputs
         System.out.println("Search Params: Name = " + name + ", Description = " + description +
                 ", Venue = " + venue + ", Capacity = " + capacity + ", Date = " + scheduledDate);
 
         // Perform the search based on user input
-        ObservableList<SearchEvent> searchResults = searchEventFactory.searchEvents(name, description, venue, capacity, scheduledDate);
+        ObservableList<SearchEvent> searchResults = searchEventFactory.searchEvents(name, description, venue, capacity, scheduledDate, eventType);
 
         // Log result count
         System.out.println("Search Results Size: " + searchResults.size());

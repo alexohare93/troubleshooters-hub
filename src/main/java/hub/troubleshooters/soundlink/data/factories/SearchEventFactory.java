@@ -2,6 +2,8 @@ package hub.troubleshooters.soundlink.data.factories;
 
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.models.SearchEvent;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+
 import com.google.inject.Inject;
 
 import javafx.collections.FXCollections;
@@ -16,9 +18,12 @@ import java.util.Optional;
 
 public class SearchEventFactory extends ModelFactory<SearchEvent> {
 
+    private final IdentityService identityService;
+
     @Inject
-    public SearchEventFactory(DatabaseConnection connection) {
+    public SearchEventFactory(DatabaseConnection connection, IdentityService identityService) {
         super(connection, "Event");
+        this.identityService = identityService;
     }
 
 // TODO: either remove this or adjust the save method so it potentially saves users' search history
@@ -71,11 +76,11 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
         final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId " +
                 "FROM Events e " +
                 "JOIN CommunityMembers cm ON cm.CommunityId = e.CommunityId " +
-                "WHERE cm.UserId = ? AND e.Scheduled >= CURRENT_TIMESTAMP";
+                "WHERE cm.UserId = ?";
         return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
-            List<SearchEvent> searchevents = new ArrayList<>();
+            List<SearchEvent> searchEvents = new ArrayList<>();
             while (executor.next()) {
-                searchevents.add(new SearchEvent(
+                searchEvents.add(new SearchEvent(
                         executor.getInt("Id"),
                         executor.getInt("CommunityId"),
                         executor.getString("Name"),
@@ -85,7 +90,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
                         executor.getDate("Scheduled")
                 ));
             }
-            return searchevents;
+            return searchEvents;
         });
     }
 
@@ -99,8 +104,7 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
         final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId " +
                 "FROM Events e " +
                 "JOIN Communities c ON e.CommunityId = c.Id " +
-                "WHERE c.Id NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?) " +
-                "AND e.Scheduled >= CURRENT_TIMESTAMP";
+                "WHERE c.Id NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?) ";
         return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
             List<SearchEvent> publicEvents = new ArrayList<>();
             while (executor.next()) {
@@ -118,24 +122,30 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
         });
     }
 
-    public ObservableList<SearchEvent> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduled) throws SQLException {
+    public ObservableList<SearchEvent> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduled,String eventType) throws SQLException {
         String sql = "SELECT * FROM Events WHERE 1=1";
         if (name != null && !name.isEmpty()) {
-            sql += " AND name LIKE ?";
+            sql += " AND Name LIKE ?";
         }
         if (description != null && !description.isEmpty()) {
-            sql += " AND description LIKE ?";
+            sql += " AND Description LIKE ?";
         }
         if (venue != null && !venue.isEmpty()) {
-            sql += " AND venue LIKE ?";
+            sql += " AND Venue LIKE ?";
         }
         if (capacity != null && !capacity.isEmpty()) {
-            sql += " AND capacity = ?";
+            sql += " AND Capacity LIKE ?";
         }
         if (scheduled != null) {
-            sql += " AND DATE(scheduled) = ?";
+            sql += " AND DATE(Scheduled) = ?";
         }
-
+        if (eventType != null) {
+            if (eventType.equals("Community Events")) {
+                sql += " AND CommunityId IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?)";
+            } else if (eventType.equals("Public Events")) {
+                sql += " AND CommunityId NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?)";
+            }
+        }
         return connection.executeQuery(sql, statement -> {
             int paramIndex = 1;
             if (name != null && !name.isEmpty()) {
@@ -148,22 +158,25 @@ public class SearchEventFactory extends ModelFactory<SearchEvent> {
                 statement.setString(paramIndex++, "%" + venue + "%");
             }
             if (capacity != null && !capacity.isEmpty()) {
-                statement.setString(paramIndex++, capacity);
+                statement.setString(paramIndex++,"%" + capacity + "%");
             }
             if (scheduled != null) {
                 statement.setDate(paramIndex++, java.sql.Date.valueOf(scheduled));
+            }
+            if (eventType != null && (eventType.equals("Community Events") || eventType.equals("Public Events"))) {
+                statement.setInt(paramIndex++, identityService.getUserContext().getUser().getId());
             }
         }, resultSet -> {
             ObservableList<SearchEvent> events = FXCollections.observableArrayList();
             while (resultSet.next()) {
                 events.add(new SearchEvent(
-                        resultSet.getInt("id"),
-                        resultSet.getInt("communityId"),
-                        resultSet.getString("name"),
-                        resultSet.getString("description"),
-                        resultSet.getString("venue"),
-                        resultSet.getInt("capacity"),
-                        resultSet.getDate("scheduled")
+                        resultSet.getInt("Id"),
+                        resultSet.getInt("CommunityId"),
+                        resultSet.getString("Name"),
+                        resultSet.getString("Description"),
+                        resultSet.getString("Venue"),
+                        resultSet.getInt("Capacity"),
+                        resultSet.getDate("Scheduled")
                 ));
             }
             return events;
