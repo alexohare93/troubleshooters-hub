@@ -68,4 +68,34 @@ public class EventServiceImpl implements EventService {
                 )
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SearchEvent> listUpcomingEvents() throws SQLException {
+        int userId = identityService.getUserContext().getUser().getId();
+
+        // Fetching user community events
+        List<SearchEvent> userCommunityEvents = searchEventFactory.findUserCommunityEvents(userId);
+        if (userCommunityEvents == null || userCommunityEvents.isEmpty()) {
+            System.out.println("No user community events found.");
+        } else {
+            System.out.println("User community events found: " + userCommunityEvents.size());
+        }
+
+        // Fetching public events
+        List<SearchEvent> publicEvents = searchEventFactory.findPublicCommunityEvents(userId);
+        if (publicEvents == null || publicEvents.isEmpty()) {
+            System.out.println("No public events found.");
+        } else {
+            System.out.println("Public events found: " + publicEvents.size());
+        }
+
+        // Combine both lists
+        if (userCommunityEvents != null) {
+            userCommunityEvents.addAll(publicEvents);
+        } else {
+            userCommunityEvents = publicEvents;
+        }
+
+        return userCommunityEvents;
+    }
 }
