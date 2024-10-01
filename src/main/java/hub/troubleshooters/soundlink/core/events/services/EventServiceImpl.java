@@ -38,4 +38,16 @@ public class EventServiceImpl implements EventService {
         }
         return new ValidationResult();
     }
+
+    @Override
+    public List<Event> getUserCommunityEvents(int userId) throws SQLException {
+        // Implementation to fetch events where the user is a member
+        return eventFactory.findUserCommunityEvents(userId);
+    }
+
+    @Override
+    public List<Event> getPublicCommunityEvents(int userId) throws SQLException {
+        // Implementation to fetch public events where the user is not a member
+        return eventFactory.findPublicCommunityEvents(userId);
+    }
 }
