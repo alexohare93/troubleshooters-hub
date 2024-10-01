@@ -19,5 +19,7 @@ public interface EventService {
     List<Event> getPublicCommunityEvents(int userId) throws SQLException;
 
     List<Event> search(SearchEventModel searchModel) throws SQLException;
+
+    List<Event> listUpcomingEvents(int userId) throws SQLException;
 }
 
