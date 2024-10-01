@@ -50,4 +50,22 @@ public class EventServiceImpl implements EventService {
         // Implementation to fetch public events where the user is not a member
         return eventFactory.findPublicCommunityEvents(userId);
     }
+
+    @Override
+    public List<Event> search(SearchEventModel searchModel) throws SQLException {
+        // fetch all events from the database
+        List<Event> allEvents = eventFactory.getAllEvents();
+
+        // apply filtering logic in-memory
+        return allEvents.stream()
+                .filter(event -> 
+                    (searchModel.name() == null || event.getName().contains(searchModel.name())) &&
+                    (searchModel.description() == null || event.getDescription().contains(searchModel.description())) &&
+                    (searchModel.scheduledDate() == null || event.getScheduledDate().equals(searchModel.scheduledDate())) &&
+                    (searchModel.Venue() == null || event.getVenue().contains(searchModel.Venue())) &&
+                    (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
+                    (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId())
+                )
+                .collect(Collectors.toList());
+    }
 }
