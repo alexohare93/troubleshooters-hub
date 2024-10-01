@@ -95,15 +95,15 @@ public class EventFactory extends ModelFactory<Event> {
      * @return A list of events the user is a member of
      * @throws SQLException if a database error occurs
      */
-    public List<SearchEvent> findUserCommunityEvents(int userId) throws SQLException {
+    public List<Event> findUserCommunityEvents(int userId) throws SQLException {
         final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId " +
                 "FROM Events e " +
                 "JOIN CommunityMembers cm ON cm.CommunityId = e.CommunityId " +
                 "WHERE cm.UserId = ?";
         return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
-            List<SearchEvent> searchEvents = new ArrayList<>();
+            List<Event> Events = new ArrayList<>();
             while (executor.next()) {
-                searchEvents.add(new SearchEvent(
+                searchEvents.add(new Event(
                         executor.getInt("Id"),
                         executor.getInt("CommunityId"),
                         executor.getString("Name"),
@@ -113,7 +113,7 @@ public class EventFactory extends ModelFactory<Event> {
                         executor.getDate("Scheduled")
                 ));
             }
-            return searchEvents;
+            return Events;
         });
     }
 
@@ -123,15 +123,15 @@ public class EventFactory extends ModelFactory<Event> {
      * @return A list of public events the user is not a member of
      * @throws SQLException if a database error occurs
      */
-    public List<SearchEvent> findPublicCommunityEvents(int userId) throws SQLException {
+    public List<Event> findPublicCommunityEvents(int userId) throws SQLException {
         final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId " +
                 "FROM Events e " +
                 "JOIN Communities c ON e.CommunityId = c.Id " +
                 "WHERE c.Id NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?) ";
         return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
-            List<SearchEvent> publicEvents = new ArrayList<>();
+            List<Event> publicEvents = new ArrayList<>();
             while (executor.next()) {
-                publicEvents.add(new SearchEvent(
+                publicEvents.add(new Event(
                         executor.getInt("Id"),
                         executor.getInt("CommunityId"),
                         executor.getString("Name"),
@@ -145,7 +145,7 @@ public class EventFactory extends ModelFactory<Event> {
         });
     }
 
-      public ObservableList<SearchEvent> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduled,String eventType) throws SQLException {
+      public ObservableList<Event> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduled,String eventType) throws SQLException {
         String sql = "SELECT * FROM Events WHERE 1=1";
         if (name != null && !name.isEmpty()) {
             sql += " AND Name LIKE ?";
@@ -190,9 +190,9 @@ public class EventFactory extends ModelFactory<Event> {
                 statement.setInt(paramIndex++, identityService.getUserContext().getUser().getId());
             }
         }, resultSet -> {
-            ObservableList<SearchEvent> events = FXCollections.observableArrayList();
+            ObservableList<Event> events = FXCollections.observableArrayList();
             while (resultSet.next()) {
-                events.add(new SearchEvent(
+                events.add(new Event(
                         resultSet.getInt("Id"),
                         resultSet.getInt("CommunityId"),
                         resultSet.getString("Name"),
