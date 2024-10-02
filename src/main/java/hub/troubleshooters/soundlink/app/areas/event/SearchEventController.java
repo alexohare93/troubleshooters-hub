@@ -51,16 +51,11 @@ public class SearchEventController {
     @FXML
     private Button searchButton;
 
-    private final SearchEventFactory searchEventFactory;
-    private final IdentityService identityService;
-    private final EventAttendeeFactory eventAttendeeFactory;
-
+    private final EventService eventService;
 
     @Inject
-    public SearchEventController(SearchEventFactory searchEventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory) {
-        this.searchEventFactory = searchEventFactory;
-        this.identityService = identityService;
-        this.eventAttendeeFactory = eventAttendeeFactory;
+    public SearchEventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
 
@@ -103,78 +98,40 @@ public class SearchEventController {
         }
     }
 
-    private VBox createEventCard(SearchEvent event) {
-        System.out.println("Creating event card for: " + event.getName());
+    private VBox createEventCard(Event event) {
         VBox eventCard = new VBox();
         eventCard.setSpacing(10.0);
         eventCard.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
 
         Label nameLabel = new Label(event.getName());
-        nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
-
-        // Format the date as day-month-year using SimpleDateFormat
-        Date scheduledDate = event.getScheduledDate();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = formatter.format(scheduledDate);
-
         Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
-        Label dateLabel = new Label("Date: " + formattedDate);
+        Label dateLabel = new Label("Date: " + event.getScheduledDate().toString());
         Label capacityLabel = new Label("Capacity: " + event.getCapacity());
-
         Button signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
+
+        // Handle sign-up logic on button click
         signUpButton.setOnAction(e -> handleSignUp(event));
 
-        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel, signUpButton);
+        eventCard.getChildren().add(signUpButton);
 
+        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel);
         return eventCard;
     }
 
-    public List<SearchEvent> listUpcomingEvents() throws SQLException {
-        int userId = identityService.getUserContext().getUser().getId();
-
-        // Fetching user community events
-        List<SearchEvent> userCommunityEvents = searchEventFactory.findUserCommunityEvents(userId);
-        if (userCommunityEvents == null || userCommunityEvents.isEmpty()) {
-            System.out.println("No user community events found.");
-        } else {
-            System.out.println("User community events found: " + userCommunityEvents.size());
-        }
-
-        // Fetching public events
-        List<SearchEvent> publicEvents = searchEventFactory.findPublicCommunityEvents(userId);
-        if (publicEvents == null || publicEvents.isEmpty()) {
-            System.out.println("No public events found.");
-        } else {
-            System.out.println("Public events found: " + publicEvents.size());
-        }
-
-        // Combine both lists
-        if (userCommunityEvents != null) {
-            userCommunityEvents.addAll(publicEvents);
-        } else {
-            userCommunityEvents = publicEvents;
-        }
-
-        return userCommunityEvents;
-    }
-
-    private void handleSignUp(SearchEvent event) {
-        int userId = identityService.getUserContext().getUser().getId();
-        int eventId = event.getId();
-
+    private void handleSignUp(Event event) {
         try {
-            Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId, userId);
-            if (existingAttendee.isPresent()) {
-                showAlert(AlertType.INFORMATION, "Already Signed Up", "You have already signed up for this event.");
+            boolean signUpSuccess = eventService.signUpForEvent(event.getId(), userId);
+
+            if (signUpSuccess) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
             } else {
-                int permission = 6;  // Permission for comment ability
-                eventAttendeeFactory.create(eventId, userId, permission);
-                showAlert(AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
+                showAlert(Alert.AlertType.INFORMATION, "Already Signed Up", "You have already signed up for this event.");
             }
         } catch (SQLException e) {
-            showAlert(AlertType.ERROR, "Error", "Failed to sign up for the event. Please try again.");
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to sign up for the event. Please try again.");
+            e.printStackTrace();
         }
     }
 
@@ -185,28 +142,41 @@ public class SearchEventController {
         alert.showAndWait();
     }
 
-    private void searchEvents() throws SQLException {
-        // Get values from the ComboBoxes and DatePicker
+   private void searchEvents() throws SQLException {
+        // Basic input validation
         String name = nameTextField.getText();
         String description = descriptionTextField.getText();
         String venue = venueTextField.getText();
-        String capacity = capacityTextField.getText();
+        String capacityText = capacityTextField.getText();
         LocalDate scheduledDate = scheduledDatePicker.getValue();
-        String eventType = eventTypeComboBox.getValue();
 
-        // Log inputs
-        System.out.println("Search Params: Name = " + name + ", Description = " + description +
-                ", Venue = " + venue + ", Capacity = " + capacity + ", Date = " + scheduledDate);
+        int capacity = 0;
+        if (!capacityText.isEmpty()) {
+            try {
+                capacity = Integer.parseInt(capacityText);
+            } catch (NumberFormatException e) {
+                showAlert(Alert.AlertType.ERROR, "Validation Error", "Capacity must be a valid number.");
+                return;
+            }
+        }
 
-        // Perform the search based on user input
-        ObservableList<SearchEvent> searchResults = searchEventFactory.searchEvents(name, description, venue, capacity, scheduledDate, eventType);
+        // Create SearchEventModel to pass to service
+        SearchEventModel searchModel = new SearchEventModel(
+            name.isEmpty() ? null : name,
+            description.isEmpty() ? null : description,
+            scheduledDate != null ? java.sql.Date.valueOf(scheduledDate) : null,
+            venue.isEmpty() ? null : venue,
+            capacity,
+            0  // Assuming no communityId filter
+        );
 
-        // Log result count
-        System.out.println("Search Results Size: " + searchResults.size());
+        // Call service to search for events
+        List<Event> searchResults = eventService.searchEvents(searchModel);
 
-        // Update the event list with the results
+        // Update UI with search results
         updateEventList(searchResults);
     }
+
 
     private void updateEventList(ObservableList<SearchEvent> searchResults) {
         System.out.println("Updating event list. Clearing previous events...");
