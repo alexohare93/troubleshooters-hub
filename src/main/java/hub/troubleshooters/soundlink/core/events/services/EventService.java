@@ -21,5 +21,7 @@ public interface EventService {
     List<Event> search(SearchEventModel searchModel) throws SQLException;
 
     List<Event> listUpcomingEvents(int userId) throws SQLException;
+
+    boolean signUpForEvent(int eventId, int userId) throws SQLException;
 }
 
