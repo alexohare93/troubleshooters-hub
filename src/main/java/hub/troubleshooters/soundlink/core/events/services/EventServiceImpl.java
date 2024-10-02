@@ -6,19 +6,33 @@ import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelVali
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
-import hub.troubleshooters.soundlink.data.factories.SearchEventFactory;
-
+import hub.troubleshooters.soundlink.data.factories.EventAttendeeFactory;
+import hub.troubleshooters.soundlink.data.models.EventAttendee;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.data.models.Event;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
 import java.sql.SQLException;
+import java.util.Optional;
+
 
 public class EventServiceImpl implements EventService {
 
     private final CreateEventModelValidator createEventModelValidator;
     private final EventFactory eventFactory;
+    private final IdentityService identityService;
+    private final EventAttendeeFactory eventAttendeeFactory;
+
 
     @Inject
-    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory) {
+    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory) {
         this.createEventModelValidator = createEventModelValidator;
         this.eventFactory = eventFactory;
+        this.identityService = identityService;
+        this.eventAttendeeFactory = eventAttendeeFactory;
     }
 
     @Override
@@ -61,7 +75,7 @@ public class EventServiceImpl implements EventService {
                 .filter(event -> 
                     (searchModel.name() == null || event.getName().contains(searchModel.name())) &&
                     (searchModel.description() == null || event.getDescription().contains(searchModel.description())) &&
-                    (searchModel.scheduledDate() == null || event.getScheduledDate().equals(searchModel.scheduledDate())) &&
+                    (searchModel.scheduledDate() == null || event.getScheduled().equals(searchModel.scheduledDate())) &&
                     (searchModel.Venue() == null || event.getVenue().contains(searchModel.Venue())) &&
                     (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
                     (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId())
@@ -70,11 +84,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<SearchEvent> listUpcomingEvents() throws SQLException {
-        int userId = identityService.getUserContext().getUser().getId();
+    public List<Event> listUpcomingEvents(int userId) throws SQLException {
+        int currentUserId = identityService.getUserContext().getUser().getId();
 
         // Fetching user community events
-        List<SearchEvent> userCommunityEvents = searchEventFactory.findUserCommunityEvents(userId);
+        List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(currentUserId);
         if (userCommunityEvents == null || userCommunityEvents.isEmpty()) {
             System.out.println("No user community events found.");
         } else {
@@ -82,7 +96,7 @@ public class EventServiceImpl implements EventService {
         }
 
         // Fetching public events
-        List<SearchEvent> publicEvents = searchEventFactory.findPublicCommunityEvents(userId);
+        List<Event> publicEvents = eventFactory.findPublicCommunityEvents(currentUserId);
         if (publicEvents == null || publicEvents.isEmpty()) {
             System.out.println("No public events found.");
         } else {
@@ -113,4 +127,4 @@ public class EventServiceImpl implements EventService {
         }
     }
 }
-}
+

@@ -1,10 +1,13 @@
 package hub.troubleshooters.soundlink.app.areas.event;
 
-import hub.troubleshooters.soundlink.data.factories.SearchEventFactory;
-import hub.troubleshooters.soundlink.data.factories.EventAttendeeFactory;
-import hub.troubleshooters.soundlink.data.models.EventAttendee;
-import hub.troubleshooters.soundlink.data.models.SearchEvent;
+
+import hub.troubleshooters.soundlink.data.models.Event;
+import hub.troubleshooters.soundlink.data.factories.EventFactory;
+
+import hub.troubleshooters.soundlink.core.events.services.EventService;
+import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+
 
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
@@ -24,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.sql.SQLException;
 import javafx.scene.control.TextField;
+import javafx.collections.FXCollections;
 
 public class SearchEventController {
 
@@ -53,11 +57,13 @@ public class SearchEventController {
 
     private final EventService eventService;
 
-    @Inject
-    public SearchEventController(EventService eventService) {
-        this.eventService = eventService;
-    }
+    private final IdentityService identityService;
 
+    @Inject
+    public SearchEventController(EventService eventService, IdentityService identityService) {
+        this.eventService = eventService;
+        this.identityService = identityService;
+    }
 
     @FXML
     public void initialize() {
@@ -89,10 +95,11 @@ public class SearchEventController {
         eventListVBox.getChildren().clear();
 
         // Fetch upcoming events for the user
-        List<SearchEvent> events = listUpcomingEvents();
+        int userId = identityService.getUserContext().getUser().getId();  // Get the user ID
+        List<Event> events = eventService.listUpcomingEvents(userId);
         System.out.println("Events:" + events);
 
-        for (SearchEvent event : events) {
+        for (Event event : events) {
             VBox eventCard = createEventCard(event);
             eventListVBox.getChildren().add(eventCard);
         }
@@ -106,7 +113,7 @@ public class SearchEventController {
         Label nameLabel = new Label(event.getName());
         Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
-        Label dateLabel = new Label("Date: " + event.getScheduledDate().toString());
+        Label dateLabel = new Label("Date: " + event.getScheduled().toString());
         Label capacityLabel = new Label("Capacity: " + event.getCapacity());
         Button signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
@@ -122,6 +129,7 @@ public class SearchEventController {
 
     private void handleSignUp(Event event) {
         try {
+            int userId = identityService.getUserContext().getUser().getId();
             boolean signUpSuccess = eventService.signUpForEvent(event.getId(), userId);
 
             if (signUpSuccess) {
@@ -142,7 +150,7 @@ public class SearchEventController {
         alert.showAndWait();
     }
 
-   private void searchEvents() throws SQLException {
+    private void searchEvents() throws SQLException {
         // Basic input validation
         String name = nameTextField.getText();
         String description = descriptionTextField.getText();
@@ -162,23 +170,27 @@ public class SearchEventController {
 
         // Create SearchEventModel to pass to service
         SearchEventModel searchModel = new SearchEventModel(
-            name.isEmpty() ? null : name,
-            description.isEmpty() ? null : description,
-            scheduledDate != null ? java.sql.Date.valueOf(scheduledDate) : null,
-            venue.isEmpty() ? null : venue,
-            capacity,
-            0  // Assuming no communityId filter
+                name.isEmpty() ? null : name,
+                description.isEmpty() ? null : description,
+                scheduledDate != null ? java.sql.Date.valueOf(scheduledDate) : null,
+                venue.isEmpty() ? null : venue,
+                capacity,
+                0  // Assuming no communityId filter
         );
 
-        // Call service to search for events
-        List<Event> searchResults = eventService.searchEvents(searchModel);
+        // Call service to search for events and get List<Event>
+        List<Event> searchResults = eventService.search(searchModel);
 
-        // Update UI with search results
-        updateEventList(searchResults);
+        // Convert List<Event> to ObservableList<Event>
+        ObservableList<Event> observableSearchResults = FXCollections.observableArrayList(searchResults);
+
+        // Update UI with observableSearchResults
+        updateEventList(observableSearchResults);
     }
 
 
-    private void updateEventList(ObservableList<SearchEvent> searchResults) {
+
+    private void updateEventList(ObservableList<Event> searchResults) {
         System.out.println("Updating event list. Clearing previous events...");
         eventListVBox.getChildren().clear();  // Clear the old event cards
 
@@ -188,7 +200,7 @@ public class SearchEventController {
             System.out.println("Displaying " + searchResults.size() + " events.");
         }
 
-        for (SearchEvent event : searchResults) {
+        for (Event event : searchResults) {
             VBox eventCard = createEventCard(event);
             eventListVBox.getChildren().add(eventCard);
             System.out.println("Added event card for: " + event.getName());

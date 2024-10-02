@@ -121,7 +121,7 @@ public class EventFactory extends ModelFactory<Event> {
 	                "JOIN CommunityMembers cm ON cm.CommunityId = e.CommunityId " +
 	                "WHERE cm.UserId = ?";
 	        return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
-	            List<Event> Events = new ArrayList<>();
+	            List<Event> searchEvents = new ArrayList<>();
 	            while (executor.next()) {
 	                searchEvents.add(new Event(
 	                        executor.getInt("Id"),
@@ -130,10 +130,11 @@ public class EventFactory extends ModelFactory<Event> {
 	                        executor.getString("Description"),
 	                        executor.getString("Venue"),
 	                        executor.getInt("Capacity"),
-	                        executor.getDate("Scheduled")
+							executor.getDate("Scheculed"),
+							executor.getDate("Created")
 	                ));
 	            }
-	            return Events;
+	            return searchEvents;
 	        });
 	    }
 	
@@ -158,7 +159,8 @@ public class EventFactory extends ModelFactory<Event> {
 	                        executor.getString("Description"),
 	                        executor.getString("Venue"),
 	                        executor.getInt("Capacity"),
-	                        executor.getDate("Scheduled")
+	                        executor.getDate("Scheduled"),
+							executor.getDate("Created")
 	                ));
 	            }
 	            return publicEvents;
@@ -219,7 +221,8 @@ public class EventFactory extends ModelFactory<Event> {
 	                        resultSet.getString("Description"),
 	                        resultSet.getString("Venue"),
 	                        resultSet.getInt("Capacity"),
-	                        resultSet.getDate("Scheduled")
+	                        resultSet.getDate("Scheduled"),
+							resultSet.getDate("Created")
 	                ));
 	            }
 	            return events;
