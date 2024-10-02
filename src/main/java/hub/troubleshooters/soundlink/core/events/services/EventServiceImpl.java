@@ -102,13 +102,13 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean signUpForEvent(int eventId, int userId) throws SQLException {
         // Check if the user is already signed up for the event
-        Optional<EventAttendee> existingAttendee = eventAttendeeRepository.get(eventId, userId);
+        Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId, userId);
 
         if (existingAttendee.isPresent()) {
             return false;  // User already signed up
         } else {
             int permission = 6;  // Permission for comment ability (as per your original code)
-            eventAttendeeRepository.create(eventId, userId, permission);
+            eventAttendeeFactory.create(eventId, userId, permission);
             return true;  // Successful sign-up
         }
     }
