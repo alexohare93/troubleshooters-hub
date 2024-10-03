@@ -5,5 +5,6 @@ import java.util.Date;
 /**
  * Represents the search parameters for filtering events
  */
-public record SearchEventModel(String name, String description, Date scheduledDate, String Venue, int capacity, int communityId) {
+public record SearchEventModel(String textSearch, Date fromDate, Date toDate, int capacity, int communityId) {
 }
+

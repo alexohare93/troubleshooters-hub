@@ -17,12 +17,9 @@ import java.util.Optional;
 
 public class EventFactory extends ModelFactory<Event> {
 
-	 private final IdentityService identityService;
-
 	@Inject
-	public EventFactory(DatabaseConnection connection, IdentityService identityService) {
+	public EventFactory(DatabaseConnection connection) {
 		super(connection, "Events");
-		this.identityService = identityService;
 	}
 
 	@Override
@@ -116,7 +113,7 @@ public class EventFactory extends ModelFactory<Event> {
 	     * @throws SQLException if a database error occurs
 	     */
 	    public List<Event> findUserCommunityEvents(int userId) throws SQLException {
-	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId " +
+	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId, e.Created " +
 	                "FROM Events e " +
 	                "JOIN CommunityMembers cm ON cm.CommunityId = e.CommunityId " +
 	                "WHERE cm.UserId = ?";
@@ -130,7 +127,7 @@ public class EventFactory extends ModelFactory<Event> {
 	                        executor.getString("Description"),
 	                        executor.getString("Venue"),
 	                        executor.getInt("Capacity"),
-							executor.getDate("Scheculed"),
+							executor.getDate("Scheduled"),
 							executor.getDate("Created")
 	                ));
 	            }
@@ -145,7 +142,7 @@ public class EventFactory extends ModelFactory<Event> {
 	     * @throws SQLException if a database error occurs
 	     */
 	    public List<Event> findPublicCommunityEvents(int userId) throws SQLException {
-	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId " +
+	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId, e.Created " +
 	                "FROM Events e " +
 	                "JOIN Communities c ON e.CommunityId = c.Id " +
 	                "WHERE c.Id NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?) ";
@@ -164,68 +161,6 @@ public class EventFactory extends ModelFactory<Event> {
 	                ));
 	            }
 	            return publicEvents;
-	        });
-	    }
-	
-	      public ObservableList<Event> searchEvents(String name, String description, String venue, String capacity, LocalDate scheduled,String eventType) throws SQLException {
-	        String sql = "SELECT * FROM Events WHERE 1=1";
-	        if (name != null && !name.isEmpty()) {
-	            sql += " AND Name LIKE ?";
-	        }
-	        if (description != null && !description.isEmpty()) {
-	            sql += " AND Description LIKE ?";
-	        }
-	        if (venue != null && !venue.isEmpty()) {
-	            sql += " AND Venue LIKE ?";
-	        }
-	        if (capacity != null && !capacity.isEmpty()) {
-	            sql += " AND Capacity LIKE ?";
-	        }
-	        if (scheduled != null) {
-	            sql += " AND DATE(Scheduled) = ?";
-	        }
-	        if (eventType != null) {
-	            if (eventType.equals("Community Events")) {
-	                sql += " AND CommunityId IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?)";
-	            } else if (eventType.equals("Public Events")) {
-	                sql += " AND CommunityId NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?)";
-	            }
-	        }
-	        return connection.executeQuery(sql, statement -> {
-	            int paramIndex = 1;
-	            if (name != null && !name.isEmpty()) {
-	                statement.setString(paramIndex++, "%" + name + "%");
-	            }
-	            if (description != null && !description.isEmpty()) {
-	                statement.setString(paramIndex++, "%" + description + "%");
-	            }
-	            if (venue != null && !venue.isEmpty()) {
-	                statement.setString(paramIndex++, "%" + venue + "%");
-	            }
-	            if (capacity != null && !capacity.isEmpty()) {
-	                statement.setString(paramIndex++,"%" + capacity + "%");
-	            }
-	            if (scheduled != null) {
-	                statement.setDate(paramIndex++, java.sql.Date.valueOf(scheduled));
-	            }
-	            if (eventType != null && (eventType.equals("Community Events") || eventType.equals("Public Events"))) {
-	                statement.setInt(paramIndex++, identityService.getUserContext().getUser().getId());
-	            }
-	        }, resultSet -> {
-	            ObservableList<Event> events = FXCollections.observableArrayList();
-	            while (resultSet.next()) {
-	                events.add(new Event(
-	                        resultSet.getInt("Id"),
-	                        resultSet.getInt("CommunityId"),
-	                        resultSet.getString("Name"),
-	                        resultSet.getString("Description"),
-	                        resultSet.getString("Venue"),
-	                        resultSet.getInt("Capacity"),
-	                        resultSet.getDate("Scheduled"),
-							resultSet.getDate("Created")
-	                ));
-	            }
-	            return events;
 	        });
 	    }
 	}

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.sql.SQLException;
 import javafx.scene.control.TextField;
+import hub.troubleshooters.soundlink.app.components.IntegerTextField;
 import javafx.collections.FXCollections;
 
 public class SearchEventController {
@@ -35,19 +36,16 @@ public class SearchEventController {
     private VBox eventListVBox;
 
     @FXML
-    private TextField nameTextField;
+    private TextField searchTextField;
 
     @FXML
-    private TextField descriptionTextField;
+    private IntegerTextField capacityTextField;
 
     @FXML
-    private TextField venueTextField;
+    private DatePicker fromDatePicker;
 
     @FXML
-    private TextField capacityTextField;
-
-    @FXML
-    private DatePicker scheduledDatePicker;
+    private DatePicker toDatePicker;
 
     @FXML
     private ComboBox<String> eventTypeComboBox;
@@ -121,9 +119,7 @@ public class SearchEventController {
         // Handle sign-up logic on button click
         signUpButton.setOnAction(e -> handleSignUp(event));
 
-        eventCard.getChildren().add(signUpButton);
-
-        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel);
+        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel,signUpButton);
         return eventCard;
     }
 
@@ -151,12 +147,11 @@ public class SearchEventController {
     }
 
     private void searchEvents() throws SQLException {
-        // Basic input validation
-        String name = nameTextField.getText();
-        String description = descriptionTextField.getText();
-        String venue = venueTextField.getText();
+        // Get input from the Text Search field
+        String textSearch = searchTextField.getText();
         String capacityText = capacityTextField.getText();
-        LocalDate scheduledDate = scheduledDatePicker.getValue();
+        LocalDate fromDate = fromDatePicker.getValue();
+        LocalDate toDate = toDatePicker.getValue();
 
         int capacity = 0;
         if (!capacityText.isEmpty()) {
@@ -168,23 +163,19 @@ public class SearchEventController {
             }
         }
 
-        // Create SearchEventModel to pass to service
+        // Create SearchEventModel
         SearchEventModel searchModel = new SearchEventModel(
-                name.isEmpty() ? null : name,
-                description.isEmpty() ? null : description,
-                scheduledDate != null ? java.sql.Date.valueOf(scheduledDate) : null,
-                venue.isEmpty() ? null : venue,
+                textSearch.isEmpty() ? null : textSearch,   // Combined text search field
+                fromDate != null ? java.sql.Date.valueOf(fromDate) : null,
+                toDate != null ? java.sql.Date.valueOf(toDate) : null,
                 capacity,
                 0  // Assuming no communityId filter
         );
 
-        // Call service to search for events and get List<Event>
+        // Get filtered events
         List<Event> searchResults = eventService.search(searchModel);
-
-        // Convert List<Event> to ObservableList<Event>
         ObservableList<Event> observableSearchResults = FXCollections.observableArrayList(searchResults);
 
-        // Update UI with observableSearchResults
         updateEventList(observableSearchResults);
     }
 
@@ -192,7 +183,7 @@ public class SearchEventController {
 
     private void updateEventList(ObservableList<Event> searchResults) {
         System.out.println("Updating event list. Clearing previous events...");
-        eventListVBox.getChildren().clear();  // Clear the old event cards
+        eventListVBox.getChildren().clear();
 
         if (searchResults.isEmpty()) {
             System.out.println("No search results to display.");

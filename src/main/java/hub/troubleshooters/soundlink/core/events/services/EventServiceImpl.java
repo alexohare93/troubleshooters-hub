@@ -67,18 +67,27 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> search(SearchEventModel searchModel) throws SQLException {
-        // fetch all events from the database
+        // Fetch all events from the database
         List<Event> allEvents = eventFactory.getAllEvents();
 
-        // apply filtering logic in-memory
+        // Apply filtering logic in-memory
         return allEvents.stream()
-                .filter(event -> 
-                    (searchModel.name() == null || event.getName().contains(searchModel.name())) &&
-                    (searchModel.description() == null || event.getDescription().contains(searchModel.description())) &&
-                    (searchModel.scheduledDate() == null || event.getScheduled().equals(searchModel.scheduledDate())) &&
-                    (searchModel.Venue() == null || event.getVenue().contains(searchModel.Venue())) &&
-                    (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
-                    (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId())
+                .filter(event ->
+                        // Combine text search for name, description, and venue
+                        (searchModel.textSearch() == null ||
+                                event.getName().contains(searchModel.textSearch()) ||
+                                event.getDescription().contains(searchModel.textSearch()) ||
+                                event.getVenue().contains(searchModel.textSearch())) &&
+
+                                // Filter by 'fromDate' and 'toDate' range if provided
+                                (searchModel.fromDate() == null || !event.getScheduled().before(searchModel.fromDate())) &&
+                                (searchModel.toDate() == null || !event.getScheduled().after(searchModel.toDate())) &&
+
+                                // Filter by capacity if provided
+                                (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
+
+                                // Filter by communityId if provided
+                                (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId())
                 )
                 .collect(Collectors.toList());
     }
