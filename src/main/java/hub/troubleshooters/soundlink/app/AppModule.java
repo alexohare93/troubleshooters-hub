@@ -5,6 +5,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.app.services.SceneManagerImpl;
+import hub.troubleshooters.soundlink.core.events.services.CommunityService;
+import hub.troubleshooters.soundlink.core.events.services.CommunityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityServiceImpl;
 import hub.troubleshooters.soundlink.core.auth.services.LoginService;
@@ -40,6 +42,7 @@ public class AppModule extends AbstractModule {
         // core services
         bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
         bind(EventService.class).to(EventServiceImpl.class).in(Singleton.class);
+        bind(CommunityService.class).to(CommunityServiceImpl.class).in(Singleton.class);
         bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
         bind(ImageUploaderService.class).to(ImageUploaderServiceImpl.class).in(Singleton.class);
 

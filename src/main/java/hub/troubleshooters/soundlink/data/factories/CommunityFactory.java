@@ -102,4 +102,21 @@ public class CommunityFactory extends ModelFactory<Community> {
             }
         });
     }
+
+    public List<Community> getAllCommunities() throws SQLException {
+        final String sql = "SELECT * FROM Communities";
+        return connection.executeQuery(sql, statement -> {}, executor -> {
+            var result = new ArrayList<Community>();
+            while (executor.next()) {
+                result.add(new Community(
+                        executor.getInt("Id"),
+                        executor.getString("Name"),
+                        executor.getString("Description"),
+                        executor.getString("Genre"),
+                        executor.getDate("Created")
+                ));
+            }
+            return result;
+        });
+    }
 }
