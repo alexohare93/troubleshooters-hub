@@ -3,15 +3,16 @@ package hub.troubleshooters.soundlink.app.areas.event;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.core.events.services.CommunityService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+
+
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import java.sql.SQLException;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 
 import java.util.List;
 
@@ -28,9 +29,12 @@ public class CommunityBrowserController {
 
     private final CommunityService communityService;
 
+    private final IdentityService identityService;
+
     @Inject
-    public CommunityBrowserController(CommunityService communityService) {
+    public CommunityBrowserController(CommunityService communityService, IdentityService identityService) {
         this.communityService = communityService;
+        this.identityService = identityService;
     }
 
     @FXML
@@ -38,9 +42,9 @@ public class CommunityBrowserController {
         try {
             System.out.println("Initializing CommunityBrowserController...");
 
-            // Fetch communities without any filter (e.g., initially show all communities)
+            // fetch communities without any filter (e.g., initially show all communities)
             List<Community> communities = communityService.searchCommunities(null);
-            displayCommunities(communities); // Pass the list of communities to the display method
+            displayCommunities(communities);
 
             System.out.println("Community list populated successfully.");
         } catch (Exception e) {
@@ -53,10 +57,8 @@ public class CommunityBrowserController {
     public void fetchCommunities() {
         String searchText = searchTextField.getText();
 
-        // Fetch filtered communities by name, description, or genre
         List<Community> filteredCommunities = communityService.searchCommunities(searchText);
 
-        // Display the filtered results
         displayCommunities(filteredCommunities);
     }
 
@@ -76,34 +78,51 @@ public class CommunityBrowserController {
         vbox.setPrefWidth(450);
         vbox.setPrefHeight(100);
 
-        // Display community name
         Label nameLabel = new Label(community.getName());
         nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
 
-        // Display community genre
         Label genreLabel = new Label("Genre: " + community.getGenre());
         genreLabel.setStyle("-fx-padding: 5px 0px;");
 
-        // Display community description
         Label descriptionLabel = new Label(community.getDescription());
         descriptionLabel.setStyle("-fx-padding: 5px 0px;");
 
-        // Join button
         Button joinButton = new Button("Join Community");
         joinButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
         joinButton.setOnAction(event -> joinCommunity(community));
 
-        // Add components to VBox
         vbox.getChildren().addAll(nameLabel, genreLabel, descriptionLabel, joinButton);
 
         return vbox;
     }
 
 
-
     private void joinCommunity(Community community) {
         System.out.println("Joining community: " + community.getName());
-        // Implement the join functionality
+        handleSignUp(community);
+    }
+
+    private void handleSignUp(Community community) {
+        try {
+            int userId = identityService.getUserContext().getUser().getId();
+            boolean signUpSuccess = communityService.signUpForCommunity(userId, community.getId());
+
+            if (signUpSuccess) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully signed up for the community!");
+            } else {
+                showAlert(Alert.AlertType.INFORMATION, "Already Signed Up", "You have already signed up for this community.");
+            }
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to sign up for the community. Please try again.");
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 

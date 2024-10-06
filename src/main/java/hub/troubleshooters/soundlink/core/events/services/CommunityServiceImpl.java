@@ -3,11 +3,14 @@ package hub.troubleshooters.soundlink.core.events.services;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.events.models.CreateCommunityModel;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
+import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
+import hub.troubleshooters.soundlink.data.models.CommunityMember;
 import hub.troubleshooters.soundlink.core.events.services.CommunityService;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -18,9 +21,12 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityFactory communityFactory;
 
+    private final CommunityMemberFactory communityMemberFactory;
+
     @Inject
-    public CommunityServiceImpl(CommunityFactory communityFactory) {
+    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory) {
         this.communityFactory = communityFactory;
+        this.communityMemberFactory = communityMemberFactory;
     }
 
     @Override
@@ -51,6 +57,20 @@ public class CommunityServiceImpl implements CommunityService {
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error searching communities", e);
             return List.of();
+        }
+    }
+
+    @Override
+    public boolean signUpForCommunity(int userId, int communityId) throws SQLException {
+        // Check if the user is already signed up for the community
+        Optional<CommunityMember> existingMember = communityMemberFactory.get(userId);
+
+        if (existingMember.isPresent()) {
+            return false;
+        } else {
+            int permission = 6;  // can change this
+            communityMemberFactory.create(communityId, userId, permission);
+            return true;
         }
     }
 }
