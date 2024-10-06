@@ -10,16 +10,18 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import java.sql.SQLException;
 
 import java.util.List;
 
 public class CommunityBrowserController {
 
     @FXML
-    private ComboBox<String> genreComboBox;
+    private TextField searchTextField;
 
     @FXML
-    private ComboBox<String> locationComboBox;
+    private Button searchButton;
 
     @FXML
     private VBox communityListVBox;
@@ -31,25 +33,33 @@ public class CommunityBrowserController {
         this.communityService = communityService;
     }
 
+    @FXML
     public void initialize() {
-        ObservableList<String> genres = FXCollections.observableArrayList("Rock", "Jazz", "Classical", "Hip-Hop");
-        genreComboBox.setItems(genres);
+        try {
+            System.out.println("Initializing CommunityBrowserController...");
 
-        ObservableList<String> locations = FXCollections.observableArrayList("New York", "Los Angeles", "Chicago");
-        locationComboBox.setItems(locations);
+            // Fetch communities without any filter (e.g., initially show all communities)
+            List<Community> communities = communityService.searchCommunities(null);
+            displayCommunities(communities); // Pass the list of communities to the display method
+
+            System.out.println("Community list populated successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error populating community list: " + e.getMessage());
+        }
     }
 
     @FXML
-    public void fetchCommunities(){
-        String selectedGenre = genreComboBox.getSelectionModel().getSelectedItem();
-        String selectedLocation = locationComboBox.getSelectionModel().getSelectedItem();
+    public void fetchCommunities() {
+        String searchText = searchTextField.getText();
 
-        // Fetch filtered communities from the service
-        List<Community> filteredCommunities = communityService.searchCommunities(selectedGenre, selectedLocation);
+        // Fetch filtered communities by name, description, or genre
+        List<Community> filteredCommunities = communityService.searchCommunities(searchText);
 
         // Display the filtered results
         displayCommunities(filteredCommunities);
     }
+
 
     private void displayCommunities(List<Community> communities) {
         communityListVBox.getChildren().clear();
@@ -66,24 +76,30 @@ public class CommunityBrowserController {
         vbox.setPrefWidth(450);
         vbox.setPrefHeight(100);
 
+        // Display community name
         Label nameLabel = new Label(community.getName());
         nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
 
-        Label descriptionLabel = new Label(community.getDescription());
-        Label locationLabel = new Label("Location: " + extractLocationFromDescription(community.getDescription()));
+        // Display community genre
+        Label genreLabel = new Label("Genre: " + community.getGenre());
+        genreLabel.setStyle("-fx-padding: 5px 0px;");
 
+        // Display community description
+        Label descriptionLabel = new Label(community.getDescription());
+        descriptionLabel.setStyle("-fx-padding: 5px 0px;");
+
+        // Join button
         Button joinButton = new Button("Join Community");
         joinButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
         joinButton.setOnAction(event -> joinCommunity(community));
 
-        vbox.getChildren().addAll(nameLabel, locationLabel, descriptionLabel, joinButton);
+        // Add components to VBox
+        vbox.getChildren().addAll(nameLabel, genreLabel, descriptionLabel, joinButton);
 
         return vbox;
     }
 
-    private String extractLocationFromDescription(String description) {
-        return description.split(":")[1].trim(); // Assuming location is part of the description
-    }
+
 
     private void joinCommunity(Community community) {
         System.out.println("Joining community: " + community.getName());

@@ -36,13 +36,16 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public List<Community> searchCommunities(String genre, String location) {
+    public List<Community> searchCommunities(String searchText) {
         try {
             List<Community> communities = communityFactory.getAllCommunities();
 
+            // Filter based on name, description, or genre
             return communities.stream()
-                    .filter(community -> (genre == null || genre.isEmpty() || community.getGenre().equalsIgnoreCase(genre)))
-                    .filter(community -> (location == null || location.isEmpty() || community.getDescription().contains(location)))
+                    .filter(community -> searchText == null || searchText.isEmpty() ||
+                            community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
+                            community.getDescription().toLowerCase().contains(searchText.toLowerCase()) ||
+                            community.getGenre().toLowerCase().contains(searchText.toLowerCase()))
                     .collect(Collectors.toList());
 
         } catch (SQLException e) {

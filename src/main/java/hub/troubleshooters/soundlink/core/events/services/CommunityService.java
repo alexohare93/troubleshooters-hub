@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CommunityService {
     void createCommunity(CreateCommunityModel model);
-    List<Community> searchCommunities(String genre, String location);
+    List<Community> searchCommunities(String searchText);
 }
