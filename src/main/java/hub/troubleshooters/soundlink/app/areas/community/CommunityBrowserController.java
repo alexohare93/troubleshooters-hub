@@ -39,14 +39,11 @@ public class CommunityBrowserController {
 
     @FXML
     public void initialize() {
-        try {
-            System.out.println("Initializing CommunityBrowserController...");
+        try {         
 
             // fetch communities without any filter (e.g., initially show all communities)
             List<Community> communities = communityService.searchCommunities(null);
-            displayCommunities(communities);
-
-            System.out.println("Community list populated successfully.");
+            displayCommunities(communities);            
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error populating community list: " + e.getMessage());
