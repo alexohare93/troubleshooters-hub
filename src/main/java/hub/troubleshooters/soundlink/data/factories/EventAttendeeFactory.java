@@ -58,7 +58,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	 * @throws SQLException
 	 */
 	public Optional<EventAttendee> get(int eventId, int userId) throws SQLException {
-		final String sql = "SELECT * FROM EventAttendees WHERE EventId = ? AND UserId;";
+		final String sql = "SELECT * FROM EventAttendees WHERE EventId = ? AND UserId = ?;";
 		var eventAttendee = connection.executeQuery(sql, statement ->{
 			statement.setInt(1, eventId);
 			statement.setInt(2, userId);
@@ -134,7 +134,7 @@ public class EventAttendeeFactory extends ModelFactory<EventAttendee> {
 	 * @param permission
 	 * @throws SQLException
 	 */
-	void create(int eventId, int userId, int permission) throws SQLException {
+	public void create(int eventId, int userId, int permission) throws SQLException {
 		final String sql = "INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (?, ?, ?);";
 		connection.executeUpdate(sql, statement -> {
 			statement.setInt(1, eventId);
