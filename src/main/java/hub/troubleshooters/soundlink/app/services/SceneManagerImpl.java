@@ -7,10 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -129,6 +131,12 @@ public class SceneManagerImpl implements SceneManager {
     @Override
     public void addNavigationListener(NavigationListener listener) {
         listeners.add(listener);
+    }
+
+    @Override
+    public File openFileDialog() {
+        var fileChooser = new FileChooser();
+        return fileChooser.showOpenDialog(primaryStage);
     }
 
     // Notify all listeners about a state change

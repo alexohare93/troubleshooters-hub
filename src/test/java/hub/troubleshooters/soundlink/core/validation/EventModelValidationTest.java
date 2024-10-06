@@ -39,7 +39,7 @@ public class EventModelValidationTest {
 
     @Test
     void testCreateEventModel_Valid() throws SQLException {
-        var model = new CreateEventModel("Valid event", "Valid description", new Date(Instant.now().toEpochMilli() + 1000), "test location", 1, 1);
+        var model = new CreateEventModel("Valid event", "Valid description", new Date(Instant.now().toEpochMilli() + 1000), "test location", 1, 1, null);
 
         when(communityFactory.get(model.communityId())).thenReturn(Optional.of(community));
         var result = createEventModelValidator.validate(model);
@@ -49,7 +49,7 @@ public class EventModelValidationTest {
 
     @Test
     void testCreateEventModel_Invalid() throws SQLException {
-        var model = new CreateEventModel("", null, new Date(Instant.now().toEpochMilli() - 1000), null, -1, 0);
+        var model = new CreateEventModel("", null, new Date(Instant.now().toEpochMilli() - 1000), null, -1, 0, null);
         when(communityFactory.get(model.communityId())).thenReturn(Optional.empty());
         var result = createEventModelValidator.validate(model);
 

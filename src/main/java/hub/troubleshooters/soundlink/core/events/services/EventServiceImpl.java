@@ -3,6 +3,7 @@ package hub.troubleshooters.soundlink.core.events.services;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
@@ -10,13 +11,17 @@ import hub.troubleshooters.soundlink.data.factories.EventAttendeeFactory;
 import hub.troubleshooters.soundlink.data.models.EventAttendee;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.data.models.Event;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
+import hub.troubleshooters.soundlink.data.factories.ImageFactory;
+
 import java.sql.SQLException;
 import java.util.Optional;
+import java.io.IOException;
 
 
 public class EventServiceImpl implements EventService {
@@ -25,14 +30,16 @@ public class EventServiceImpl implements EventService {
     private final EventFactory eventFactory;
     private final IdentityService identityService;
     private final EventAttendeeFactory eventAttendeeFactory;
+    private final ImageUploaderService imageUploaderService;
 
 
     @Inject
-    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory) {
+    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory, ImageUploaderService imageUploaderService) {
         this.createEventModelValidator = createEventModelValidator;
         this.eventFactory = eventFactory;
         this.identityService = identityService;
         this.eventAttendeeFactory = eventAttendeeFactory;
+        this.imageUploaderService = imageUploaderService;
     }
 
     @Override
@@ -46,8 +53,9 @@ public class EventServiceImpl implements EventService {
 
         // save event to DB
         try {
+            imageUploaderService.upload(model.bannerImage());
             eventFactory.create(model.name(), model.description(), model.communityId(), model.location(), model.capacity(), model.scheduledDate());
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
         }
         return new ValidationResult();
