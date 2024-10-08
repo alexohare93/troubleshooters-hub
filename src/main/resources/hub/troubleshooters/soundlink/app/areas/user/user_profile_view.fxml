@@ -33,41 +33,15 @@
                 <HBox spacing="10.0" alignment="CENTER">
                     <Label text="Name:" minWidth="100" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
                     <TextField fx:id="nameField" minWidth="300" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
-                    <Button text="Edit" onAction="#editName" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                    <Button text="Save" onAction="#saveName" fx:id="saveNameButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
                 </HBox>
 
                 <!-- Short Bio Section -->
                 <HBox spacing="10.0" alignment="CENTER">
                     <Label text="Short Bio:" minWidth="100" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
                     <TextField fx:id="bioField" minWidth="300" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
-                    <Button text="Edit" onAction="#editBio" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                    <Button text="Save" onAction="#saveBio" fx:id="saveBioButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
                 </HBox>
             </VBox>
         </HBox>
-
-        <!-- Post/Event/Community Section -->
-        <VBox spacing="20.0" layoutX="50.0" layoutY="350.0" prefWidth="700.0" alignment="CENTER" style="-fx-background-color: #FFFFFF; -fx-padding: 20; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 5);">
-            <HBox spacing="10.0" alignment="CENTER">
-                <Label text="My Posts:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-                <TextField fx:id="postsField" minWidth="300" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
-                <Button text="Edit" onAction="#editPosts" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                <Button text="Save" onAction="#savePosts" fx:id="savePostsButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-            </HBox>
-            <HBox spacing="10.0" alignment="CENTER">
-                <Label text="My Events:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-                <TextField fx:id="eventsField" minWidth="300" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
-                <Button text="Edit" onAction="#editEvents" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                <Button text="Save" onAction="#saveEvents" fx:id="saveEventsButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-            </HBox>
-            <HBox spacing="10.0" alignment="CENTER">
-                <Label text="My Communities:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-                <TextField fx:id="communitiesField" minWidth="300" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
-                <Button text="Edit" onAction="#editCommunities" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                <Button text="Save" onAction="#saveCommunities" fx:id="saveCommunitiesButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-            </HBox>
-        </VBox>
 
         <!-- Footer -->
         <Label layoutX="310.0" layoutY="570.0" text="© 2024 SoundLink. All rights reserved." style="-fx-text-fill: #999999;" />
