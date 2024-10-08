@@ -7,8 +7,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-
 <?import javafx.scene.shape.Circle?>
+
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom right, #f7f7f7, #e2e2e2);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.profile.UserProfileController">
     <children>
 
@@ -38,12 +38,6 @@
                     <TextField fx:id="bioField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
                     <Button text="Edit" onAction="#editBio" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
                     <Button text="Save" onAction="#saveBio" fx:id="saveBioButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                </HBox>
-                <HBox spacing="10.0">
-                    <Label text="My Preferences:" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;" />
-                    <TextField fx:id="preferencesField" style="-fx-font-size: 18px; -fx-background-radius: 10px; -fx-border-color: #FF6F61; -fx-border-width: 2px;" editable="false" />
-                    <Button text="Edit" onAction="#editPreferences" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
-                    <Button text="Save" onAction="#savePreferences" fx:id="savePreferencesButton" visible="false" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px;" />
                 </HBox>
             </VBox>
         </HBox>

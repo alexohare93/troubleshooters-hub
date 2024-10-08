@@ -76,20 +76,6 @@ public class UserProfileController {
         saveBioButton.setVisible(false);
     }
 
-    // Method to make the preferences field editable and show the save button
-    @FXML
-    public void editPreferences() {
-        preferencesField.setEditable(true);
-        savePreferencesButton.setVisible(true);
-    }
-
-    // Method to save the preferences and disable editing
-    @FXML
-    public void savePreferences() {
-        preferencesField.setEditable(false);
-        savePreferencesButton.setVisible(false);
-    }
-
     // Method to make the posts field editable and show the save button
     @FXML
     public void editPosts() {
