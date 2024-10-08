@@ -23,22 +23,37 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityMemberFactory communityMemberFactory;
 
+    private final CreateCommunityModelValidator createCommunityModelValidator;
+
+    private final ImageUploaderService imageUploaderService;
+
     @Inject
-    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory) {
+    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory, CreateCommunityModelValidator createCommunityModelValidator, ImageUploaderService imageUploaderService) {
         this.communityFactory = communityFactory;
         this.communityMemberFactory = communityMemberFactory;
+        this.createCommunityModelValidator = createCommunityModelValidator;
+        this.imageUploaderService = imageUploaderService;
     }
 
     @Override
-    public void createCommunity(CreateCommunityModel model) {
+    public ValidationResult createCommunity(CreateCommunityModel model) {
+
+        // validate
+        var result = createCommunityModelValidator.validate(model);
+        if (!result.isSuccess()) {
+            return result;
+        }
+
         try {
+            imageUploaderService.upload(model.bannerImage());
             Community community = new Community(
                     model.id(), model.name(), model.description(), model.genre(), model.created()
             );
             communityFactory.create(community);
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error creating community", e);
+            return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
         }
+        return new ValidationResult();
     }
 
     @Override
