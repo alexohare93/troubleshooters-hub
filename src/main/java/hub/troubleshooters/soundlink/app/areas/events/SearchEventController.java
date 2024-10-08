@@ -139,8 +139,6 @@ public class SearchEventController {
         updateEventList(observableSearchResults);
     }
 
-
-
     private void updateEventList(ObservableList<Event> searchResults) {
         System.out.println("Updating event list. Clearing previous events...");
         eventListVBox.getChildren().clear();
