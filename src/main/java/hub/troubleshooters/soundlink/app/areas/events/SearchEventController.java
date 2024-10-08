@@ -1,8 +1,7 @@
-package hub.troubleshooters.soundlink.app.areas.event;
+package hub.troubleshooters.soundlink.app.areas.events;
 
 
 import hub.troubleshooters.soundlink.data.models.Event;
-import hub.troubleshooters.soundlink.data.factories.EventFactory;
 
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
@@ -19,12 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.collections.ObservableList;
-import javafx.scene.input.KeyEvent;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.sql.SQLException;
 import javafx.scene.control.TextField;
 import hub.troubleshooters.soundlink.app.components.IntegerTextField;

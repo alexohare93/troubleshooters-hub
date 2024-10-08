@@ -112,6 +112,7 @@ public class EventFactory extends ModelFactory<Event> {
 	        return connection.executeQuery(sql, statement -> {}, executor -> {
 	            List<Event> eventList = new ArrayList<>();
 	            while (executor.next()) {
+					var bannerId = executor.getInt("BannerImageId");
 	                eventList.add(new Event(
 	                        executor.getInt("Id"),
 	                        executor.getInt("CommunityId"),
@@ -120,7 +121,8 @@ public class EventFactory extends ModelFactory<Event> {
 	                        executor.getString("Venue"),
 	                        executor.getInt("Capacity"),
 	                        executor.getDate("Scheduled"),
-	                        executor.getDate("Created")
+	                        executor.getDate("Created"),
+							bannerId == 0 ? null : bannerId
 	                ));
 	            }
 	            return eventList;
@@ -134,13 +136,14 @@ public class EventFactory extends ModelFactory<Event> {
 	     * @throws SQLException if a database error occurs
 	     */
 	    public List<Event> findUserCommunityEvents(int userId) throws SQLException {
-	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId, e.Created " +
+	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId, e.Created, e.BannerImageId " +
 	                "FROM Events e " +
 	                "JOIN CommunityMembers cm ON cm.CommunityId = e.CommunityId " +
 	                "WHERE cm.UserId = ?";
 	        return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
 	            List<Event> searchEvents = new ArrayList<>();
 	            while (executor.next()) {
+					var bannerId = executor.getInt("BannerImageId");
 	                searchEvents.add(new Event(
 	                        executor.getInt("Id"),
 	                        executor.getInt("CommunityId"),
@@ -149,7 +152,8 @@ public class EventFactory extends ModelFactory<Event> {
 	                        executor.getString("Venue"),
 	                        executor.getInt("Capacity"),
 							executor.getDate("Scheduled"),
-							executor.getDate("Created")
+							executor.getDate("Created"),
+							bannerId == 0 ? null : bannerId
 	                ));
 	            }
 	            return searchEvents;
@@ -170,6 +174,7 @@ public class EventFactory extends ModelFactory<Event> {
 	        return connection.executeQuery(sql, statement -> statement.setInt(1, userId), executor -> {
 	            List<Event> publicEvents = new ArrayList<>();
 	            while (executor.next()) {
+					var bannerId = executor.getInt("BannerImageId");
 	                publicEvents.add(new Event(
 	                        executor.getInt("Id"),
 	                        executor.getInt("CommunityId"),
@@ -178,7 +183,8 @@ public class EventFactory extends ModelFactory<Event> {
 	                        executor.getString("Venue"),
 	                        executor.getInt("Capacity"),
 	                        executor.getDate("Scheduled"),
-							executor.getDate("Created")
+							executor.getDate("Created"),
+							bannerId == 0 ? null : bannerId
 	                ));
 	            }
 	            return publicEvents;

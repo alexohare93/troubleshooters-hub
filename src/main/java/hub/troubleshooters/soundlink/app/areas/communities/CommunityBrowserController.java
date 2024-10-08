@@ -1,4 +1,4 @@
-package hub.troubleshooters.soundlink.app.areas.community;
+package hub.troubleshooters.soundlink.app.areas.communities;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.data.models.Community;
