@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.areas.events;
 
 
+import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.data.models.Event;
 
 import hub.troubleshooters.soundlink.core.events.services.EventService;
@@ -50,32 +51,28 @@ public class SearchEventController {
     private Button searchButton;
 
     private final EventService eventService;
-
     private final IdentityService identityService;
+    private final SceneManager sceneManager;
 
     @Inject
-    public SearchEventController(EventService eventService, IdentityService identityService) {
+    public SearchEventController(EventService eventService, IdentityService identityService, SceneManager sceneManager) {
         this.eventService = eventService;
         this.identityService = identityService;
+        this.sceneManager = sceneManager;
     }
 
     @FXML
     public void initialize() {
         try {
-            System.out.println("Initializing SearchEventController...");
             populateEventList();
-            System.out.println("Event list populated successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
             System.err.println("Error populating event list: " + e.getMessage());
         }
 
         searchButton.setOnAction(event -> {
-            System.out.println("Search button clicked.");
             try {
                 searchEvents();
             } catch (SQLException e) {
-                e.printStackTrace();
                 System.err.println("Error during search: " + e.getMessage());
             }
         });
@@ -91,7 +88,6 @@ public class SearchEventController {
         // Fetch upcoming events for the user
         int userId = identityService.getUserContext().getUser().getId();  // Get the user ID
         List<Event> events = eventService.listUpcomingEvents(userId);
-        System.out.println("Events:" + events);
 
         for (Event event : events) {
             VBox eventCard = createEventCard(event);
@@ -109,55 +105,23 @@ public class SearchEventController {
         Label locationLabel = new Label("Location: " + event.getVenue());
         Label dateLabel = new Label("Date: " + event.getScheduled().toString());
         Label capacityLabel = new Label("Capacity: " + event.getCapacity());
-        Button signUpButton = new Button("Sign Up");
-        signUpButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
+        Button detailsButton = new Button("Details");
+        detailsButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
 
         // Handle sign-up logic on button click
-        signUpButton.setOnAction(e -> handleSignUp(event));
+        detailsButton.setOnAction(e -> sceneManager.navigateToEventDetailsView(event.getId()));
 
-        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel,signUpButton);
+        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel, detailsButton);
         return eventCard;
-    }
-
-    private void handleSignUp(Event event) {
-        try {
-            int userId = identityService.getUserContext().getUser().getId();
-            boolean signUpSuccess = eventService.signUpForEvent(event.getId(), userId);
-
-            if (signUpSuccess) {
-                showAlert(Alert.AlertType.INFORMATION, "Success", "You have successfully signed up for the event!");
-            } else {
-                showAlert(Alert.AlertType.INFORMATION, "Already Signed Up", "You have already signed up for this event.");
-            }
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to sign up for the event. Please try again.");
-            e.printStackTrace();
-        }
-    }
-
-    private void showAlert(AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     private void searchEvents() throws SQLException {
         // Get input from the Text Search field
         String textSearch = searchTextField.getText();
-        String capacityText = capacityTextField.getText();
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
 
-        int capacity = 0;
-        if (!capacityText.isEmpty()) {
-            try {
-                capacity = Integer.parseInt(capacityText);
-            } catch (NumberFormatException e) {
-                showAlert(Alert.AlertType.ERROR, "Validation Error", "Capacity must be a valid number.");
-                return;
-            }
-        }
+        int capacity = capacityTextField.getValue();
 
         // Create SearchEventModel
         SearchEventModel searchModel = new SearchEventModel(

@@ -122,30 +122,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> listUpcomingEvents(int userId) throws SQLException {
-        int currentUserId = identityService.getUserContext().getUser().getId();
 
         // Fetching user community events
-        List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(currentUserId);
-        if (userCommunityEvents == null || userCommunityEvents.isEmpty()) {
-            System.out.println("No user community events found.");
-        } else {
-            System.out.println("User community events found: " + userCommunityEvents.size());
-        }
+        List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(userId);
 
         // Fetching public events
-        List<Event> publicEvents = eventFactory.findPublicCommunityEvents(currentUserId);
-        if (publicEvents == null || publicEvents.isEmpty()) {
-            System.out.println("No public events found.");
-        } else {
-            System.out.println("Public events found: " + publicEvents.size());
-        }
+        List<Event> publicEvents = eventFactory.findPublicCommunityEvents(userId);
 
         // Combine both lists
-        if (userCommunityEvents != null) {
-            userCommunityEvents.addAll(publicEvents);
-        } else {
-            userCommunityEvents = publicEvents;
-        }
+        userCommunityEvents.addAll(publicEvents);
 
         return userCommunityEvents;
     }
@@ -158,7 +143,7 @@ public class EventServiceImpl implements EventService {
         if (existingAttendee.isPresent()) {
             return false;  // User already signed up
         } else {
-            int permission = 6;  // Permission for comment ability (as per your original code)
+            int permission = 6;  // Permission for comment ability
             eventAttendeeFactory.create(eventId, userId, permission);
             return true;  // Successful sign-up
         }
