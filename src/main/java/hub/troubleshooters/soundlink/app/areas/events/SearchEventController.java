@@ -125,7 +125,7 @@ public class SearchEventController {
 
         // Create SearchEventModel
         SearchEventModel searchModel = new SearchEventModel(
-                textSearch.isEmpty() ? null : textSearch,   // Combined text search field
+                textSearch,
                 fromDate != null ? java.sql.Date.valueOf(fromDate) : null,
                 toDate != null ? java.sql.Date.valueOf(toDate) : null,
                 capacity,
