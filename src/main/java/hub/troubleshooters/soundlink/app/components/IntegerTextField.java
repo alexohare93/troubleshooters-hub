@@ -21,4 +21,11 @@ public class IntegerTextField extends TextField {
 
         setTextFormatter(new TextFormatter<String>(integerFilter));
     }
+
+    public int getValue() {
+        if (getText().isEmpty()) {
+            return 0;
+        }
+        return Integer.parseInt(getText());
+    }
 }
