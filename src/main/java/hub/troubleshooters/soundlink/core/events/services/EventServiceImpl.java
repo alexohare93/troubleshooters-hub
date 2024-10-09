@@ -1,10 +1,15 @@
 package hub.troubleshooters.soundlink.core.events.services;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.core.CoreResult;
 import hub.troubleshooters.soundlink.core.Map;
+import hub.troubleshooters.soundlink.core.auth.Scope;
+import hub.troubleshooters.soundlink.core.auth.ScopeUtils;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.events.models.EventModel;
+import hub.troubleshooters.soundlink.core.events.validation.BookingAlreadyExistsException;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
+import hub.troubleshooters.soundlink.core.events.validation.EventBookingResult;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
@@ -137,17 +142,20 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean signUpForEvent(int eventId, int userId) throws SQLException {
-        // Check if the user is already signed up for the event
-        Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId, userId);
-
-        if (existingAttendee.isPresent()) {
-            return false;  // User already signed up
-        } else {
-            int permission = 6;  // Permission for comment ability
-            eventAttendeeFactory.create(eventId, userId, permission);
-            return true;  // Successful sign-up
+    public EventBookingResult bookEvent(int eventId, int userId) throws SQLException {
+        if (isBooked(eventId, userId)) {
+            return new EventBookingResult(new BookingAlreadyExistsException(eventId, userId));
         }
+
+        eventAttendeeFactory.create(eventId, userId, ScopeUtils.combineScopes(Scope.EVENT_READ));
+        var booking = eventAttendeeFactory.get(eventId, userId).get();  // unwrap should never fail since we've just inserted the record.
+        return new EventBookingResult(booking);
+    }
+
+    @Override
+    public boolean isBooked(int eventId, int userId) throws SQLException {
+       var booking = eventAttendeeFactory.get(eventId, userId);
+       return booking.isPresent();
     }
 }
 

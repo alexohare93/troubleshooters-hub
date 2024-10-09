@@ -78,8 +78,8 @@ public class EventDetailsController {
         }
         try {
             // TODO: if you are already booked into event, this button shouldn't event appear / replace with "cancel booking" button.
-            var result = eventService.signUpForEvent(event.id(), identityService.getUserContext().getUser().getId());
-            if (result) {
+            var result = eventService.bookEvent(event.id(), identityService.getUserContext().getUser().getId());
+            if (result.isSuccess()) {
                 sceneManager.alert(new Alert(Alert.AlertType.INFORMATION, "Booked into event successfully"));
             } else {
                 sceneManager.alert(new Alert(Alert.AlertType.ERROR, "You are already booked into this event"));
