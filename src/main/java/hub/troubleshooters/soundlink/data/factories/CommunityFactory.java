@@ -89,13 +89,11 @@ public class CommunityFactory extends ModelFactory<Community> {
      * @throws SQLException if the creation of the community fails
      */
     public void create(Community community) throws SQLException {
-        final String sql = "INSERT INTO Communities (Id, Name, Description, Genre, Created) VALUES (?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO Communities (Name, Description, Genre) VALUES (?, ?, ?)";
         connection.executeUpdate(sql, statement -> {
-            statement.setInt(1, community.getId());
-            statement.setString(2, community.getName());
-            statement.setString(3, community.getDescription());
-            statement.setString(4, community.getGenre());
-            statement.setDate(5, new java.sql.Date(community.getCreated().getTime()));
+            statement.setString(1, community.getName());
+            statement.setString(2, community.getDescription());
+            statement.setString(3, community.getGenre());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update community. Rows Affected: " + rowsAffected);

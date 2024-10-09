@@ -6,8 +6,13 @@ import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.data.models.CommunityMember;
-import hub.troubleshooters.soundlink.core.events.services.CommunityService;
+import hub.troubleshooters.soundlink.core.validation.ModelValidator;
+import hub.troubleshooters.soundlink.core.validation.ValidationError;
+import hub.troubleshooters.soundlink.core.validation.ValidationResult;
+import hub.troubleshooters.soundlink.core.events.validation.CreateCommunityModelValidator;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -47,10 +52,10 @@ public class CommunityServiceImpl implements CommunityService {
         try {
             imageUploaderService.upload(model.bannerImage());
             Community community = new Community(
-                    model.id(), model.name(), model.description(), model.genre(), model.created()
+                    0, model.name(), model.description(), model.genre(), null
             );
             communityFactory.create(community);
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
         }
         return new ValidationResult();

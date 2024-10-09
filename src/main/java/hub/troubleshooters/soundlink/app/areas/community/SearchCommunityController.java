@@ -13,10 +13,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
-
+import javafx.scene.layout.HBox;
 import java.util.List;
 
-public class CommunityBrowserController {
+public class SearchCommunityController {
 
     @FXML
     private TextField searchTextField;
@@ -25,14 +25,14 @@ public class CommunityBrowserController {
     private Button searchButton;
 
     @FXML
-    private VBox communityListVBox;
+    private VBox communityListContainer;
 
     private final CommunityService communityService;
 
     private final IdentityService identityService;
 
     @Inject
-    public CommunityBrowserController(CommunityService communityService, IdentityService identityService) {
+    public SearchCommunityController(CommunityService communityService, IdentityService identityService) {
         this.communityService = communityService;
         this.identityService = identityService;
     }
@@ -60,19 +60,11 @@ public class CommunityBrowserController {
     }
 
 
-    private void displayCommunities(List<Community> communities) {
-        communityListVBox.getChildren().clear();
-
-        for (Community community : communities) {
-            VBox communityCard = createCommunityCard(community);
-            communityListVBox.getChildren().add(communityCard);
-        }
-    }
-
     private VBox createCommunityCard(Community community) {
         VBox vbox = new VBox();
         vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
-        vbox.setPrefWidth(450);
+        vbox.setSpacing(10.0);
+        vbox.setPrefWidth(250);
         vbox.setPrefHeight(100);
 
         Label nameLabel = new Label(community.getName());
@@ -81,7 +73,8 @@ public class CommunityBrowserController {
         Label genreLabel = new Label("Genre: " + community.getGenre());
         genreLabel.setStyle("-fx-padding: 5px 0px;");
 
-        Label descriptionLabel = new Label(community.getDescription());
+        //Need to allow this to wrap
+        Label descriptionLabel = new Label("Description: " + community.getDescription());
         descriptionLabel.setStyle("-fx-padding: 5px 0px;");
 
         Button joinButton = new Button("Join Community");
@@ -120,6 +113,27 @@ public class CommunityBrowserController {
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void displayCommunities(List<Community> communities) {
+        // Clear previous results
+        communityListContainer.getChildren().clear();
+
+        // Create a new HBox to hold each row of community boxes
+        HBox row = null;
+        for (int i = 0; i < communities.size(); i++) {
+            // Create a new row (HBox) every two communities
+            if (i % 2 == 0) {
+                row = new HBox(10); // 10 is the spacing between community boxes
+                row.setStyle("-fx-padding: 10px;");
+                communityListContainer.getChildren().add(row);
+            }
+
+            // Create a community card using the provided method
+            VBox communityCard = createCommunityCard(communities.get(i));
+
+            row.getChildren().add(communityCard);
+        }
     }
 }
 

@@ -2,8 +2,6 @@ package hub.troubleshooters.soundlink.app.areas.event;
 
 
 import hub.troubleshooters.soundlink.data.models.Event;
-import hub.troubleshooters.soundlink.data.factories.EventFactory;
-
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
@@ -15,16 +13,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.collections.ObservableList;
-import javafx.scene.input.KeyEvent;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Optional;
 import java.sql.SQLException;
 import javafx.scene.control.TextField;
 import hub.troubleshooters.soundlink.app.components.IntegerTextField;
@@ -67,7 +63,8 @@ public class SearchEventController {
     public void initialize() {
         try {
             System.out.println("Initializing SearchEventController...");
-            populateEventList();
+            int userId = identityService.getUserContext().getUser().getId();
+            displayEvents(eventService.listUpcomingEvents(userId));
             System.out.println("Event list populated successfully.");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,17 +86,23 @@ public class SearchEventController {
      * Populates the event list in the UI
      * @throws SQLException if a database error occurs
      */
-    private void populateEventList() throws SQLException {
+    private void displayEvents(List<Event> events) throws SQLException {
         eventListVBox.getChildren().clear();
 
-        // Fetch upcoming events for the user
-        int userId = identityService.getUserContext().getUser().getId();  // Get the user ID
-        List<Event> events = eventService.listUpcomingEvents(userId);
-        System.out.println("Events:" + events);
+        // Create a new HBox to hold each row of community boxes
+        HBox row = null;
+        for (int i = 0; i < events.size(); i++) {
+            // Create a new row (HBox) every two communities
+            if (i % 2 == 0) {
+                row = new HBox(10); // 10 is the spacing between community boxes
+                row.setStyle("-fx-padding: 10px;");
+                eventListVBox.getChildren().add(row);
+            }
 
-        for (Event event : events) {
-            VBox eventCard = createEventCard(event);
-            eventListVBox.getChildren().add(eventCard);
+            // Create a community card using the provided method
+            VBox eventCard = createEventCard(events.get(i));
+
+            row.getChildren().add(eventCard);
         }
     }
 
@@ -107,11 +110,16 @@ public class SearchEventController {
         VBox eventCard = new VBox();
         eventCard.setSpacing(10.0);
         eventCard.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
+        eventCard.setPrefWidth(250);
+        eventCard.setPrefHeight(100);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        String formattedDate = formatter.format(event.getScheduled());
 
         Label nameLabel = new Label(event.getName());
         Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
-        Label dateLabel = new Label("Date: " + event.getScheduled().toString());
+        Label dateLabel = new Label("Date: " + formattedDate);
         Label capacityLabel = new Label("Capacity: " + event.getCapacity());
         Button signUpButton = new Button("Sign Up");
         signUpButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
