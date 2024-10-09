@@ -37,4 +37,11 @@ public class ImageUploaderServiceImpl implements ImageUploaderService {
         imageFactory.create(fileName);
         return imageFactory.get(fileName).get();    // unwrap should be safe unless something internal is horribly wrong
     }
+
+    public File getImageFile(Image image) throws IOException {
+        var fileName = image.getFileName();
+        var path = Path.of(imageDirectory, fileName);
+
+        return path.toFile();
+    }
 }

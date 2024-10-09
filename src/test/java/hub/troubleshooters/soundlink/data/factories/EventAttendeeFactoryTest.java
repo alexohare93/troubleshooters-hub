@@ -44,7 +44,7 @@ public class EventAttendeeFactoryTest {
 		user = new User(1, "username", "hashed_password", new Date(), new Date());
 
 		// Initialise an Event object with mock data
-		event = new Event(1, 1, "title", "description", "venue", 100, new Date(), new Date());
+		event = new Event(1, 1, "title", "description", "venue", 100, new Date(), new Date(), null);
 	}
 
 	@Test

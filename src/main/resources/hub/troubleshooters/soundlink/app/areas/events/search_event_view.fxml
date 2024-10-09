@@ -13,7 +13,7 @@
 <?import javafx.scene.control.TextField?>
 <?import hub.troubleshooters.soundlink.app.components.IntegerTextField?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.event.SearchEventController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.events.SearchEventController">
     <children>
         <HBox layoutX="20.0" layoutY="100.0" spacing="30.0">
             <VBox prefWidth="250.0" style="-fx-background-color: white; -fx-padding: 20px; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-border-radius: 5px;">

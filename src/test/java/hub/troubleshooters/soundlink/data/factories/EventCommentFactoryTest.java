@@ -39,7 +39,7 @@ public class EventCommentFactoryTest {
 		eventComment = new EventComment(1, 1, 1, "title", new Date());
 
 		// Initialize a Event object with mock data
-		event = new Event(1, 1, "name", "description", "venue", 100, new Date(), new Date());
+		event = new Event(1, 1, "name", "description", "venue", 100, new Date(), new Date(), null);
 	}
 
 	@Test

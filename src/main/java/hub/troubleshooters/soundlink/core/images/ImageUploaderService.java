@@ -8,4 +8,5 @@ import java.sql.SQLException;
 
 public interface ImageUploaderService {
     Image upload(File file) throws IOException, SQLException;
+    File getImageFile(Image image) throws IOException;
 }
