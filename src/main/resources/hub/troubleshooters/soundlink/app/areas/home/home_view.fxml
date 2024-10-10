@@ -46,8 +46,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
     <children>
-        <VBox alignment="CENTER" layoutX="50.0" layoutY="20.0" spacing="30.0">
-
+        <VBox alignment="CENTER" layoutX="50.0" layoutY="20.0" spacing="30.0" AnchorPane.topAnchor="20.0">
             <!-- Welcome Message -->
             <Label style="-fx-font-size: 32px; -fx-text-fill: #444; -fx-font-weight: bold;" text="Welcome Back!" />
 
@@ -88,11 +87,11 @@
                     <Label style="-fx-font-size: 13px; -fx-text-fill: white;" text="Discover events and experiences that match your unique taste." wrapText="true" prefHeight="100.0" />
                 </VBox>
             </HBox>
+        </VBox>
 
-            <!-- Testimonials or Social Proof -->
+        <!-- Footer Section -->
+        <VBox alignment="CENTER" prefWidth="800.0" spacing="5.0" AnchorPane.bottomAnchor="0.0">
             <Label style="-fx-font-size: 14px; -fx-text-fill: gray;" text="Over 5,000 music lovers have joined us!" />
-
-            <!-- Footer -->
             <Label style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
         </VBox>
     </children>
