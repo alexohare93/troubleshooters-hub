@@ -31,7 +31,7 @@ public class EventFactoryTest {
         MockitoAnnotations.openMocks(this);
 
         // Create a sample event for use in tests
-        event = new Event(1, 1, "Event Name", "Description", "Venue", 100, new Date(), new Date());
+        event = new Event(1, 1, "Event Name", "Description", "Venue", 100, new Date(), new Date(), null);
     }
 
     @Test

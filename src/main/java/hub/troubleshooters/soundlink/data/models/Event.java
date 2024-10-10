@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.data.models;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class Event {
 	private final int id;
@@ -11,8 +12,9 @@ public class Event {
 	private int capacity;
 	private Date scheduled;
 	private final Date created;
+	private Integer bannerImageId;
 
-	public Event(int id, int communityId, String name, String description, String venue, int capacity, Date scheduled, Date created) {
+	public Event(int id, int communityId, String name, String description, String venue, int capacity, Date scheduled, Date created, Integer bannerImageId) {
 		this.id = id;
 		this.communityId = communityId;
 		this.name = name;
@@ -21,6 +23,7 @@ public class Event {
 		this.capacity = capacity;
 		this.scheduled = scheduled;
 		this.created = created;
+		this.bannerImageId = bannerImageId;
 	}
 
 	public int getId() { return id; }
@@ -50,4 +53,10 @@ public class Event {
 	public void setScheduled(Date scheduled) { this.scheduled = scheduled; }
 
 	public Date getCreated() { return created; }
+
+	public Optional<Integer> getBannerImageId() { return bannerImageId == null ? Optional.empty() : Optional.of(bannerImageId); }
+
+	public void setBannerImageId(Integer bannerImageId) {
+		this.bannerImageId = bannerImageId;
+	}
 }

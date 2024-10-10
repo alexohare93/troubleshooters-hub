@@ -1,8 +1,15 @@
 package hub.troubleshooters.soundlink.core.events.services;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.core.CoreResult;
+import hub.troubleshooters.soundlink.core.Map;
+import hub.troubleshooters.soundlink.core.auth.Scope;
+import hub.troubleshooters.soundlink.core.auth.ScopeUtils;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
+import hub.troubleshooters.soundlink.core.events.models.EventModel;
+import hub.troubleshooters.soundlink.core.events.validation.BookingAlreadyExistsException;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
+import hub.troubleshooters.soundlink.core.events.validation.EventBookingResult;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
@@ -18,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
 import hub.troubleshooters.soundlink.data.factories.ImageFactory;
+import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -31,15 +39,16 @@ public class EventServiceImpl implements EventService {
     private final IdentityService identityService;
     private final EventAttendeeFactory eventAttendeeFactory;
     private final ImageUploaderService imageUploaderService;
-
+    private final Map map;
 
     @Inject
-    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory, ImageUploaderService imageUploaderService) {
+    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory, ImageUploaderService imageUploaderService, Map map) {
         this.createEventModelValidator = createEventModelValidator;
         this.eventFactory = eventFactory;
         this.identityService = identityService;
         this.eventAttendeeFactory = eventAttendeeFactory;
         this.imageUploaderService = imageUploaderService;
+        this.map = map;
     }
 
     @Override
@@ -53,8 +62,12 @@ public class EventServiceImpl implements EventService {
 
         // save event to DB
         try {
-            imageUploaderService.upload(model.bannerImage());
-            eventFactory.create(model.name(), model.description(), model.communityId(), model.location(), model.capacity(), model.scheduledDate());
+            if (model.bannerImage() != null) {
+                var img = imageUploaderService.upload(model.bannerImage());
+                eventFactory.create(model.name(), model.description(), model.communityId(), model.location(), model.capacity(), model.scheduledDate(), img.getId());
+            } else {
+                eventFactory.create(model.name(), model.description(), model.communityId(), model.location(), model.capacity(), model.scheduledDate());
+            }
         } catch (SQLException | IOException e) {
             return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
         }
@@ -62,6 +75,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Optional<EventModel> getEvent(int id) {
+        try {
+            var eventOpt = eventFactory.get(id);
+            if (eventOpt.isPresent()) {
+                return Optional.of(map.event(eventOpt.get()));
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            return Optional.empty();
+        }
+    }
+    
     public List<Event> getUserCommunityEvents(int userId) throws SQLException {
         // Implementation to fetch events where the user is a member
         return eventFactory.findUserCommunityEvents(userId);
@@ -80,68 +105,57 @@ public class EventServiceImpl implements EventService {
 
         // Apply filtering logic in-memory
         return allEvents.stream()
-                .filter(event ->
-                        // Combine text search for name, description, and venue
-                        (searchModel.textSearch() == null ||
-                                event.getName().contains(searchModel.textSearch()) ||
-                                event.getDescription().contains(searchModel.textSearch()) ||
-                                event.getVenue().contains(searchModel.textSearch())) &&
+                .filter(event -> {
+                    // Combine text search for name, description, and venue
+                    var text = searchModel.textSearch().toLowerCase();
+                    return (
+                            event.getName().toLowerCase().contains(text) ||
+                            event.getDescription().toLowerCase().contains(text) ||
+                            event.getVenue().toLowerCase().contains(text)
+                    ) &&
+                            // Filter by 'fromDate' and 'toDate' range if provided
+                            (searchModel.fromDate() == null || !event.getScheduled().before(searchModel.fromDate())) &&
+                            (searchModel.toDate() == null || !event.getScheduled().after(searchModel.toDate())) &&
 
-                                // Filter by 'fromDate' and 'toDate' range if provided
-                                (searchModel.fromDate() == null || !event.getScheduled().before(searchModel.fromDate())) &&
-                                (searchModel.toDate() == null || !event.getScheduled().after(searchModel.toDate())) &&
+                            // Filter by capacity if provided
+                            (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
 
-                                // Filter by capacity if provided
-                                (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
-
-                                // Filter by communityId if provided
-                                (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId())
-                )
+                            // Filter by communityId if provided
+                            (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId());
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Event> listUpcomingEvents(int userId) throws SQLException {
-        int currentUserId = identityService.getUserContext().getUser().getId();
 
         // Fetching user community events
-        List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(currentUserId);
-        if (userCommunityEvents == null || userCommunityEvents.isEmpty()) {
-            System.out.println("No user community events found.");
-        } else {
-            System.out.println("User community events found: " + userCommunityEvents.size());
-        }
+        List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(userId);
 
         // Fetching public events
-        List<Event> publicEvents = eventFactory.findPublicCommunityEvents(currentUserId);
-        if (publicEvents == null || publicEvents.isEmpty()) {
-            System.out.println("No public events found.");
-        } else {
-            System.out.println("Public events found: " + publicEvents.size());
-        }
+        List<Event> publicEvents = eventFactory.findPublicCommunityEvents(userId);
 
         // Combine both lists
-        if (userCommunityEvents != null) {
-            userCommunityEvents.addAll(publicEvents);
-        } else {
-            userCommunityEvents = publicEvents;
-        }
+        userCommunityEvents.addAll(publicEvents);
 
         return userCommunityEvents;
     }
 
     @Override
-    public boolean signUpForEvent(int eventId, int userId) throws SQLException {
-        // Check if the user is already signed up for the event
-        Optional<EventAttendee> existingAttendee = eventAttendeeFactory.get(eventId, userId);
-
-        if (existingAttendee.isPresent()) {
-            return false;  // User already signed up
-        } else {
-            int permission = 6;  // Permission for comment ability (as per your original code)
-            eventAttendeeFactory.create(eventId, userId, permission);
-            return true;  // Successful sign-up
+    public EventBookingResult bookEvent(int eventId, int userId) throws SQLException {
+        if (isBooked(eventId, userId)) {
+            return new EventBookingResult(new BookingAlreadyExistsException(eventId, userId));
         }
+
+        eventAttendeeFactory.create(eventId, userId, ScopeUtils.combineScopes(Scope.EVENT_READ));
+        var booking = eventAttendeeFactory.get(eventId, userId).get();  // unwrap should never fail since we've just inserted the record.
+        return new EventBookingResult(booking);
+    }
+
+    @Override
+    public boolean isBooked(int eventId, int userId) throws SQLException {
+       var booking = eventAttendeeFactory.get(eventId, userId);
+       return booking.isPresent();
     }
 }
 
