@@ -7,10 +7,10 @@ import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.auth.Scope;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
-import hub.troubleshooters.soundlink.core.events.services.CommunityService;
+import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.data.models.Community;
-import hub.troubleshooters.soundlink.core.events.models.CreateCommunityModel;
+import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 
 import javafx.collections.FXCollections;

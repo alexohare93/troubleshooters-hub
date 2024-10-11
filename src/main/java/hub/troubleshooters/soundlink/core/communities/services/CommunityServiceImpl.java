@@ -1,7 +1,7 @@
-package hub.troubleshooters.soundlink.core.events.services;
+package hub.troubleshooters.soundlink.core.communities.services;
 
 import com.google.inject.Inject;
-import hub.troubleshooters.soundlink.core.events.models.CreateCommunityModel;
+import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
@@ -9,7 +9,7 @@ import hub.troubleshooters.soundlink.data.models.CommunityMember;
 import hub.troubleshooters.soundlink.core.validation.ModelValidator;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
-import hub.troubleshooters.soundlink.core.events.validation.CreateCommunityModelValidator;
+import hub.troubleshooters.soundlink.core.communities.validation.CreateCommunityModelValidator;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 
 import java.io.IOException;

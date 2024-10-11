@@ -2,7 +2,7 @@ package hub.troubleshooters.soundlink.app.areas.community;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.data.models.Community;
-import hub.troubleshooters.soundlink.core.events.services.CommunityService;
+import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 
 

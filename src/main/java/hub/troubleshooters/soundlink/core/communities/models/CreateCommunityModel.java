@@ -1,4 +1,4 @@
-package hub.troubleshooters.soundlink.core.events.models;
+package hub.troubleshooters.soundlink.core.communities.models;
 
 import java.io.File;
 import java.util.Date;

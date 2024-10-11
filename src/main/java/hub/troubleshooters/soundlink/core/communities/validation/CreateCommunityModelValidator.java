@@ -1,7 +1,7 @@
-package hub.troubleshooters.soundlink.core.events.validation;
+package hub.troubleshooters.soundlink.core.communities.validation;
 
 import com.google.inject.Inject;
-import hub.troubleshooters.soundlink.core.events.models.CreateCommunityModel;
+import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
 import hub.troubleshooters.soundlink.core.validation.ModelValidator;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
