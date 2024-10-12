@@ -74,4 +74,6 @@ public interface SceneManager {
     File openFileDialog();
 
     void navigateToEventDetailsView(int eventId);
+
+    void navigateToCommunityDetailsView(int communityId);
 }

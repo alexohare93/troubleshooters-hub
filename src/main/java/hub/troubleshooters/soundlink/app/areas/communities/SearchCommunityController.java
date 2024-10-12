@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
-
+import hub.troubleshooters.soundlink.app.services.SceneManager;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
@@ -31,10 +31,13 @@ public class SearchCommunityController {
 
     private final IdentityService identityService;
 
+    private final SceneManager sceneManager;
+
     @Inject
-    public SearchCommunityController(CommunityService communityService, IdentityService identityService) {
+    public SearchCommunityController(CommunityService communityService, IdentityService identityService, SceneManager sceneManager) {
         this.communityService = communityService;
         this.identityService = identityService;
+        this.sceneManager = sceneManager;
     }
 
     @FXML
@@ -77,11 +80,13 @@ public class SearchCommunityController {
         Label descriptionLabel = new Label("Description: " + community.getDescription());
         descriptionLabel.setStyle("-fx-padding: 5px 0px;");
 
-        Button joinButton = new Button("Join Community");
-        joinButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
-        joinButton.setOnAction(event -> joinCommunity(community));
+        Button detailsButton = new Button("Details");
+        detailsButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
 
-        vbox.getChildren().addAll(nameLabel, genreLabel, descriptionLabel, joinButton);
+        // Handle sign-up logic on button click
+        detailsButton.setOnAction(e -> sceneManager.navigateToCommunityDetailsView(community.getId()));
+
+        vbox.getChildren().addAll(nameLabel, genreLabel, descriptionLabel, detailsButton);
 
         return vbox;
     }

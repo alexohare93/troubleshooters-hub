@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
 
@@ -16,6 +18,8 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
     public CommunityMemberFactory(DatabaseConnection connection) {
         super(connection, "CommunityMembers");
     }
+
+    private static final Logger LOGGER = Logger.getLogger(CommunityMemberFactory.class.getName());
 
     @Override
     public void save(CommunityMember model) throws SQLException {
@@ -122,4 +126,41 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
                 throw new SQLException("Failed to create Community Member. Rows affected" + rowsAffected);
         });
     }
+
+    /**
+     * Deletes a CommunityMember from the database based on communityId and userId.
+     * @param communityId the ID of the community.
+     * @param userId the ID of the user.
+     * @return true if the deletion was successful, false otherwise.
+     * @throws SQLException if a database access error occurs.
+     */
+    public boolean delete(int communityId, int userId) throws SQLException {
+        final String sql = "DELETE FROM CommunityMembers WHERE CommunityId = ? AND UserId = ?;";
+        try {
+            // Track the success of the deletion.
+            final boolean[] isDeleted = {false};
+
+            connection.executeUpdate(sql, statement -> {
+                statement.setInt(1, communityId);
+                statement.setInt(2, userId);
+            }, rowsAffected -> {
+                // Update the isDeleted variable based on the affected rows.
+                isDeleted[0] = (rowsAffected == 1);
+
+                // Log if no rows were deleted.
+                if (!isDeleted[0]) {
+                    LOGGER.log(Level.WARNING, "No CommunityMember found for deletion with CommunityId: "
+                            + communityId + " and UserId: " + userId);
+                }
+            });
+
+            // Return the result of the deletion.
+            return isDeleted[0];
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting CommunityMember for CommunityId: "
+                    + communityId + " and UserId: " + userId, e);
+            throw e;
+        }
+    }
+
 }

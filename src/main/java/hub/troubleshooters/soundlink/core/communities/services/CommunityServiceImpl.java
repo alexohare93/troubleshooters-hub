@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.core.communities.services;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
+import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
@@ -11,6 +12,7 @@ import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.core.communities.validation.CreateCommunityModelValidator;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
+import hub.troubleshooters.soundlink.core.Map;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,12 +34,15 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final ImageUploaderService imageUploaderService;
 
+    private final Map map;
+
     @Inject
-    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory, CreateCommunityModelValidator createCommunityModelValidator, ImageUploaderService imageUploaderService) {
+    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory, CreateCommunityModelValidator createCommunityModelValidator, ImageUploaderService imageUploaderService, Map map) {
         this.communityFactory = communityFactory;
         this.communityMemberFactory = communityMemberFactory;
         this.createCommunityModelValidator = createCommunityModelValidator;
         this.imageUploaderService = imageUploaderService;
+        this.map = map;
     }
 
     @Override
@@ -95,5 +100,37 @@ public class CommunityServiceImpl implements CommunityService {
             communityMemberFactory.create(communityId, userId, permission);
             return true;
         }
+    }
+
+    @Override
+    public boolean cancelBooking(int userId, int communityId) throws SQLException {
+        // Check if the user is currently signed up for the community
+        Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
+
+        if (existingMember.isPresent()) {
+            communityMemberFactory.delete(userId, communityId); // Assumes a delete method exists to remove the user booking
+            return true;
+        } else {
+            return false; // User was not signed up for this community, so cannot cancel
+        }
+    }
+
+    @Override
+    public Optional<CommunityModel> getCommunity(int id) {
+        try {
+            var communityOpt = communityFactory.get(id);
+            if (communityOpt.isPresent()) {
+                return Optional.of(map.community(communityOpt.get()));
+            }
+            return Optional.empty();
+        } catch (SQLException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean isUserBookedIntoCommunity(int userId, int communityId) throws SQLException {
+        Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
+        return existingMember.isPresent();
     }
 }
