@@ -50,11 +50,14 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         try {
-            imageUploaderService.upload(model.bannerImage());
-            Community community = new Community(
-                    0, model.name(), model.description(), model.genre(), null
-            );
-            communityFactory.create(community);
+            if (model.bannerImage() != null) {
+                var img = imageUploaderService.upload(model.bannerImage());
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId());
+                communityFactory.create(community);
+            } else {
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, null);
+                communityFactory.create(community);
+            }
         } catch (SQLException | IOException e) {
             return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
         }

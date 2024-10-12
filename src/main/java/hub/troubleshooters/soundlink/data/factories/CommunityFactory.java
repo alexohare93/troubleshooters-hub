@@ -18,13 +18,14 @@ public class CommunityFactory extends ModelFactory<Community> {
 
     @Override
     public void save(Community community) throws SQLException {
-        final String sql = "UPDATE Communities SET Name = ?, Description = ?, Genre = ?, Created = ? WHERE Id = ?";
+        final String sql = "UPDATE Communities SET Name = ?, Description = ?, Genre = ?, Created = ?, BannerImageId = ? WHERE Id = ?";
         connection.executeUpdate(sql, statement -> {
             statement.setString(1, community.getName());
             statement.setString(2, community.getDescription());
             statement.setString(3, community.getGenre());
             statement.setDate(4, new java.sql.Date(community.getCreated().getTime()));
             statement.setInt(5, community.getId());
+            statement.setObject(6, community.getBannerImageId().orElse(null));	// setObject so that we can set null
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update community. Rows Affected: " + rowsAffected);
@@ -37,12 +38,14 @@ public class CommunityFactory extends ModelFactory<Community> {
         final String sql = "SELECT * FROM Communities WHERE Id = ?";
         var community = connection.executeQuery(sql, statement -> statement.setInt(1, id), executor -> {
             if (executor.next()) {
+                var bannerId = executor.getInt("BannerImageId");
                 return new Community(
                         executor.getInt("Id"),
                         executor.getString("Name"),
                         executor.getString("Description"),
                         executor.getString("Genre"),
-                        executor.getDate("Created")
+                        executor.getDate("Created"),
+                        bannerId == 0 ? null : bannerId
                 );
             }
             return null;
@@ -71,12 +74,14 @@ public class CommunityFactory extends ModelFactory<Community> {
         return connection.executeQuery(sql, statement -> statement.setString(1, sb.toString()), executor -> {
             var result = new ArrayList<Community>();
             while (executor.next()) {
+                var bannerId = executor.getInt("BannerImageId");
                 result.add(new Community(
                         executor.getInt("Id"),
                         executor.getString("Name"),
                         executor.getString("Description"),
                         executor.getString("Genre"),
-                        executor.getDate("Created")
+                        executor.getDate("Created"),
+                        bannerId == 0 ? null : bannerId
                 ));
             }
             return result;
@@ -106,12 +111,14 @@ public class CommunityFactory extends ModelFactory<Community> {
         return connection.executeQuery(sql, statement -> {}, executor -> {
             var result = new ArrayList<Community>();
             while (executor.next()) {
+                var bannerId = executor.getInt("BannerImageId");
                 result.add(new Community(
                         executor.getInt("Id"),
                         executor.getString("Name"),
                         executor.getString("Description"),
                         executor.getString("Genre"),
-                        executor.getDate("Created")
+                        executor.getDate("Created"),
+                        bannerId == 0 ? null : bannerId
                 ));
             }
             return result;
