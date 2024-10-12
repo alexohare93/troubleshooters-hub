@@ -32,7 +32,7 @@ public class CommunityDetailsController {
     @FXML
     private Button signUpButton;
     @FXML
-    private Button cancelBookingButton;
+    private Button cancelButton;
 
     private final CommunityService communityService;
     private final ImageUploaderService imageUploaderService;
@@ -62,7 +62,7 @@ public class CommunityDetailsController {
         nameLabel.setText(community.name());
         descriptionTextArea.setText(community.description());
         setUpBannerImage();
-        updateBookingButtons();
+        updateJoinButtons();
     }
 
     private void setUpBannerImage() {
@@ -87,11 +87,11 @@ public class CommunityDetailsController {
         }
     }
 
-    private void updateBookingButtons() {
+    private void updateJoinButtons() {
         try {
             int userId = identityService.getUserContext().getUser().getId();
-            boolean isBooked = communityService.isUserBookedIntoCommunity(userId, community.communityId());
-            toggleBookingButtons(isBooked);
+            boolean isJoined = communityService.hasUserJoinedIntoCommunity(userId, community.communityId());
+            toggleBookingButtons(isJoined);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating booking status", e);
             showAlert(Alert.AlertType.ERROR, "Unable to update booking status. Please try again.");
@@ -104,7 +104,7 @@ public class CommunityDetailsController {
             showAlert(Alert.AlertType.ERROR, "No community selected for booking.");
             return;
         }
-        handleBookingOperation(() -> communityService.signUpForCommunity(identityService.getUserContext().getUser().getId(), community.communityId()),
+        handleJoinOperation(() -> communityService.signUpForCommunity(identityService.getUserContext().getUser().getId(), community.communityId()),
                 "Booked into event successfully",
                 "You are already booked into this event");
     }
@@ -115,17 +115,17 @@ public class CommunityDetailsController {
             showAlert(Alert.AlertType.ERROR, "No community selected for cancellation.");
             return;
         }
-        handleBookingOperation(() -> communityService.cancelBooking(identityService.getUserContext().getUser().getId(), community.communityId()),
+        handleJoinOperation(() -> communityService.cancelJoin(identityService.getUserContext().getUser().getId(), community.communityId()),
                 "Booking canceled successfully",
                 "Unable to cancel booking. Please try again.");
     }
 
-    private void handleBookingOperation(BookingOperation operation, String successMessage, String failureMessage) {
+    private void handleJoinOperation(JoinOperation operation, String successMessage, String failureMessage) {
         try {
             boolean result = operation.execute();
             if (result) {
                 showAlert(Alert.AlertType.INFORMATION, successMessage);
-                updateBookingButtons();
+                updateJoinButtons();
             } else {
                 showAlert(Alert.AlertType.ERROR, failureMessage);
             }
@@ -137,7 +137,7 @@ public class CommunityDetailsController {
 
     private void toggleBookingButtons(boolean isBooked) {
         signUpButton.setVisible(!isBooked);
-        cancelBookingButton.setVisible(isBooked);
+        cancelButton.setVisible(isBooked);
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {
@@ -145,7 +145,7 @@ public class CommunityDetailsController {
     }
 
     @FunctionalInterface
-    private interface BookingOperation {
+    private interface JoinOperation {
         boolean execute() throws SQLException;
     }
 }
