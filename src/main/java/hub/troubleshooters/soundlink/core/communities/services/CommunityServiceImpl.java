@@ -1,13 +1,18 @@
-package hub.troubleshooters.soundlink.core.events.services;
+package hub.troubleshooters.soundlink.core.communities.services;
 
 import com.google.inject.Inject;
-import hub.troubleshooters.soundlink.core.events.models.CreateCommunityModel;
+import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.data.models.CommunityMember;
-import hub.troubleshooters.soundlink.core.events.services.CommunityService;
+import hub.troubleshooters.soundlink.core.validation.ModelValidator;
+import hub.troubleshooters.soundlink.core.validation.ValidationError;
+import hub.troubleshooters.soundlink.core.validation.ValidationResult;
+import hub.troubleshooters.soundlink.core.communities.validation.CreateCommunityModelValidator;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -23,22 +28,40 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityMemberFactory communityMemberFactory;
 
+    private final CreateCommunityModelValidator createCommunityModelValidator;
+
+    private final ImageUploaderService imageUploaderService;
+
     @Inject
-    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory) {
+    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory, CreateCommunityModelValidator createCommunityModelValidator, ImageUploaderService imageUploaderService) {
         this.communityFactory = communityFactory;
         this.communityMemberFactory = communityMemberFactory;
+        this.createCommunityModelValidator = createCommunityModelValidator;
+        this.imageUploaderService = imageUploaderService;
     }
 
     @Override
-    public void createCommunity(CreateCommunityModel model) {
-        try {
-            Community community = new Community(
-                    model.id(), model.name(), model.description(), model.genre(), model.created()
-            );
-            communityFactory.create(community);
-        } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error creating community", e);
+    public ValidationResult createCommunity(CreateCommunityModel model) {
+
+        // validate
+        var result = createCommunityModelValidator.validate(model);
+        if (!result.isSuccess()) {
+            return result;
         }
+
+        try {
+            if (model.bannerImage() != null) {
+                var img = imageUploaderService.upload(model.bannerImage());
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId());
+                communityFactory.create(community);
+            } else {
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, null);
+                communityFactory.create(community);
+            }
+        } catch (SQLException | IOException e) {
+            return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
+        }
+        return new ValidationResult();
     }
 
     @Override
