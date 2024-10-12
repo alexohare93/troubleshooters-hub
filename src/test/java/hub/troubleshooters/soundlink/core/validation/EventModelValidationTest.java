@@ -34,7 +34,7 @@ public class EventModelValidationTest {
         MockitoAnnotations.openMocks(this);
 
         // setting up test community
-        community = new Community(1, "test", "test", "test", Date.from(Instant.now()));
+        community = new Community(1, "test", "test", "test", Date.from(Instant.now()), null);
     }
 
     @Test

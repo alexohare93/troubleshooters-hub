@@ -108,7 +108,7 @@ class ModelValidatorTest {
   
     @Test
     void testCommunityExistsSuccess() throws SQLException {
-        community = new Community(1, "test", "test", "test", Date.from(Instant.now()));
+        community = new Community(1, "test", "test", "test", Date.from(Instant.now()), null);
         CommunityFactory communityFactory = mock(CommunityFactory.class);
         when(communityFactory.get(1)).thenReturn(Optional.of(community));
         Optional<ValidationError> result = validator.communityExists(communityFactory, 1);
