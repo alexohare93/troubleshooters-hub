@@ -1,30 +1,20 @@
-package hub.troubleshooters.soundlink.app.areas.community;
+package hub.troubleshooters.soundlink.app.areas.communities;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.areas.Routes;
-import hub.troubleshooters.soundlink.app.components.IntegerTextField;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
-import hub.troubleshooters.soundlink.core.auth.Scope;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
-import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
-import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
-import java.time.LocalDateTime;
 
 public class CreateCommunityController {
 
