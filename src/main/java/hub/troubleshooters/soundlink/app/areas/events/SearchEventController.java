@@ -111,9 +111,6 @@ public class SearchEventController {
         eventCard.setPrefWidth(250);
         eventCard.setPrefHeight(100);
 
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        String formattedDate = formatter.format(event.getScheduled());
-
         Label nameLabel = new Label(event.getName());
         Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
