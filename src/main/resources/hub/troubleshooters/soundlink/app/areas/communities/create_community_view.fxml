@@ -13,7 +13,7 @@
 
 <!-- Main content for community creation form -->
 
-<VBox alignment="CENTER" prefWidth="504.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.community.CreateCommunityController">
+<VBox alignment="CENTER" prefWidth="504.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.communities.CreateCommunityController">
       <children>
           <!-- Title -->
           <Label style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Create a New Community" />
