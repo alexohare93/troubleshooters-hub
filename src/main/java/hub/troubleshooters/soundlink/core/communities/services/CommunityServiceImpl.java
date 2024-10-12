@@ -103,7 +103,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public boolean cancelBooking(int userId, int communityId) throws SQLException {
+    public boolean cancelJoin(int userId, int communityId) throws SQLException {
         // Check if the user is currently signed up for the community
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
 
@@ -129,7 +129,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public boolean isUserBookedIntoCommunity(int userId, int communityId) throws SQLException {
+    public boolean hasUserJoinedIntoCommunity(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
         return existingMember.isPresent();
     }

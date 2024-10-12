@@ -41,7 +41,7 @@
                     <String fx:value="btn-primary" />
                 </styleClass>
             </Button>
-            <Button fx:id="cancelBookingButton" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel Booking">
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel Booking">
                 <styleClass>
                     <String fx:value="btn" />
                     <String fx:value="btn-secondary" />

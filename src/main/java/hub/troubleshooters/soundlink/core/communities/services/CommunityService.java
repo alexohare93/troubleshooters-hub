@@ -14,6 +14,6 @@ public interface CommunityService {
     List<Community> searchCommunities(String searchText);
     boolean signUpForCommunity(int userId, int communityId) throws SQLException;
     Optional<CommunityModel> getCommunity(int id);
-    boolean isUserBookedIntoCommunity(int userId, int communityId) throws SQLException;
-    boolean cancelBooking(int userId, int communityId) throws SQLException;
+    boolean hasUserJoinedIntoCommunity(int userId, int communityId) throws SQLException;
+    boolean cancelJoin(int userId, int communityId) throws SQLException;
 }
