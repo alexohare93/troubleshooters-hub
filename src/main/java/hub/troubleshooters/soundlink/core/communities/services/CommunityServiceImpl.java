@@ -133,4 +133,35 @@ public class CommunityServiceImpl implements CommunityService {
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
         return existingMember.isPresent();
     }
+
+    @Override
+    public void updateCommunity(CommunityModel community) throws SQLException {
+        try {
+            // Extract the ID from the Image object (if present)
+            Integer bannerImageId = community.bannerImage().map(img -> img.getId()).orElse(null);
+
+            // Create the updated Community object with the correct bannerImageId
+            Community updatedCommunity = new Community(
+                    community.communityId(),   // Keep the same ID
+                    community.name(),
+                    community.description(),
+                    community.genre(),
+                    community.created(),       // Keep the original creation date
+                    bannerImageId              // Pass the Image ID (Integer), not the Image object
+            );
+
+            // Use the save method in CommunityFactory to update the community in the database
+            communityFactory.save(updatedCommunity);
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating community", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException {
+        Optional<CommunityMember> communityMember = communityMemberFactory.get(userId, communityId);
+        return communityMember.map(CommunityMember::getPermission);
+    }
 }
