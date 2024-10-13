@@ -16,7 +16,9 @@ CREATE TABLE Communities (
     Name TEXT NOT NULL,
     Genre TEXT NOT NULL,
     Description TEXT NOT NULL,
-    Created DATETIME DEFAULT CURRENT_TIMESTAMP
+    Created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    BannerImageId INTEGER,
+    FOREIGN KEY (BannerImageId) REFERENCES Images(Id) ON DELETE SET NULL
 );
 
 CREATE TABLE CommunityMembers (

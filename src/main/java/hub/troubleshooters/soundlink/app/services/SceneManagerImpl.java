@@ -3,6 +3,7 @@ package hub.troubleshooters.soundlink.app.services;
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
 import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.areas.events.EventDetailsController;
+import hub.troubleshooters.soundlink.app.areas.communities.CommunityDetailsController;
 import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -160,6 +161,13 @@ public class SceneManagerImpl implements SceneManager {
     public void navigateToEventDetailsView(int eventId) {
         switchToOutletScene(Routes.EVENT_DETAILS, (EventDetailsController controller) -> {
             controller.loadEventDetails(eventId);  // pass the eventId to the controller
+        });
+    }
+
+    @Override
+    public void navigateToCommunityDetailsView(int communityId) {
+        switchToOutletScene(Routes.COMMUNITY_DETAILS, (CommunityDetailsController controller) -> {
+            controller.loadCommunityDetails(communityId);
         });
     }
 

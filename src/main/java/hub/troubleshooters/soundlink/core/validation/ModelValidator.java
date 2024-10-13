@@ -35,7 +35,7 @@ public abstract class ModelValidator<T> {
             return Optional.of(new ValidationError(name + " is null"));
         }
 
-        if (value.getName().endsWith(".png") || value.getName().endsWith(".jpg") || value.getName().endsWith(".jpeg")) {
+        if (value.getName().toLowerCase().endsWith(".png") || value.getName().toLowerCase().endsWith(".jpg") || value.getName().toLowerCase().endsWith(".jpeg")) {
             return Optional.empty();
         } else {
             return Optional.of(new ValidationError(name + " is not an image"));

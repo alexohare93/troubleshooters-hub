@@ -39,7 +39,7 @@ public class CommunityPostFactoryTest {
 		communityPost = new CommunityPost(1, 1, 1, "title", "content", new Date());
 
 		// Initialize a Community object with mock data
-		community = new Community(1, "name", "description", "genre", new Date());
+		community = new Community(1, "name", "description", "genre", new Date(), null);
 	}
 
 	@Test

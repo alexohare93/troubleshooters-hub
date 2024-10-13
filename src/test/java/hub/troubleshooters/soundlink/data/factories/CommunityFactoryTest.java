@@ -31,7 +31,7 @@ public class CommunityFactoryTest {
         MockitoAnnotations.openMocks(this);
 
         // Create a sample community object for use in the tests
-        community = new Community(1, "Test Community", "Description", "Genre", new Date());
+        community = new Community(1, "Test Community", "Description", "Genre", new Date(), null);
     }
 
     @Test
