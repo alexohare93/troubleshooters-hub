@@ -7,6 +7,7 @@ import hub.troubleshooters.soundlink.data.models.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 public class ImageUploaderServiceImpl implements ImageUploaderService {
     private final ImageFactory imageFactory;
     private final String imageDirectory = System.getProperty("user.home") + "/.soundlink/images/";  // images are stored in ~/.soundlink/images
+    private final String sampleImageDirectory = System.getProperty("user.home") + "/.soundlink/default-banner-images/";  // images are stored in ~/.soundlink/default-banner-images
 
     @Inject
     public ImageUploaderServiceImpl(ImageFactory imageFactory) {
@@ -38,9 +40,18 @@ public class ImageUploaderServiceImpl implements ImageUploaderService {
         return imageFactory.get(fileName).get();    // unwrap should be safe unless something internal is horribly wrong
     }
 
-    public File getImageFile(Image image) throws IOException {
+    public File getImageFile(Image image) throws InvalidPathException {
         var fileName = image.getFileName();
         var path = Path.of(imageDirectory, fileName);
+
+        return path.toFile();
+    }
+
+    public File getSampleBannerImageFile(int id) throws InvalidPathException {
+        id %= 7;    // there are only 7 sample banner images in the folder directory. Can update this if images are added or removed
+                    // it's a bit hacky, but was quick to implement.
+        var fileName = id + ".jpg";
+        var path = Path.of(sampleImageDirectory, fileName);
 
         return path.toFile();
     }

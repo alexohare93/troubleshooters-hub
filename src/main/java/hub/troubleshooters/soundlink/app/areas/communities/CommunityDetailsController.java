@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -71,7 +72,7 @@ public class CommunityDetailsController {
                 try {
                     var path = "file:///" + imageUploaderService.getImageFile(img).getAbsolutePath();
                     bannerImageView.setImage(new Image(path));
-                } catch (IOException e) {
+                } catch (InvalidPathException e) {
                     LOGGER.log(Level.WARNING, "Failed to load banner image from file", e);
                     bannerImageView.setImage(null);
                 }

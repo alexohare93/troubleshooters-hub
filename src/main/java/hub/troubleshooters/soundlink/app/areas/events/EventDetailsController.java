@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.sql.SQLException;
 
 public class EventDetailsController {
@@ -58,8 +59,12 @@ public class EventDetailsController {
                 var img = event.bannerImage().get();
                 var path = "file:///" + imageUploaderService.getImageFile(img).getAbsolutePath();
                 bannerImageView.setImage(new Image(path));
+            } else {
+                var img = imageUploaderService.getSampleBannerImageFile(event.id());
+                var path = "file:///" + img.getAbsolutePath();
+                bannerImageView.setImage(new Image(path));
             }
-        } catch (IOException e) {
+        } catch (InvalidPathException e) {
             bannerImageView.setImage(null);
         } finally {
             if (bannerImageView.getImage() == null) {
