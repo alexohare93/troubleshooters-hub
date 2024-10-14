@@ -172,7 +172,9 @@ public class EventServiceImpl implements EventService {
         List<EventModel> eventModels = new ArrayList<>();
         for (Event event : events) eventModels.add(map.event(event));
         return eventModels;
+    }
 
+    @Override
     public List<EventComment> getComments(int eventId) throws SQLException {
         return eventCommentFactory.getByEventId(eventId);
     }
