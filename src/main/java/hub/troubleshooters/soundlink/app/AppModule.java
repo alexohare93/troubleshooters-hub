@@ -19,10 +19,7 @@ import hub.troubleshooters.soundlink.core.events.services.EventServiceImpl;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderServiceImpl;
-import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
-import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
-import hub.troubleshooters.soundlink.data.factories.ImageFactory;
-import hub.troubleshooters.soundlink.data.factories.UserFactory;
+import hub.troubleshooters.soundlink.data.factories.*;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
 import javafx.stage.Stage;
@@ -50,6 +47,7 @@ public class AppModule extends AbstractModule {
         // data factories
         bind(UserFactory.class).in(Singleton.class);
         bind(CommunityFactory.class).in(Singleton.class);
+        bind(CommunityPostFactory.class).in(Singleton.class);
         bind(CommunityMemberFactory.class).in(Singleton.class);
         bind(ImageFactory.class).in(Singleton.class);
 

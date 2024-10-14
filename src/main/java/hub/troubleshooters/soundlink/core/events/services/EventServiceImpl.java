@@ -157,5 +157,10 @@ public class EventServiceImpl implements EventService {
        var booking = eventAttendeeFactory.get(eventId, userId);
        return booking.isPresent();
     }
+
+    @Override
+    public List<Event> getCommunityEvents(int communityId) throws SQLException {
+        return eventFactory.findCommunityEvents(communityId);
+    }
 }
 

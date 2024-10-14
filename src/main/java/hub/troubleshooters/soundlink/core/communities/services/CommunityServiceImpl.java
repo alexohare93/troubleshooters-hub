@@ -5,6 +5,7 @@ import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityMode
 import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
+import hub.troubleshooters.soundlink.data.factories.CommunityPostFactory;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.data.models.CommunityMember;
 import hub.troubleshooters.soundlink.core.validation.ModelValidator;
@@ -13,6 +14,8 @@ import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.core.communities.validation.CreateCommunityModelValidator;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.Map;
+import hub.troubleshooters.soundlink.data.models.CommunityPost;
+import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,6 +31,8 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityFactory communityFactory;
 
+    private final CommunityPostFactory communityPostFactory;
+
     private final CommunityMemberFactory communityMemberFactory;
 
     private final CreateCommunityModelValidator createCommunityModelValidator;
@@ -37,8 +42,9 @@ public class CommunityServiceImpl implements CommunityService {
     private final Map map;
 
     @Inject
-    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityMemberFactory communityMemberFactory, CreateCommunityModelValidator createCommunityModelValidator, ImageUploaderService imageUploaderService, Map map) {
+    public CommunityServiceImpl(CommunityFactory communityFactory, CommunityPostFactory communityPostFactory, CommunityMemberFactory communityMemberFactory, CreateCommunityModelValidator createCommunityModelValidator, ImageUploaderService imageUploaderService, Map map) {
         this.communityFactory = communityFactory;
+        this.communityPostFactory = communityPostFactory;
         this.communityMemberFactory = communityMemberFactory;
         this.createCommunityModelValidator = createCommunityModelValidator;
         this.imageUploaderService = imageUploaderService;
@@ -132,5 +138,10 @@ public class CommunityServiceImpl implements CommunityService {
     public boolean hasUserJoinedIntoCommunity(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
         return existingMember.isPresent();
+    }
+
+    @Override
+    public List<CommunityPost> getCommunityPosts(int communityId) throws SQLException {
+        return communityPostFactory.getPosts(communityId);
     }
 }

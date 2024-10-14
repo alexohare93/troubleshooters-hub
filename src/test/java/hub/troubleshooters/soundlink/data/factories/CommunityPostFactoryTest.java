@@ -29,6 +29,7 @@ public class CommunityPostFactoryTest {
 
 	private CommunityPost communityPost;
 	private Community community;
+	private int communityId;
 
 	@BeforeEach
 	void setUp() {
@@ -38,8 +39,9 @@ public class CommunityPostFactoryTest {
 		// Initialize a CommunityPost object with mock data
 		communityPost = new CommunityPost(1, 1, 1, "title", "content", new Date());
 
+		communityId = 1;
 		// Initialize a Community object with mock data
-		community = new Community(1, "name", "description", "genre", new Date(), null);
+		community = new Community(communityId, "name", "description", "genre", new Date(), null);
 	}
 
 	@Test
@@ -73,7 +75,7 @@ public class CommunityPostFactoryTest {
 		when(databaseConnection.executeQuery(anyString(), any(), any())).thenReturn(List.of(communityPost));
 
 		// Call the method to retrieve all CommunityPosts for the given Community
-		var result = communityPostFactory.get(community);
+		var result = communityPostFactory.getPosts(communityId);
 
 		// Assert that the result contains the expected CommunityPost
 		assertEquals(1, result.size());
@@ -86,7 +88,7 @@ public class CommunityPostFactoryTest {
 		when(databaseConnection.executeQuery(anyString(), any(), any())).thenReturn(new ArrayList<CommunityPost>());
 
 		// Call method to retrieve all  Community Posts for this non-existent Community
-		var result = communityPostFactory.get(community);
+		var result = communityPostFactory.getPosts(communityId);
 
 		// Assert that the result is empty
 		assertEquals(0, result.size());

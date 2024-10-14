@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" alignment="CENTER"
+            style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;"
+            xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hub.troubleshooters.soundlink.app.areas.communities.CommunityFeedController">
+
+    <!-- Event Name -->
+    <Label fx:id="nameLabel" styleClass="h1" text="place holder" />
+
+    <!-- List Box -->
+    <VBox fx:id="ListContainer" spacing="5.0" alignment="CENTER"
+          style="-fx-padding: 5; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;">
+        <!-- Box will contain the lists of either Events or community posts -->
+    </VBox>
+
+</VBox>
