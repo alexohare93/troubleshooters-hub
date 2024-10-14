@@ -11,11 +11,13 @@ import hub.troubleshooters.soundlink.core.auth.validation.LoginModelValidator;
 import hub.troubleshooters.soundlink.core.auth.validation.RegisterModelValidator;
 import hub.troubleshooters.soundlink.data.factories.CommunityMemberFactory;
 import hub.troubleshooters.soundlink.data.factories.UserFactory;
+import hub.troubleshooters.soundlink.data.factories.UserProfileFactory;
 
 import java.sql.SQLException;
 
 public class LoginServiceImpl implements LoginService {
     private final UserFactory userFactory;
+    private final UserProfileFactory userProfileFactory;
     private final CommunityMemberFactory communityMemberFactory;
     private final IdentityService identityService;
     private final LoginModelValidator loginModelValidator;
@@ -27,13 +29,15 @@ public class LoginServiceImpl implements LoginService {
             UserFactory userFactory,
             CommunityMemberFactory communityUserFactory,
             LoginModelValidator loginModelValidator,
-            RegisterModelValidator registerModelValidator
+            RegisterModelValidator registerModelValidator,
+            UserProfileFactory userProfileFactory
     ) {
         this.identityService = identityService;
         this.userFactory = userFactory;
         this.communityMemberFactory = communityUserFactory;
         this.loginModelValidator = loginModelValidator;
         this.registerModelValidator = registerModelValidator;
+        this.userProfileFactory = userProfileFactory;
     }
 
     @Override
@@ -84,7 +88,11 @@ public class LoginServiceImpl implements LoginService {
                 return new AuthResult(new AuthError("User already exists"));
             }
             var hashedPassword = hashPassword(model.password());
-            userFactory.create(model.username(), hashedPassword);
+            var user = userFactory.create(model.username(), hashedPassword);
+
+            // create new user profile
+            userProfileFactory.create(user.getId(), user.getUsername());
+
             return new AuthResult(); // registration successful
         } catch (SQLException e) {
             return new AuthResult(new AuthError("Internal server error. Please contact SoundLink support. Error: " + e.getMessage()));

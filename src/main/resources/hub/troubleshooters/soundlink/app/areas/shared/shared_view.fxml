@@ -11,18 +11,19 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane fx:id="root" prefHeight="810.0" prefWidth="1152.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
     <top>
         <VBox style="-fx-background-color: #fa8072;"> <!-- Use VBox to stack HBox and Pane -->
             <!-- Navigation Bar -->
             <HBox fx:id="navBar" alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="800.0" spacing="15" styleClass="nav-bar hbox" BorderPane.alignment="CENTER">
                 <children>
-               <HBox alignment="CENTER">
-                  <children>
-                   <Button fx:id="backButton" onAction="#onBackButtonPressed" disable="true" mnemonicParsing="false" text="⮜" />
-                     <Button fx:id="forwardButton" onAction="#onForwardButtonPressed" disable="true" mnemonicParsing="false" text="⮞" />
-                  </children>
-               </HBox>
+<!--               <HBox alignment="CENTER">-->
+<!--                  <children>-->
+<!--                   <Button fx:id="backButton" onAction="#onBackButtonPressed" disable="true" mnemonicParsing="false" text="⮜" />-->
+<!--                     <Button fx:id="forwardButton" onAction="#onForwardButtonPressed" disable="true" mnemonicParsing="false" text="⮞" />-->
+<!--                  </children>-->
+<!--               </HBox>-->
                     <!-- Logo -->
                     <Button mnemonicParsing="false" onAction="#onHomeButtonPressed" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-text-fill: white; -fx-font-size: 24px;                     -fx-font-weight: bold; -fx-padding: 0; -fx-cursor: hand;" styleClass="logo-button" text="SOUNDLINK" />
                     <Region HBox.hgrow="ALWAYS" />
@@ -64,13 +65,14 @@
         </VBox>
     </top>
     <center>
-      <StackPane>
-         <children>
-            <HBox fx:id="outlet" alignment="CENTER" />
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </BorderPane.margin>
-      </StackPane>
+        <ScrollPane fitToWidth="true">
+            <StackPane>
+                <HBox fx:id="outlet" alignment="CENTER" />
+                <BorderPane.margin>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </BorderPane.margin>
+            </StackPane>
+        </ScrollPane>
+
     </center>
 </BorderPane>

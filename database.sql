@@ -11,6 +11,16 @@ CREATE TABLE Users (
     LastLogin DATETIME
 );
 
+CREATE TABLE UserProfiles (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserId INTEGER NOT NULL,
+    DisplayName TEXT NOT NULL,
+    Bio TEXT NOT NULL,
+    ProfileImageId INTEGER,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+    FOREIGN KEY (ProfileImageId) REFERENCES Images(Id) ON DELETE SET NULL
+);
+
 CREATE TABLE Communities (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
@@ -57,7 +67,7 @@ CREATE TABLE Events (
     FOREIGN KEY (BannerImageId) REFERENCES Images(Id) ON DELETE SET NULL
 );
 
-CREATE TABLE EventAttendees (
+CREATE TABLE Bookings (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     EventId INTEGER NOT NULL,
     UserId INTEGER NOT NULL,
@@ -83,8 +93,11 @@ CREATE TABLE EventComments (
 -- username is 'admin', password is '123'
 INSERT INTO Users (Username, HashedPassword) VALUES ('admin', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
+-- user profile
+INSERT INTO UserProfiles (UserId, DisplayName, Bio) VALUES (1, 'Admin', 'This is an admin account');
+
 -- username is 'user', password is '123'
-INSERT INTO Users (Username, HashedPassword) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
+-- INSERT INTO Users (Username, HashedPassword) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
 INSERT INTO Communities (Name, Genre, Description) VALUES ('Test Community', 'Test Rock', 'This is a test Community');
 
@@ -99,9 +112,9 @@ INSERT INTO CommunityPosts (CommunityId, UserId, Title, Content) VALUES (1, 1, '
 INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (1, 'Test Event', 'This is a test Event', 'Not a real place', 100, '2025-01-01 00:00:00');
 
 -- 'admin' is attending 'Test Event' and is superadmin
-INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (1, 1, 1);
+INSERT INTO Bookings (EventId, UserId, Permission) VALUES (1, 1, 1);
 -- 'user' is attending 'Test Event' and can read and write event details and comments
-INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (1, 2, 6);
+INSERT INTO Bookings (EventId, UserId, Permission) VALUES (1, 2, 6);
 
 -- made by 'admin' in 'Test Event'
 INSERT INTO EventComments (UserId, EventId, Content) VALUES (1, 1, 'This is a test comment');

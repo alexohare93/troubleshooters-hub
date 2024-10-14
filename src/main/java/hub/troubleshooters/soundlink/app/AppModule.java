@@ -19,6 +19,9 @@ import hub.troubleshooters.soundlink.core.events.services.EventServiceImpl;
 import hub.troubleshooters.soundlink.core.events.validation.CreateEventModelValidator;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderServiceImpl;
+import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
+import hub.troubleshooters.soundlink.core.profile.services.UserProfileServiceImpl;
+import hub.troubleshooters.soundlink.core.profile.validation.UserProfileValidator;
 import hub.troubleshooters.soundlink.data.factories.*;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
@@ -43,6 +46,7 @@ public class AppModule extends AbstractModule {
         bind(CommunityService.class).to(CommunityServiceImpl.class).in(Singleton.class);
         bind(IdentityService.class).to(IdentityServiceImpl.class).in(Singleton.class);
         bind(ImageUploaderService.class).to(ImageUploaderServiceImpl.class).in(Singleton.class);
+        bind(UserProfileService.class).to(UserProfileServiceImpl.class).in(Singleton.class);
 
         // data factories
         bind(UserFactory.class).in(Singleton.class);
@@ -50,11 +54,16 @@ public class AppModule extends AbstractModule {
         bind(CommunityPostFactory.class).in(Singleton.class);
         bind(CommunityMemberFactory.class).in(Singleton.class);
         bind(ImageFactory.class).in(Singleton.class);
+        bind(UserProfileFactory.class).in(Singleton.class);
+        bind(BookingFactory.class).in(Singleton.class);
+        bind(CommunityPostFactory.class).in(Singleton.class);
+        bind(EventCommentFactory.class).in(Singleton.class);
 
         // validators
         bind(CreateEventModelValidator.class).in(Singleton.class);
         bind(LoginModelValidator.class).in(Singleton.class);
         bind(RegisterModelValidator.class).in(Singleton.class);
+        bind(UserProfileValidator.class).in(Singleton.class);
 
         // mapper (potentially in future have mapper profiles?)
         bind(Map.class).in(Singleton.class);

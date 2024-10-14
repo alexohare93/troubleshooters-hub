@@ -1,7 +1,6 @@
 package hub.troubleshooters.soundlink.core.events.services;
 
 import com.google.inject.Inject;
-import hub.troubleshooters.soundlink.core.CoreResult;
 import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.Scope;
 import hub.troubleshooters.soundlink.core.auth.ScopeUtils;
@@ -13,19 +12,17 @@ import hub.troubleshooters.soundlink.core.events.validation.EventBookingResult;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
+import hub.troubleshooters.soundlink.data.factories.EventCommentFactory;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
-import hub.troubleshooters.soundlink.data.factories.EventAttendeeFactory;
-import hub.troubleshooters.soundlink.data.models.EventAttendee;
+import hub.troubleshooters.soundlink.data.factories.BookingFactory;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
-import hub.troubleshooters.soundlink.data.factories.ImageFactory;
-import hub.troubleshooters.soundlink.data.models.Event;
+import hub.troubleshooters.soundlink.data.models.EventComment;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -37,18 +34,29 @@ public class EventServiceImpl implements EventService {
     private final CreateEventModelValidator createEventModelValidator;
     private final EventFactory eventFactory;
     private final IdentityService identityService;
-    private final EventAttendeeFactory eventAttendeeFactory;
+    private final BookingFactory bookingFactory;
     private final ImageUploaderService imageUploaderService;
     private final Map map;
+    private final EventCommentFactory eventCommentFactory;
 
     @Inject
-    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, EventAttendeeFactory eventAttendeeFactory, ImageUploaderService imageUploaderService, Map map) {
+    public EventServiceImpl(
+            CreateEventModelValidator createEventModelValidator,
+            EventFactory eventFactory,
+            IdentityService identityService,
+            BookingFactory bookingFactory,
+            ImageUploaderService imageUploaderService,
+            Map map,
+            EventCommentFactory eventCommentFactory
+
+    ) {
         this.createEventModelValidator = createEventModelValidator;
         this.eventFactory = eventFactory;
         this.identityService = identityService;
-        this.eventAttendeeFactory = eventAttendeeFactory;
+        this.bookingFactory = bookingFactory;
         this.imageUploaderService = imageUploaderService;
         this.map = map;
+        this.eventCommentFactory = eventCommentFactory;
     }
 
     @Override
@@ -147,14 +155,14 @@ public class EventServiceImpl implements EventService {
             return new EventBookingResult(new BookingAlreadyExistsException(eventId, userId));
         }
 
-        eventAttendeeFactory.create(eventId, userId, ScopeUtils.combineScopes(Scope.EVENT_READ));
-        var booking = eventAttendeeFactory.get(eventId, userId).get();  // unwrap should never fail since we've just inserted the record.
+        bookingFactory.create(eventId, userId, ScopeUtils.combineScopes(Scope.EVENT_READ));
+        var booking = bookingFactory.get(eventId, userId).get();  // unwrap should never fail since we've just inserted the record.
         return new EventBookingResult(booking);
     }
 
     @Override
     public boolean isBooked(int eventId, int userId) throws SQLException {
-       var booking = eventAttendeeFactory.get(eventId, userId);
+       var booking = bookingFactory.get(eventId, userId);
        return booking.isPresent();
     }
 
@@ -164,6 +172,14 @@ public class EventServiceImpl implements EventService {
         List<EventModel> eventModels = new ArrayList<>();
         for (Event event : events) eventModels.add(map.event(event));
         return eventModels;
+
+    public List<EventComment> getComments(int eventId) throws SQLException {
+        return eventCommentFactory.getByEventId(eventId);
+    }
+
+    @Override
+    public void comment(int eventId, int userId, String comment) throws SQLException {
+        eventCommentFactory.create(eventId, userId, comment);
     }
 }
 

@@ -1,11 +1,11 @@
 package hub.troubleshooters.soundlink.core.events.validation;
 
 import hub.troubleshooters.soundlink.core.CoreResult;
-import hub.troubleshooters.soundlink.data.models.EventAttendee;
+import hub.troubleshooters.soundlink.data.models.Booking;
 
-public class EventBookingResult extends CoreResult<EventAttendee, BookingAlreadyExistsException> {
+public class EventBookingResult extends CoreResult<Booking, BookingAlreadyExistsException> {
 
-    public EventBookingResult(EventAttendee booking) {
+    public EventBookingResult(Booking booking) {
         super(booking);
     }
 

@@ -5,11 +5,17 @@ import hub.troubleshooters.soundlink.core.communities.models.CommunityPostModel;
 import hub.troubleshooters.soundlink.core.events.models.EventModel;
 import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.core.profile.models.UserModel;
+import hub.troubleshooters.soundlink.data.factories.UserFactory;
+import hub.troubleshooters.soundlink.data.models.*;
+
+import hub.troubleshooters.soundlink.core.profile.models.UserProfileModel;
 import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
 import hub.troubleshooters.soundlink.data.factories.ImageFactory;
-import hub.troubleshooters.soundlink.data.factories.UserFactory;
-import hub.troubleshooters.soundlink.data.models.*;
+import hub.troubleshooters.soundlink.data.models.Event;
+import hub.troubleshooters.soundlink.data.models.Community;
+import hub.troubleshooters.soundlink.data.models.Image;
+import hub.troubleshooters.soundlink.data.models.UserProfile;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -66,5 +72,14 @@ public class Map {
         return new CommunityPostModel(post.getId(), communityModel, userModel, post.getTitle(), post.getContent(), post.getCreated());
     }
 
+    public UserProfileModel userProfile(UserProfile userProfile) throws SQLException {
 
+        // profile image ID can be NULL
+        Optional<Image> imageOpt = Optional.empty();
+        if (userProfile.getProfileImageId().isPresent()) {
+            imageOpt = imageFactory.get(userProfile.getProfileImageId().get());
+        }
+
+        return new UserProfileModel(userProfile.getId(), userProfile.getUserId(), userProfile.getDisplayName(), userProfile.getBio(), imageOpt);
+    }
 }

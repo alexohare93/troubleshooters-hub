@@ -83,7 +83,7 @@ public class UserFactory extends ModelFactory<User> {
      * @param hashedPassword the hashed password of the new user
      * @throws SQLException if an error occurs while creating the user
      */
-    public void create(String username, String hashedPassword) throws SQLException {
+    public User create(String username, String hashedPassword) throws SQLException {
         final var sql = "INSERT INTO Users (Username, HashedPassword) VALUES (?, ?)";
         connection.executeUpdate(sql, preparedStatement -> {
             preparedStatement.setString(1, username);
@@ -93,5 +93,6 @@ public class UserFactory extends ModelFactory<User> {
                 throw new SQLException("Failed to create new user: " + username);
             }
         });
+        return get(username).get(); // should not fail due to just being created.
     }
 }

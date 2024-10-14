@@ -25,6 +25,8 @@ Each project will need to provide a certain amount of features/functionalities, 
 
 3. Run the `SoundLinkApplication` class located in the `src/main/java/hub/troubleshooters/soundlink/app` directory to start the application.
 
+4. Copy the `default-banner-images` folder to your the configured SoundLink application configuration directory, which is `~/.soundlink`.
+
 ### Project Structure
 
 This project uses the familiar layered architecture pattern, with the following packages and their respective responsibilities:
