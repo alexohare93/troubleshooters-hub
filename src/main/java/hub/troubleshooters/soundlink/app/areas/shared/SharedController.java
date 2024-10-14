@@ -25,8 +25,8 @@ public class SharedController implements NavigationListener {
     @FXML private Pane root;
     @FXML private MenuButton usernameMenuButton;
     @FXML private Pane outlet;
-    @FXML private Button backButton;
-    @FXML private Button forwardButton;
+//    @FXML private Button backButton;
+//    @FXML private Button forwardButton;
 
     @Inject
     public SharedController(LoginService loginService, IdentityService identityService, SceneManager sceneManager) {
@@ -40,8 +40,8 @@ public class SharedController implements NavigationListener {
     @FXML
     public void initialize() {
         usernameMenuButton.setText(identityService.getUserContext().getUser().getUsername());
-        backButton.disableProperty().bind(hasHistoryProperty.not());
-        forwardButton.disableProperty().bind(hasFutureProperty.not());
+//        backButton.disableProperty().bind(hasHistoryProperty.not());
+//        forwardButton.disableProperty().bind(hasFutureProperty.not());
     }
 
     public void setOutlet(Parent content) {
@@ -85,15 +85,15 @@ public class SharedController implements NavigationListener {
         sceneManager.navigate(Routes.PROFILE);
     }
 
-    @FXML
-    protected void onBackButtonPressed() {
-        sceneManager.navigateBack();
-    }
-
-    @FXML
-    protected void onForwardButtonPressed() {
-        sceneManager.navigateForward();
-    }
+//    @FXML
+//    protected void onBackButtonPressed() {
+//        sceneManager.navigateBack();
+//    }
+//
+//    @FXML
+//    protected void onForwardButtonPressed() {
+//        sceneManager.navigateForward();
+//    }
 
     @Override
     public void onNavigationStateChange() {
