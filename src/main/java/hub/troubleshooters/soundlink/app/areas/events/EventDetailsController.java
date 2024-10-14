@@ -12,6 +12,7 @@ import hub.troubleshooters.soundlink.core.profile.models.UserProfileModel;
 import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
 import hub.troubleshooters.soundlink.data.models.EventComment;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -25,6 +26,9 @@ import javafx.scene.shape.Circle;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class EventDetailsController {
     @FXML private ImageView bannerImageView;
@@ -33,6 +37,7 @@ public class EventDetailsController {
     @FXML private Label communityLabel;
     @FXML private Label venueLabel;
     @FXML private VBox commentsVbox;
+    @FXML private TextArea commentTextArea;
 
     private final EventService eventService;
     private final ImageUploaderService imageUploaderService;
@@ -109,31 +114,59 @@ public class EventDetailsController {
     }
 
     private Node createCommentCard(EventComment comment) {
-        UserProfileModel userProfile = null;     // TODO: error handling
+        UserProfileModel userProfile = null; // TODO: error handling
         try {
             userProfile = map.userProfile(userProfileService.getUserProfile(comment.getUserId()).get());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        // Outer card layout
         var card = new VBox();
-        card.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
-        card.setPrefWidth(250);
-        card.setPrefHeight(100);
+        card.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 15px; -fx-spacing: 10px;");
+        card.setPrefWidth(300);
+        card.setPrefHeight(150);
+
+        // top row: profile image and name
         var r1 = new HBox();
+        r1.setSpacing(10);
+        r1.setAlignment(Pos.CENTER_LEFT);
+
         var img = imageUploaderService.getFullProtocolPath(imageUploaderService.getDefaultProfileImageFile());
         if (userProfile.profileImage().isPresent()) {
             img = imageUploaderService.getFullProtocolPath(userProfile.profileImage().get());
         }
+
         var imgView = new ImageView(img);
-        imgView.setFitWidth(32);
-        imgView.setFitHeight(32);
-        imgView.setStyle("-fx-background-color: #e0e0e0; -fx-border-color: #FF6F61; -fx-border-width: 4px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 5);");
-        imgView.setClip(new Circle(16, 16, 16));
-        r1.getChildren().add(imgView);
-        r1.getChildren().add(new Label(userProfile.displayName()));
-        card.getChildren().addAll(r1);
-        card.getChildren().add(new Label(comment.getContent()));
+        imgView.setFitWidth(40);
+        imgView.setFitHeight(40);
+        imgView.setStyle("-fx-background-color: #e0e0e0; -fx-border-color: #FF6F61; -fx-border-width: 3px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 5);");
+        imgView.setClip(new Circle(20, 20, 20));
+
+        var nameLabel = new Label(userProfile.displayName());
+        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        r1.getChildren().addAll(imgView, nameLabel);
+
+        // middle row: comment
+        var contentLabel = new Label(comment.getContent());
+        contentLabel.setWrapText(true);
+        contentLabel.setStyle("-fx-font-size: 12px;");
+
+        // bottom row: date
+        var r2 = new HBox();
+        r2.setAlignment(Pos.BOTTOM_RIGHT);
+        var createdDateLabel = new Label(formatDate(comment.getCreated()));
+        createdDateLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: gray;");
+        r2.getChildren().add(createdDateLabel);
+
+        card.getChildren().addAll(r1, contentLabel, r2);
         return card;
+    }
+
+    private String formatDate(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy, HH:mm");
+        return dateFormat.format(date);
     }
 
     @FXML
@@ -152,5 +185,14 @@ public class EventDetailsController {
         } catch (SQLException e) {
             sceneManager.alert(new Alert(Alert.AlertType.ERROR, "Something went wrong booking into this event. Please contact SoundLink Support."));
         }
+    }
+
+    @FXML
+    protected void onCommentButtonClick() {
+        if (event == null) {
+            return;
+        }
+
+        
     }
 }
