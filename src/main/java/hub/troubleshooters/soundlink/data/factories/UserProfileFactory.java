@@ -75,7 +75,7 @@ public class UserProfileFactory extends ModelFactory<UserProfile> {
         return Optional.of(profile);
     }
 
-    public void create(int userId, String displayName) throws SQLException {
+    public UserProfile create(int userId, String displayName) throws SQLException {
         final var sql = "INSERT INTO UserProfiles (UserId, DisplayName, Bio) VALUES (?, ?, '')";
         connection.executeUpdate(sql, preparedStatement -> {
             preparedStatement.setInt(1, userId);
@@ -85,5 +85,6 @@ public class UserProfileFactory extends ModelFactory<UserProfile> {
                 throw new SQLException("Failed to create new user: " + displayName);
             }
         });
+        return getByUserId(userId).get();   // shouldn't fail since just made, but could
     }
 }
