@@ -170,5 +170,10 @@ public class EventServiceImpl implements EventService {
     public List<EventComment> getComments(int eventId) throws SQLException {
         return eventCommentFactory.getByEventId(eventId);
     }
+
+    @Override
+    public void comment(int eventId, int userId, String comment) throws SQLException {
+        eventCommentFactory.create(eventId, userId, comment);
+    }
 }
 

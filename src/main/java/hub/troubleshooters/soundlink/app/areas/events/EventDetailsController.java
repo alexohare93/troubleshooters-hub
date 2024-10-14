@@ -77,6 +77,7 @@ public class EventDetailsController {
         descriptionTextArea.setText(event.description());
         communityLabel.setText("This event is shared with the " + event.community().getName() + " community.");
         venueLabel.setText(event.venue());
+        commentTextArea.clear();
 
         // set banner image
         try {
@@ -193,6 +194,20 @@ public class EventDetailsController {
             return;
         }
 
-        
+        // mild validation
+        if (commentTextArea.getText().isEmpty()) {
+            sceneManager.alert(new Alert(Alert.AlertType.INFORMATION, "Comment cannot be empty"));
+            return;
+        }
+
+        // leave comment
+        try {
+            eventService.comment(event.id(), identityService.getUserContext().getUser().getId(), commentTextArea.getText());
+        } catch (SQLException e) {
+            sceneManager.alert(new Alert(Alert.AlertType.ERROR, "Error creating comment."));
+        }
+
+        // refresh current view
+        loadEventDetails(event.id());
     }
 }
