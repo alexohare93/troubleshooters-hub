@@ -159,8 +159,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getCommunityEvents(int communityId) throws SQLException {
-        return eventFactory.findCommunityEvents(communityId);
+    public List<EventModel> getCommunityEvents(int communityId) throws SQLException {
+        List<Event> events = eventFactory.findCommunityEvents(communityId);
+        List<EventModel> eventModels = new ArrayList<>();
+        for (Event event : events) eventModels.add(map.event(event));
+        return eventModels;
     }
 }
 

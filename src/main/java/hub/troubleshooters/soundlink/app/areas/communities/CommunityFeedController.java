@@ -3,12 +3,12 @@ package hub.troubleshooters.soundlink.app.areas.communities;
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.core.communities.models.CommunityPostModel;
 import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
+import hub.troubleshooters.soundlink.core.events.models.EventModel;
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
-import hub.troubleshooters.soundlink.data.models.CommunityPost;
-import hub.troubleshooters.soundlink.data.models.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
@@ -40,8 +40,8 @@ public class CommunityFeedController {
 	private final SceneManager sceneManager;
 
 	private CommunityModel community;
-	private List<Event> events;
-	private List<CommunityPost> posts;
+	private List<EventModel> events;
+	private List<CommunityPostModel> posts;
 	private static final Logger LOGGER = Logger.getLogger(CommunityFeedController.class.getName());
 
 	private final Insets cardMargins = new Insets(5, 10, 5, 10);
@@ -96,7 +96,7 @@ public class CommunityFeedController {
 		// clear previous list
 		listContainer.getChildren().clear();
 		VBox card;
-		for (Event event : events) {
+		for (EventModel event : events) {
 			card = createEventCard(event);
 			listContainer.getChildren().add(card);
 		}
@@ -107,13 +107,13 @@ public class CommunityFeedController {
 		listContainer.getChildren().clear();
 
 		VBox card;
-		for (CommunityPost post : posts) {
+		for (CommunityPostModel post : posts) {
 			card = createCommunityPostCard(post);
 			listContainer.getChildren().add(card);
 		}
 	}
 
-	private VBox createEventCard(Event event) {
+	private VBox createEventCard(EventModel event) {
 		VBox vbox = new VBox();
 
 		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
@@ -124,31 +124,31 @@ public class CommunityFeedController {
 		vbox.setMinWidth(250);
 		vbox.setMinHeight(100);
 
-		Label eventNameLabel = new Label(event.getName());
+		Label eventNameLabel = new Label(event.name());
 		eventNameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072; -fx-padding: 5px;");
 
 		// Need to allow this to wrap
-		Label descriptionLabel = new Label("Description: " + event.getDescription());
+		Label descriptionLabel = new Label("Description: " + event.description());
 		descriptionLabel.setStyle("-fx-padding: 5px 0px;");
 
-		Label venueLabel = new Label("Genre: " + event.getVenue());
+		Label venueLabel = new Label("Genre: " + event.venue());
 		venueLabel.setStyle("-fx-padding: 5px 0px;");
 
-		Label scheduledLabel = new Label("Scheduled: " + event.getScheduled().toString());
+		Label scheduledLabel = new Label("Scheduled: " + event.scheduled().toString());
 		scheduledLabel.setStyle("-fx-padding: 5px 0px;");
 
 		Button detailsButton = new Button("Details");
 		detailsButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
 
 		// Handle sign-up logic on button click
-		detailsButton.setOnAction(e -> sceneManager.navigateToEventDetailsView(event.getId()));
+		detailsButton.setOnAction(e -> sceneManager.navigateToEventDetailsView(event.id()));
 
 		vbox.getChildren().addAll(eventNameLabel, descriptionLabel, venueLabel, scheduledLabel, detailsButton);
 		VBox.setVgrow(vbox, Priority.NEVER);
 		return vbox;
 	}
 
-	private VBox createCommunityPostCard(CommunityPost post) {
+	private VBox createCommunityPostCard(CommunityPostModel post) {
 		VBox vbox = new VBox();
 
 		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
@@ -159,18 +159,18 @@ public class CommunityFeedController {
 		vbox.setMinWidth(250);
 		vbox.setMinHeight(100);
 
-		Label titleLabel = new Label(post.getTitle());
+		Label titleLabel = new Label(post.title());
 		titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072; -fx-padding: 5px;");
 
-		Label userLabel = new Label("By: " + post.getUserid());
+		Label userLabel = new Label("By: " + post.user().username());
 		userLabel.setStyle("-fx-padding: 5px 0px;");
 
 		// Need to allow this to wrap
-		Label contentLabel = new Label(post.getContent());
+		Label contentLabel = new Label(post.content());
 		contentLabel.setStyle("-fx-padding: 5px 0px;");
 
 
-		Label postedLabel = new Label("Posted: " + post.getCreated().toString());
+		Label postedLabel = new Label("Posted: " + post.created().toString());
 		postedLabel.setStyle("-fx-padding: 5px 0px;");
 
 		vbox.getChildren().addAll(titleLabel, userLabel, contentLabel, postedLabel);

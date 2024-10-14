@@ -1,11 +1,10 @@
 package hub.troubleshooters.soundlink.core.communities.services;
 
+import hub.troubleshooters.soundlink.core.communities.models.CommunityPostModel;
 import hub.troubleshooters.soundlink.core.communities.models.CreateCommunityModel;
 import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
 import hub.troubleshooters.soundlink.data.models.Community;
-import hub.troubleshooters.soundlink.data.models.CommunityPost;
-import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,5 +17,5 @@ public interface CommunityService {
     Optional<CommunityModel> getCommunity(int id);
     boolean hasUserJoinedIntoCommunity(int userId, int communityId) throws SQLException;
     boolean cancelJoin(int userId, int communityId) throws SQLException;
-    List<CommunityPost> getCommunityPosts(int communityId) throws SQLException;
+    List<CommunityPostModel> getCommunityPosts(int communityId) throws SQLException;
 }
