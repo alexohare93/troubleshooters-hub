@@ -18,6 +18,7 @@ import hub.troubleshooters.soundlink.data.factories.BookingFactory;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.data.models.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
