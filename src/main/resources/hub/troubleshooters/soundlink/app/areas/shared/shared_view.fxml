@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane fx:id="root" prefHeight="810.0" prefWidth="1152.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.shared.SharedController">
     <top>
         <VBox style="-fx-background-color: #fa8072;"> <!-- Use VBox to stack HBox and Pane -->
@@ -64,13 +65,14 @@
         </VBox>
     </top>
     <center>
-      <StackPane>
-         <children>
-            <HBox fx:id="outlet" alignment="CENTER" />
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </BorderPane.margin>
-      </StackPane>
+        <ScrollPane fitToWidth="true">
+            <StackPane>
+                <HBox fx:id="outlet" alignment="CENTER" />
+                <BorderPane.margin>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </BorderPane.margin>
+            </StackPane>
+        </ScrollPane>
+
     </center>
 </BorderPane>
