@@ -14,8 +14,8 @@ import java.sql.SQLException;
 
 public class ImageUploaderServiceImpl implements ImageUploaderService {
     private final ImageFactory imageFactory;
-    private final String imageDirectory = System.getProperty("user.home") + "/.soundlink/images/";  // images are stored in ~/.soundlink/images
-    private final String sampleImageDirectory = System.getProperty("user.home") + "/.soundlink/default-banner-images/";  // images are stored in ~/.soundlink/default-banner-images
+    private final String imageDirectory = System.getProperty("user.dir") + "/app_data/images/";  // images are stored in app_data/images
+    private final String sampleImageDirectory = System.getProperty("user.dir") + "/app_data/default-banner-images/";  // images are stored in app_data/default-banner-images
 
     @Inject
     public ImageUploaderServiceImpl(ImageFactory imageFactory) {
