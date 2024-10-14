@@ -1,5 +1,14 @@
 package hub.troubleshooters.soundlink.app.areas.profile;
 
+import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.app.services.SceneManager;
+import hub.troubleshooters.soundlink.core.Map;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
+import hub.troubleshooters.soundlink.core.profile.models.UserProfileModel;
+import hub.troubleshooters.soundlink.core.profile.models.UserProfileUpdateModel;
+import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
+import hub.troubleshooters.soundlink.data.models.UserProfile;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,8 +20,22 @@ import hub.troubleshooters.soundlink.app.UserDataStore;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class UserProfileController {
+
+    // Reference to UserDataStore for storing user data
+    private UserDataStore userDataStore = UserDataStore.getInstance();  // todo: DI or get rid of this
+
+    private final ImageUploaderService imageUploaderService;
+    private final UserProfileService userProfileService;
+    private final IdentityService identityService;
+    private final SceneManager sceneManager;
+    private final Map map;
+
+    private UserProfileModel userProfile;
+    private File profileImageFile;
 
     // Fields for user profile data
     @FXML
@@ -32,24 +55,41 @@ public class UserProfileController {
     @FXML
     private ImageView userImageView; // ImageView for user's profile picture
 
-    // Buttons for saving edited fields
     @FXML
-    private Button saveNameButton; // Button for saving edited name
-    @FXML
-    private Button saveBioButton;  // Button for saving edited bio
+    private Button saveButton;
 
-    // Reference to UserDataStore for storing user data
-    private UserDataStore userDataStore = UserDataStore.getInstance();
+    @Inject
+    public UserProfileController(ImageUploaderService imageUploaderService, UserProfileService userProfileService, IdentityService identityService, SceneManager sceneManager, Map map) {
+        this.imageUploaderService = imageUploaderService;
+        this.userProfileService = userProfileService;
+        this.identityService = identityService;
+        this.sceneManager = sceneManager;
+        this.map = map;
+    }
 
     // Initialize method, runs when the FXML file is loaded
     @FXML
     public void initialize() {
-        // Load user data from UserDataStore
-        nameField.setText(userDataStore.getUserName());
-        bioField.setText(userDataStore.getUserBio());
+        var user = identityService.getUserContext().getUser();
+        try {
+            userProfile = map.userProfile(userProfileService.getUserProfile(user.getId()).get());     // TODO: error handling
+        } catch (SQLException e) {
+            throw new RuntimeException(e);  // TODO: error handling
+        }
+
+        nameField.setText(userProfile.displayName());
+        bioField.setText(userProfile.bio());
         updatePostsLabel();
         updateEventsLabel();
         updateCommunitiesLabel();
+
+        if (userProfile.profileImage().isPresent()) {
+            var img = userProfile.profileImage().get();
+            userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(img)));
+        } else {
+            var img = imageUploaderService.getDefaultProfileImageFile();
+            userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(img)));
+        }
     }
 
     // Method to update posts label from UserDataStore
@@ -79,57 +119,22 @@ public class UserProfileController {
         }
     }
 
-    // Method to make the name field editable and show the save button
-    @FXML
-    public void editName() {
-        nameField.setEditable(true);
-        saveNameButton.setVisible(true);
-    }
-
-    // Method to save the name and disable editing
-    @FXML
-    public void saveName() {
-        String newName = nameField.getText();
-        nameField.setEditable(false);
-        saveNameButton.setVisible(false);
-
-        // Save the name to UserDataStore and update it
-        userDataStore.setUserName(newName);
-    }
-
-    // Method to make the bio field editable and show the save button
-    @FXML
-    public void editBio() {
-        bioField.setEditable(true);
-        saveBioButton.setVisible(true);
-    }
-
-    // Method to save the bio and disable editing
-    @FXML
-    public void saveBio() {
-        String newBio = bioField.getText();
-        bioField.setEditable(false);
-        saveBioButton.setVisible(false);
-
-        // Save the bio to UserDataStore and update it
-        userDataStore.setUserBio(newBio);
-    }
-
-    // Method to allow the user to change their profile image
     @FXML
     public void changeImage() {
-        FileChooser fileChooser = new FileChooser(); // Open file dialog
-        fileChooser.setTitle("Choose an Image");     // Set the dialog title
-        // Limit file types to images
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
-        );
-        // Show dialog and get the selected file
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            // Convert the selected file to an image and set it in the ImageView
-            Image image = new Image(selectedFile.toURI().toString());
-            userImageView.setImage(image); // Update ImageView with the new image
+        var file = sceneManager.openFileDialog();
+        if (file == null) return;
+        userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(file)));
+        profileImageFile = file;
+    }
+
+    @FXML
+    protected void onSaveButtonClick() {
+        var updateModel = new UserProfileUpdateModel(userProfile.id(), nameField.getText(), bioField.getText(), profileImageFile);
+        var result = userProfileService.update(updateModel, userProfile.userId());
+        if (result.isSuccess()) {
+            System.out.println("Successful save");
+        } else {
+            System.out.println(result.getError().getMessage());
         }
     }
 }

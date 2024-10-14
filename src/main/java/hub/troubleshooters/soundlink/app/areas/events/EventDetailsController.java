@@ -57,11 +57,12 @@ public class EventDetailsController {
         try {
             if (event.bannerImage().isPresent()) {
                 var img = event.bannerImage().get();
-                var path = "file:///" + imageUploaderService.getImageFile(img).getAbsolutePath();
+//                var path = "file:///" + imageUploaderService.getImageFile(img).getAbsolutePath();
+                var path = imageUploaderService.getFullProtocolPath(img);
                 bannerImageView.setImage(new Image(path));
             } else {
                 var img = imageUploaderService.getSampleBannerImageFile(event.id());
-                var path = "file:///" + img.getAbsolutePath();
+                var path = imageUploaderService.getFullProtocolPath(img);
                 bannerImageView.setImage(new Image(path));
             }
         } catch (InvalidPathException e) {

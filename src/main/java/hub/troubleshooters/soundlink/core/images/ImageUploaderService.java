@@ -9,6 +9,8 @@ import java.sql.SQLException;
 
 public interface ImageUploaderService {
     Image upload(File file) throws IOException, SQLException;
-    File getImageFile(Image image) throws InvalidPathException;
     File getSampleBannerImageFile(int id) throws InvalidPathException;
+    File getDefaultProfileImageFile();
+    String getFullProtocolPath(File file);
+    String getFullProtocolPath(Image img);
 }

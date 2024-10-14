@@ -70,7 +70,7 @@ public class CommunityDetailsController {
         try {
             community.bannerImage().ifPresent(img -> {
                 try {
-                    var path = "file:///" + imageUploaderService.getImageFile(img).getAbsolutePath();
+                    var path = imageUploaderService.getFullProtocolPath(img);
                     bannerImageView.setImage(new Image(path));
                 } catch (InvalidPathException e) {
                     LOGGER.log(Level.WARNING, "Failed to load banner image from file", e);
