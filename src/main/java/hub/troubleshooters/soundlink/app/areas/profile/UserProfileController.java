@@ -1,5 +1,7 @@
 package hub.troubleshooters.soundlink.app.areas.profile;
 
+import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,7 +41,14 @@ public class UserProfileController {
     private Button saveBioButton;  // Button for saving edited bio
 
     // Reference to UserDataStore for storing user data
-    private UserDataStore userDataStore = UserDataStore.getInstance();
+    private UserDataStore userDataStore = UserDataStore.getInstance();  // todo: DI or get rid of this
+
+    private final ImageUploaderService imageUploaderService;
+
+    @Inject
+    public UserProfileController(ImageUploaderService imageUploaderService) {
+        this.imageUploaderService = imageUploaderService;
+    }
 
     // Initialize method, runs when the FXML file is loaded
     @FXML
@@ -50,6 +59,10 @@ public class UserProfileController {
         updatePostsLabel();
         updateEventsLabel();
         updateCommunitiesLabel();
+
+        // set default profile image if none exists
+        var img = imageUploaderService.getDefaultProfileImageFile();
+        userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(img)));
     }
 
     // Method to update posts label from UserDataStore
@@ -118,6 +131,7 @@ public class UserProfileController {
     // Method to allow the user to change their profile image
     @FXML
     public void changeImage() {
+        // TODO: use ImageUploaderService
         FileChooser fileChooser = new FileChooser(); // Open file dialog
         fileChooser.setTitle("Choose an Image");     // Set the dialog title
         // Limit file types to images
