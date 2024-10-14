@@ -11,8 +11,10 @@ import hub.troubleshooters.soundlink.data.models.CommunityPost;
 import hub.troubleshooters.soundlink.data.models.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -42,6 +44,8 @@ public class CommunityFeedController {
 	private List<CommunityPost> posts;
 	private static final Logger LOGGER = Logger.getLogger(CommunityFeedController.class.getName());
 
+	private final Insets cardMargins = new Insets(5, 10, 5, 10);
+
 	@Inject
 	public CommunityFeedController(CommunityService communityService, EventService eventService, ImageUploaderService imageUploaderService,
 								   IdentityService identityService, SceneManager sceneManager) {
@@ -53,8 +57,7 @@ public class CommunityFeedController {
 	}
 
 	@FXML
-	public void initialise() {
-
+	public void initialize() {
 	}
 
 	public void LoadFeed(int communityId) {
@@ -89,7 +92,6 @@ public class CommunityFeedController {
 		displayPosts();
 	}
 
-	@FXML
 	private void displayEvents() {
 		// clear previous list
 		listContainer.getChildren().clear();
@@ -100,7 +102,6 @@ public class CommunityFeedController {
 		}
 	}
 
-	@FXML
 	private void displayPosts() {
 		// clear previous list
 		listContainer.getChildren().clear();
@@ -115,13 +116,16 @@ public class CommunityFeedController {
 	private VBox createEventCard(Event event) {
 		VBox vbox = new VBox();
 
-		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px; -fx-border-radius: 10px;");
+		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
+				"-fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+		VBox.setMargin(vbox, cardMargins);
+		vbox.setAlignment(Pos.TOP_LEFT);
 		vbox.setSpacing(10.0);
-		vbox.setPrefWidth(250);
-		vbox.setPrefHeight(100);
+		vbox.setMinWidth(250);
+		vbox.setMinHeight(100);
 
 		Label eventNameLabel = new Label(event.getName());
-		eventNameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
+		eventNameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072; -fx-padding: 5px;");
 
 		// Need to allow this to wrap
 		Label descriptionLabel = new Label("Description: " + event.getDescription());
@@ -140,19 +144,23 @@ public class CommunityFeedController {
 		detailsButton.setOnAction(e -> sceneManager.navigateToEventDetailsView(event.getId()));
 
 		vbox.getChildren().addAll(eventNameLabel, descriptionLabel, venueLabel, scheduledLabel, detailsButton);
+		VBox.setVgrow(vbox, Priority.NEVER);
 		return vbox;
 	}
 
 	private VBox createCommunityPostCard(CommunityPost post) {
 		VBox vbox = new VBox();
 
-		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px; -fx-border-radius: 10px;");
+		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
+				"-fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+		VBox.setMargin(vbox, cardMargins);
+		vbox.setAlignment(Pos.TOP_LEFT);
 		vbox.setSpacing(10.0);
-		vbox.setPrefWidth(250);
-		vbox.setPrefHeight(100);
+		vbox.setMinWidth(250);
+		vbox.setMinHeight(100);
 
 		Label titleLabel = new Label(post.getTitle());
-		titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
+		titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072; -fx-padding: 5px;");
 
 		Label userLabel = new Label("By: " + post.getUserid());
 		userLabel.setStyle("-fx-padding: 5px 0px;");
@@ -166,6 +174,7 @@ public class CommunityFeedController {
 		postedLabel.setStyle("-fx-padding: 5px 0px;");
 
 		vbox.getChildren().addAll(titleLabel, userLabel, contentLabel, postedLabel);
+		VBox.setVgrow(vbox, Priority.NEVER);
 		return vbox;
 	}
 }
