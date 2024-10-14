@@ -34,11 +34,8 @@ public class UserProfileController {
     @FXML
     private ImageView userImageView; // ImageView for user's profile picture
 
-    // Buttons for saving edited fields
     @FXML
-    private Button saveNameButton; // Button for saving edited name
-    @FXML
-    private Button saveBioButton;  // Button for saving edited bio
+    private Button saveButton;
 
     // Reference to UserDataStore for storing user data
     private UserDataStore userDataStore = UserDataStore.getInstance();  // todo: DI or get rid of this
@@ -92,42 +89,6 @@ public class UserProfileController {
         }
     }
 
-    // Method to make the name field editable and show the save button
-    @FXML
-    public void editName() {
-        nameField.setEditable(true);
-        saveNameButton.setVisible(true);
-    }
-
-    // Method to save the name and disable editing
-    @FXML
-    public void saveName() {
-        String newName = nameField.getText();
-        nameField.setEditable(false);
-        saveNameButton.setVisible(false);
-
-        // Save the name to UserDataStore and update it
-        userDataStore.setUserName(newName);
-    }
-
-    // Method to make the bio field editable and show the save button
-    @FXML
-    public void editBio() {
-        bioField.setEditable(true);
-        saveBioButton.setVisible(true);
-    }
-
-    // Method to save the bio and disable editing
-    @FXML
-    public void saveBio() {
-        String newBio = bioField.getText();
-        bioField.setEditable(false);
-        saveBioButton.setVisible(false);
-
-        // Save the bio to UserDataStore and update it
-        userDataStore.setUserBio(newBio);
-    }
-
     // Method to allow the user to change their profile image
     @FXML
     public void changeImage() {
@@ -145,5 +106,10 @@ public class UserProfileController {
             Image image = new Image(selectedFile.toURI().toString());
             userImageView.setImage(image); // Update ImageView with the new image
         }
+    }
+
+    @FXML
+    protected void onSaveButtonClick() {
+        System.out.println("G");
     }
 }
