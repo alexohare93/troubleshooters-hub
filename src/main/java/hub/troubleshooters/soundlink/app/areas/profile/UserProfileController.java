@@ -1,7 +1,10 @@
 package hub.troubleshooters.soundlink.app.areas.profile;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
+import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
+import hub.troubleshooters.soundlink.data.models.UserProfile;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -41,18 +44,26 @@ public class UserProfileController {
     private UserDataStore userDataStore = UserDataStore.getInstance();  // todo: DI or get rid of this
 
     private final ImageUploaderService imageUploaderService;
+    private final UserProfileService userProfileService;
+    private final IdentityService identityService;
+
+    private UserProfile userProfile;
 
     @Inject
-    public UserProfileController(ImageUploaderService imageUploaderService) {
+    public UserProfileController(ImageUploaderService imageUploaderService, UserProfileService userProfileService, IdentityService identityService) {
         this.imageUploaderService = imageUploaderService;
+        this.userProfileService = userProfileService;
+        this.identityService = identityService;
     }
 
     // Initialize method, runs when the FXML file is loaded
     @FXML
     public void initialize() {
-        // Load user data from UserDataStore
-        nameField.setText(userDataStore.getUserName());
-        bioField.setText(userDataStore.getUserBio());
+        var user = identityService.getUserContext().getUser();
+        userProfile = userProfileService.getUserProfile(user.getId()).get();     // TODO: error handling
+
+        nameField.setText(userProfile.getDisplayName());
+        bioField.setText(userProfile.getBio());
         updatePostsLabel();
         updateEventsLabel();
         updateCommunitiesLabel();

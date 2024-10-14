@@ -11,6 +11,16 @@ CREATE TABLE Users (
     LastLogin DATETIME
 );
 
+CREATE TABLE UserProfiles (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserId INTEGER NOT NULL,
+    DisplayName TEXT NOT NULL,
+    Bio TEXT NOT NULL,
+    ProfileImageId INTEGER,
+    FOREIGN KEY (UserId) REFERENCES Users(Id) ON DELETE CASCADE
+    FOREIGN KEY (ProfileImageId) REFERENCES Images(Id) ON DELETE SET NULL
+);
+
 CREATE TABLE Communities (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
@@ -83,8 +93,11 @@ CREATE TABLE EventComments (
 -- username is 'admin', password is '123'
 INSERT INTO Users (Username, HashedPassword) VALUES ('admin', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
+-- user profile
+INSERT INTO UserProfiles (UserId, DisplayName, Bio) VALUES (1, 'Admin', 'This is an admin account');
+
 -- username is 'user', password is '123'
-INSERT INTO Users (Username, HashedPassword) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
+-- INSERT INTO Users (Username, HashedPassword) VALUES ('user', '$2a$12$2Sll4xwHPA4j0LG4NpJZEeCtidG72KqFpyBzwqwJrkjzIv7MgqGli');
 
 INSERT INTO Communities (Name, Genre, Description) VALUES ('Test Community', 'Test Rock', 'This is a test Community');
 
