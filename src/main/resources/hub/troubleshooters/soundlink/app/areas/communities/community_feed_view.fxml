@@ -30,9 +30,7 @@
         </Button>
     </HBox>
     <!-- Scrolling pane -->
-    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-        <VBox fx:id="listContainer" alignment="TOP_CENTER" spacing="20.0"
-              style="-fx-border-color: gray; -fx-border-radius: 10px;"/>
-    </ScrollPane>
+    <VBox fx:id="listContainer" alignment="TOP_CENTER" spacing="20.0"
+          style="-fx-border-color: gray; -fx-border-radius: 10px;" VBox.vgrow="ALWAYS"/>
 
 </VBox>

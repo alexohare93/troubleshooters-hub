@@ -44,7 +44,7 @@ public class CommunityFeedController {
 	private List<CommunityPostModel> posts;
 	private static final Logger LOGGER = Logger.getLogger(CommunityFeedController.class.getName());
 
-	private final Insets cardMargins = new Insets(5, 10, 5, 10);
+	private final Insets cardMargins = new Insets(0, 10, 0, 10);
 
 	@Inject
 	public CommunityFeedController(CommunityService communityService, EventService eventService, ImageUploaderService imageUploaderService,
