@@ -10,13 +10,11 @@ import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.data.models.CommunityPost;
 import hub.troubleshooters.soundlink.data.models.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -26,9 +24,12 @@ public class CommunityFeedController {
 
 	@FXML
 	private Label nameLabel;
-
 	@FXML
-	private VBox ListContainer;
+	private Button eventsTab;
+	@FXML
+	private Button postsTab;
+	@FXML
+	private VBox listContainer;
 
 	private final CommunityService communityService;
 	private final EventService eventService;
@@ -74,24 +75,40 @@ public class CommunityFeedController {
 		}
 	}
 
+	@FXML
+	private void eventsTabClicked() {
+		eventsTab.setDisable(true);
+		postsTab.setDisable(false);
+		displayEvents();
+	}
+
+	@FXML
+	private void postsTabClicked() {
+		postsTab.setDisable(true);
+		eventsTab.setDisable(false);
+		displayPosts();
+	}
+
+	@FXML
 	private void displayEvents() {
 		// clear previous list
-		ListContainer.getChildren().clear();
+		listContainer.getChildren().clear();
 		VBox card;
 		for (Event event : events) {
 			card = createEventCard(event);
-			ListContainer.getChildren().add(card);
+			listContainer.getChildren().add(card);
 		}
 	}
 
+	@FXML
 	private void displayPosts() {
 		// clear previous list
-		ListContainer.getChildren().clear();
+		listContainer.getChildren().clear();
 
 		VBox card;
 		for (CommunityPost post : posts) {
 			card = createCommunityPostCard(post);
-			ListContainer.getChildren().add(card);
+			listContainer.getChildren().add(card);
 		}
 	}
 
