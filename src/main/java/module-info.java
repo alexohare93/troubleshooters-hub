@@ -36,6 +36,7 @@ module hub.troubleshooters.soundlink {
     exports hub.troubleshooters.soundlink.core.auth.models;
     exports hub.troubleshooters.soundlink.core.images;
     exports hub.troubleshooters.soundlink.core.profile.services to com.google.guice;
+    exports hub.troubleshooters.soundlink.core.profile.validation to com.google.guice;
 
     exports hub.troubleshooters.soundlink.app.areas.profile;
     opens hub.troubleshooters.soundlink.app.areas.profile to javafx.fxml, com.google.guice;

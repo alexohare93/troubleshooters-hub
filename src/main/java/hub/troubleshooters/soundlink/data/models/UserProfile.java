@@ -53,7 +53,7 @@ public class UserProfile {
         return profileImageId == null ? Optional.empty() : Optional.of(profileImageId);
     }
 
-    public void setBannerImageId(Integer profileImageId) {
+    public void setProfileImageId(Integer profileImageId) {
         this.profileImageId = profileImageId;
     }
 }
