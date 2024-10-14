@@ -8,6 +8,7 @@ import hub.troubleshooters.soundlink.data.models.Event;
 
 import java.util.Optional;
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
+import hub.troubleshooters.soundlink.data.models.EventComment;
 
 import java.util.List;
 import java.sql.SQLException;
@@ -31,5 +32,9 @@ public interface EventService {
     EventBookingResult bookEvent(int eventId, int userId) throws SQLException;
 
     boolean isBooked(int eventId, int userId) throws SQLException;
+
+    List<EventComment> getComments(int eventId) throws SQLException;
+
+    void comment(int eventId, int userId, String comment) throws SQLException;
 }
 

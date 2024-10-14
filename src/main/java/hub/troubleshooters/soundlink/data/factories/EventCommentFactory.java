@@ -58,6 +58,10 @@ public class EventCommentFactory extends ModelFactory<EventComment> {
 		});
 	}
 
+	public List<EventComment> getByEventId(int eventId) throws SQLException {
+		return get(new Event(eventId, 0, null, null, null, 0, null, null, null));
+	}
+
 	@Override
 	public void save(EventComment eventComment) throws SQLException {
 		final String sql = "UPDATE EventComments SET Content = ? WHERE Id = ?;";

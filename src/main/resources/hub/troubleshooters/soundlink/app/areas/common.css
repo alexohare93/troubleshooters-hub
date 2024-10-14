@@ -59,3 +59,8 @@
 .transparent {
     -fx-background-color: transparent;
 }
+
+.btn-sm {
+    -fx-font-size: 14px;
+    -fx-padding: 5 10;
+}

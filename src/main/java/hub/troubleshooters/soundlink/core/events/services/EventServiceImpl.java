@@ -12,6 +12,7 @@ import hub.troubleshooters.soundlink.core.events.validation.EventBookingResult;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.validation.ValidationError;
 import hub.troubleshooters.soundlink.core.validation.ValidationResult;
+import hub.troubleshooters.soundlink.data.factories.EventCommentFactory;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
 import hub.troubleshooters.soundlink.data.factories.BookingFactory;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
+import hub.troubleshooters.soundlink.data.models.EventComment;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -35,15 +37,26 @@ public class EventServiceImpl implements EventService {
     private final BookingFactory bookingFactory;
     private final ImageUploaderService imageUploaderService;
     private final Map map;
+    private final EventCommentFactory eventCommentFactory;
 
     @Inject
-    public EventServiceImpl(CreateEventModelValidator createEventModelValidator, EventFactory eventFactory, IdentityService identityService, BookingFactory bookingFactory, ImageUploaderService imageUploaderService, Map map) {
+    public EventServiceImpl(
+            CreateEventModelValidator createEventModelValidator,
+            EventFactory eventFactory,
+            IdentityService identityService,
+            BookingFactory bookingFactory,
+            ImageUploaderService imageUploaderService,
+            Map map,
+            EventCommentFactory eventCommentFactory
+
+    ) {
         this.createEventModelValidator = createEventModelValidator;
         this.eventFactory = eventFactory;
         this.identityService = identityService;
         this.bookingFactory = bookingFactory;
         this.imageUploaderService = imageUploaderService;
         this.map = map;
+        this.eventCommentFactory = eventCommentFactory;
     }
 
     @Override
@@ -151,6 +164,16 @@ public class EventServiceImpl implements EventService {
     public boolean isBooked(int eventId, int userId) throws SQLException {
        var booking = bookingFactory.get(eventId, userId);
        return booking.isPresent();
+    }
+
+    @Override
+    public List<EventComment> getComments(int eventId) throws SQLException {
+        return eventCommentFactory.getByEventId(eventId);
+    }
+
+    @Override
+    public void comment(int eventId, int userId, String comment) throws SQLException {
+        eventCommentFactory.create(eventId, userId, comment);
     }
 }
 
