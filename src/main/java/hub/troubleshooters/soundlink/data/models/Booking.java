@@ -2,15 +2,14 @@ package hub.troubleshooters.soundlink.data.models;
 
 import java.util.Date;
 
-
-public class EventAttendee {
+public class Booking {
 	private final int id;
 	private final int eventId;
 	private final int userId;
 	private final Date created;
 	private int permission;
 
-	public EventAttendee(int id, int eventId, int userId, Date created, int permission) {
+	public Booking(int id, int eventId, int userId, Date created, int permission) {
 		this.id = id;
 		this.eventId = eventId;
 		this.userId = userId;

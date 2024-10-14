@@ -57,7 +57,7 @@ CREATE TABLE Events (
     FOREIGN KEY (BannerImageId) REFERENCES Images(Id) ON DELETE SET NULL
 );
 
-CREATE TABLE EventAttendees (
+CREATE TABLE Bookings (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     EventId INTEGER NOT NULL,
     UserId INTEGER NOT NULL,
@@ -99,9 +99,9 @@ INSERT INTO CommunityPosts (CommunityId, UserId, Title, Content) VALUES (1, 1, '
 INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (1, 'Test Event', 'This is a test Event', 'Not a real place', 100, '2025-01-01 00:00:00');
 
 -- 'admin' is attending 'Test Event' and is superadmin
-INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (1, 1, 1);
+INSERT INTO Bookings (EventId, UserId, Permission) VALUES (1, 1, 1);
 -- 'user' is attending 'Test Event' and can read and write event details and comments
-INSERT INTO EventAttendees (EventId, UserId, Permission) VALUES (1, 2, 6);
+INSERT INTO Bookings (EventId, UserId, Permission) VALUES (1, 2, 6);
 
 -- made by 'admin' in 'Test Event'
 INSERT INTO EventComments (UserId, EventId, Content) VALUES (1, 1, 'This is a test comment');
