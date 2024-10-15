@@ -183,7 +183,6 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
-
     private boolean isAdmin(int userId, int communityId) throws SQLException {
         Optional<Integer> permissionLevel = getUserPermissionLevel(userId, communityId);
         return permissionLevel.map(level -> level == 1).orElse(false);  // Assume 1 is admin level

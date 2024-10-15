@@ -35,7 +35,7 @@
     <!-- Sign Up and Cancel Buttons -->
     <HBox spacing="10.0">
         <children>
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onBookButtonClick" text="Sign Up">
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onJoinButtonClick" text="Sign Up">
                 <styleClass>
                     <String fx:value="btn" />
                     <String fx:value="btn-primary" />

@@ -116,7 +116,7 @@ public class CommunityDetailsController {
         try {
             int userId = identityService.getUserContext().getUser().getId();
             boolean isJoined = communityService.hasUserJoinedIntoCommunity(userId, community.communityId());
-            toggleBookingButtons(isJoined);
+            toggleJoiningButtons(isJoined);
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error updating joining status", e);
             showAlert(Alert.AlertType.ERROR, "Unable to update join status. Please try again.");
@@ -124,7 +124,7 @@ public class CommunityDetailsController {
     }
 
     @FXML
-    protected void onBookButtonClick() {
+    protected void onJoinButtonClick() {
         if (community == null) {
             showAlert(Alert.AlertType.ERROR, "No community selected for booking.");
             return;
@@ -134,8 +134,7 @@ public class CommunityDetailsController {
                     int userId = identityService.getUserContext().getUser().getId();
                     boolean joined = communityService.signUpForCommunity(userId, community.communityId());
                     if (joined) {
-                        // Toggle the buttons to reflect the successful join action
-                        toggleBookingButtons(true);
+                        toggleJoiningButtons(true);
                     }
                     return joined;
                 },
@@ -154,7 +153,7 @@ public class CommunityDetailsController {
                     int userId = identityService.getUserContext().getUser().getId();
                     boolean cancelled = communityService.cancelJoin(userId, community.communityId());
                     if (cancelled) {
-                        toggleBookingButtons(false);
+                        toggleJoiningButtons(false);
                     }
                     return cancelled;
                 },
@@ -177,7 +176,7 @@ public class CommunityDetailsController {
         }
     }
 
-    private void toggleBookingButtons(boolean isJoined) {
+    private void toggleJoiningButtons(boolean isJoined) {
         signUpButton.setVisible(!isJoined);
         signUpButton.setManaged(!isJoined);
 
