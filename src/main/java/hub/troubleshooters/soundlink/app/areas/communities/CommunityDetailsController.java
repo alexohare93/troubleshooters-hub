@@ -129,7 +129,16 @@ public class CommunityDetailsController {
             showAlert(Alert.AlertType.ERROR, "No community selected for booking.");
             return;
         }
-        handleJoinOperation(() -> communityService.signUpForCommunity(identityService.getUserContext().getUser().getId(), community.communityId()),
+
+        handleJoinOperation(() -> {
+                    int userId = identityService.getUserContext().getUser().getId();
+                    boolean joined = communityService.signUpForCommunity(userId, community.communityId());
+                    if (joined) {
+                        // Toggle the buttons to reflect the successful join action
+                        toggleBookingButtons(true);
+                    }
+                    return joined;
+                },
                 "Joined into community successfully",
                 "You have already joined this community");
     }
@@ -140,17 +149,25 @@ public class CommunityDetailsController {
             showAlert(Alert.AlertType.ERROR, "No community selected for cancellation.");
             return;
         }
-        handleJoinOperation(() -> communityService.cancelJoin(identityService.getUserContext().getUser().getId(), community.communityId()),
+
+        handleJoinOperation(() -> {
+                    int userId = identityService.getUserContext().getUser().getId();
+                    boolean cancelled = communityService.cancelJoin(userId, community.communityId());
+                    if (cancelled) {
+                        toggleBookingButtons(false);
+                    }
+                    return cancelled;
+                },
                 "Successfully removed from community",
                 "Unable to be removed from the community. Please try again.");
     }
+
 
     private void handleJoinOperation(JoinOperation operation, String successMessage, String failureMessage) {
         try {
             boolean result = operation.execute();
             if (result) {
                 showAlert(Alert.AlertType.INFORMATION, successMessage);
-                updateJoinButtons();
             } else {
                 showAlert(Alert.AlertType.ERROR, failureMessage);
             }
@@ -160,9 +177,12 @@ public class CommunityDetailsController {
         }
     }
 
-    private void toggleBookingButtons(boolean isBooked) {
-        signUpButton.setVisible(!isBooked);
-        cancelButton.setVisible(isBooked);
+    private void toggleBookingButtons(boolean isJoined) {
+        signUpButton.setVisible(!isJoined);
+        signUpButton.setManaged(!isJoined);
+
+        cancelButton.setVisible(isJoined);
+        cancelButton.setManaged(isJoined);
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {

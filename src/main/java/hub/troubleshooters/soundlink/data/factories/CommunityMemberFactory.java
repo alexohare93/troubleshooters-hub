@@ -116,6 +116,13 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
      * @throws SQLException
      */
     public void create(int communityId, int userId, int permission) throws SQLException {
+        // check if the user is already a member of the community.
+        // probably not the best area to do this check but was the only one that worked.
+        Optional<CommunityMember> existingMember = get(communityId, userId);
+        if (existingMember.isPresent()) {
+            LOGGER.log(Level.INFO, "User with UserId: " + userId + " is already a member of CommunityId: " + communityId);
+            return;
+        }
         final String sql = "INSERT INTO CommunityMembers (CommunityId, UserId, Permission) VALUES (?, ?, ?);";
         connection.executeUpdate(sql, statement -> {
             statement.setInt(1, communityId);

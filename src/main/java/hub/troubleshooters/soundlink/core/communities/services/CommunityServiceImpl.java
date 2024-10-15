@@ -73,7 +73,6 @@ public class CommunityServiceImpl implements CommunityService {
     public List<Community> searchCommunities(String searchText) {
         try {
             List<Community> communities = communityFactory.getAllCommunities();
-
             return communities.stream()
                     .filter(community -> searchText == null || searchText.isEmpty() ||
                             community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
@@ -90,7 +89,6 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public boolean signUpForCommunity(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId);
-
         if (existingMember.isPresent()) {
             return false;
         } else {
@@ -102,16 +100,22 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public boolean cancelJoin(int userId, int communityId) throws SQLException {
-        // Check if the user is currently signed up for the community
-        Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
+        Optional<CommunityMember> existingMember = communityMemberFactory.get(communityId, userId);
 
         if (existingMember.isPresent()) {
-            communityMemberFactory.delete(userId, communityId);
-            return true;
+            try {
+                communityMemberFactory.delete(communityId, userId);
+                return true;
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error removing user from community", e);
+                throw new SQLException("Error removing user from the community.", e);
+            }
         } else {
+            LOGGER.log(Level.WARNING, "User is not a member of this community: CommunityId = " + communityId + ", UserId = " + userId);
             return false;
         }
     }
+
 
     @Override
     public Optional<CommunityModel> getCommunity(int id) {
@@ -147,7 +151,6 @@ public class CommunityServiceImpl implements CommunityService {
                     bannerImageId
             );
 
-            System.out.println(community);
             communityFactory.save(updatedCommunity);
 
         } catch (SQLException e) {
@@ -159,7 +162,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> communityMember = communityMemberFactory.get(userId, communityId);
-        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(0)); // 0 = read-only access
+        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(1)); // 0 = read-only access
     }
 
     @Override
@@ -167,14 +170,12 @@ public class CommunityServiceImpl implements CommunityService {
         if (!isAdmin(userId, communityId)) {
             throw new SecurityException("Only admins can delete communities.");
         }
-
         try {
             Optional<Community> communityOpt = communityFactory.get(communityId);
 
             if (communityOpt.isEmpty()) {
-                throw new SQLException("Community with ID " + communityId + " not found.");            }
-
-
+                throw new SQLException("Community with ID " + communityId + " not found.");
+            }
             communityFactory.delete(communityOpt.get());
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting community", e);
