@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.app.areas.profile;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.UserDataStore;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
@@ -13,17 +14,20 @@ import hub.troubleshooters.soundlink.data.models.UserProfile;
 import hub.troubleshooters.soundlink.data.models.Image;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UserProfileController {
+
+    private static final Logger logger = Logger.getLogger(UserProfileController.class.getName());
 
     private final UserDataStore userDataStore;
     private final ImageUploaderService imageUploaderService;
@@ -47,11 +51,14 @@ public class UserProfileController {
     private Label communitiesLabel;
     @FXML
     private ImageView userImageView;
+
     @FXML
-    private Button saveButton;
+    private javafx.scene.control.Button saveButton;
 
     @Inject
-    public UserProfileController(ImageUploaderService imageUploaderService, UserProfileService userProfileService, IdentityService identityService, SceneManager sceneManager, Map map, UserDataStore userDataStore) {
+    public UserProfileController(ImageUploaderService imageUploaderService, UserProfileService userProfileService,
+                                 IdentityService identityService, SceneManager sceneManager, Map map,
+                                 UserDataStore userDataStore) {
         this.imageUploaderService = imageUploaderService;
         this.userProfileService = userProfileService;
         this.identityService = identityService;
@@ -68,11 +75,15 @@ public class UserProfileController {
             if (optionalProfile.isPresent()) {
                 userProfile = map.userProfile(optionalProfile.get());
             } else {
-                System.err.println("User profile not found for user: " + user.getId());
+                logger.log(Level.SEVERE, "User profile not found for user: {0}", user.getId());
+                showErrorMessage("User profile not found", "Please contact support.");
+                sceneManager.switchToOutletScene(Routes.HOME);
                 return;
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching user profile: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error fetching user profile for user: " + user.getId(), e);
+            showErrorMessage("Unable to load profile", "Please contact support.");
+            sceneManager.switchToOutletScene(Routes.HOME);
             return;
         }
 
@@ -87,8 +98,7 @@ public class UserProfileController {
                 .orElse(imageUploaderService.getDefaultProfileImageFile().getName());
 
         userImageView.setImage(new javafx.scene.image.Image(imageUploaderService.getFullProtocolPath(new File(img))));
-
-        saveButton.setDisable(true);
+        disableSaveButton();
 
         nameField.textProperty().addListener((observable, oldValue, newValue) -> enableSaveButton());
         bioField.textProperty().addListener((observable, oldValue, newValue) -> enableSaveButton());
@@ -121,12 +131,20 @@ public class UserProfileController {
             var updateModel = new UserProfileUpdateModel(userProfile.id(), nameField.getText(), bioField.getText(), profileImageFile);
             var result = userProfileService.update(updateModel, userProfile.userId());
             if (result.isSuccess()) {
-                System.out.println("Profile updated successfully");
+                logger.log(Level.INFO, "Profile updated successfully for user: {0}", userProfile.userId());
                 disableSaveButton();
             } else {
-                System.out.println(result.getError().getMessage());
+                logger.log(Level.SEVERE, "Failed to update profile for user: {0}", userProfile.userId());
+                showErrorMessage("Failed to update profile", "Please try again.");
             }
         }
+    }
+
+    private void showErrorMessage(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(content);
+        alert.showAndWait();
     }
 
     private void enableSaveButton() {
@@ -137,6 +155,10 @@ public class UserProfileController {
         saveButton.setDisable(true);
     }
 }
+
+
+
+
 
 
 
