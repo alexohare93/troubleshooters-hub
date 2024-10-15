@@ -2,8 +2,10 @@ package hub.troubleshooters.soundlink.app.services;
 
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
 import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.areas.admin.AdminController;
 import hub.troubleshooters.soundlink.app.areas.events.EventDetailsController;
 import hub.troubleshooters.soundlink.app.areas.communities.CommunityDetailsController;
+import hub.troubleshooters.soundlink.app.areas.notification.NotificationController;
 import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -168,6 +170,14 @@ public class SceneManagerImpl implements SceneManager {
     public void navigateToCommunityDetailsView(int communityId) {
         switchToOutletScene(Routes.COMMUNITY_DETAILS, (CommunityDetailsController controller) -> {
             controller.loadCommunityDetails(communityId);
+        });
+    }
+
+    @Override
+    public void onNotificationButtonClick(int communityId) {
+        // Navigate to the Admin Approval Page with initialization of AdminController
+        switchToOutletScene(Routes.ADMIN, (AdminController controller) -> {
+            controller.initializeWithCommunityId(communityId);  // Assuming AdminController has such a method
         });
     }
 

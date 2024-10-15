@@ -18,14 +18,15 @@ public class CommunityFactory extends ModelFactory<Community> {
 
     @Override
     public void save(Community community) throws SQLException {
-        final String sql = "UPDATE Communities SET Name = ?, Description = ?, Genre = ?, Created = ?, BannerImageId = ? WHERE Id = ?";
+        final String sql = "UPDATE Communities SET Name = ?, Description = ?, Genre = ?, Created = ?, BannerImageId = ?, isPrivate = ? WHERE Id = ?";
         connection.executeUpdate(sql, statement -> {
             statement.setString(1, community.getName());
             statement.setString(2, community.getDescription());
             statement.setString(3, community.getGenre());
             statement.setDate(4, new java.sql.Date(community.getCreated().getTime()));
-            statement.setInt(5, community.getId());
-            statement.setObject(6, community.getBannerImageId().orElse(null));	// setObject so that we can set null
+            statement.setObject(5, community.getBannerImageId().orElse(null)); // Handle null for BannerImageId
+            statement.setBoolean(6, community.isPrivate()); // Set the isPrivate field
+            statement.setInt(7, community.getId());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update community. Rows Affected: " + rowsAffected);
@@ -45,7 +46,8 @@ public class CommunityFactory extends ModelFactory<Community> {
                         executor.getString("Description"),
                         executor.getString("Genre"),
                         executor.getDate("Created"),
-                        bannerId == 0 ? null : bannerId
+                        bannerId == 0 ? null : bannerId,
+                        executor.getBoolean("isPrivate") // Get the isPrivate field
                 );
             }
             return null;
@@ -54,22 +56,14 @@ public class CommunityFactory extends ModelFactory<Community> {
         return Optional.of(community);
     }
 
-    /**
-     * Returns a list of communities given a list of IDs
-     * @param ids a list of community IDs
-     * @return a list of communities
-     * @throws SQLException if there was an underlying SQL error
-     */
     public List<Community> get(List<Integer> ids) throws SQLException {
         final String sql = "SELECT * FROM Communities WHERE Id IN (?)";
-        // transforming int array to comma-delimited string
         var sb = new StringBuilder();
         for (int id : ids) {
-            sb.append(id);
-            sb.append(',');
+            sb.append(id).append(',');
         }
-        if (!sb.isEmpty()) {
-            sb.deleteCharAt(sb.length() - 1);  // remove final comma
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
         }
         return connection.executeQuery(sql, statement -> statement.setString(1, sb.toString()), executor -> {
             var result = new ArrayList<Community>();
@@ -81,27 +75,30 @@ public class CommunityFactory extends ModelFactory<Community> {
                         executor.getString("Description"),
                         executor.getString("Genre"),
                         executor.getDate("Created"),
-                        bannerId == 0 ? null : bannerId
+                        bannerId == 0 ? null : bannerId,
+                        executor.getBoolean("isPrivate")
                 ));
             }
             return result;
         });
     }
 
-    /**
-     * Creates new Community
-     * @param community the community object to be inserted
-     * @throws SQLException if the creation of the community fails
-     */
     public void create(Community community) throws SQLException {
-        final String sql = "INSERT INTO Communities (Name, Description, Genre) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO Communities (Name, Description, Genre, Created, BannerImageId, isPrivate) VALUES (?, ?, ?, ?, ?, ?)";
         connection.executeUpdate(sql, statement -> {
             statement.setString(1, community.getName());
             statement.setString(2, community.getDescription());
             statement.setString(3, community.getGenre());
+            if (community.getCreated() != null) {
+                statement.setDate(4, new java.sql.Date(community.getCreated().getTime()));
+            } else {
+                statement.setNull(4, java.sql.Types.DATE);
+            }
+            statement.setObject(5, community.getBannerImageId().orElse(null));
+            statement.setBoolean(6, community.isPrivate());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
-                throw new SQLException("Failed to update community. Rows Affected: " + rowsAffected);
+                throw new SQLException("Failed to insert community. Rows Affected: " + rowsAffected);
             }
         });
     }
@@ -118,7 +115,8 @@ public class CommunityFactory extends ModelFactory<Community> {
                         executor.getString("Description"),
                         executor.getString("Genre"),
                         executor.getDate("Created"),
-                        bannerId == 0 ? null : bannerId
+                        bannerId == 0 ? null : bannerId,
+                        executor.getBoolean("isPrivate")
                 ));
             }
             return result;

@@ -57,10 +57,10 @@ public class CommunityServiceImpl implements CommunityService {
         try {
             if (model.bannerImage() != null) {
                 var img = imageUploaderService.upload(model.bannerImage());
-                Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId());
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId(), model.isPrivate());
                 communityFactory.create(community);
             } else {
-                Community community = new Community(0, model.name(), model.description(), model.genre(), null, null);
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, null, model.isPrivate());
                 communityFactory.create(community);
             }
         } catch (SQLException | IOException e) {

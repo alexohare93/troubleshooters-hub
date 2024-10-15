@@ -47,7 +47,7 @@ public class Map {
             imageOpt = imageFactory.get(community.getBannerImageId().get());
         }
 
-        return new CommunityModel(community.getId(),community.getName(), community.getDescription(), community.getGenre(), community.getCreated(), imageOpt);
+        return new CommunityModel(community.getId(),community.getName(), community.getDescription(), community.getGenre(), community.getCreated(), imageOpt, community.isPrivate());
     }
 
     public UserProfileModel userProfile(UserProfile userProfile) throws SQLException {
