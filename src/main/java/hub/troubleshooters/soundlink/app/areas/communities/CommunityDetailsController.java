@@ -118,8 +118,8 @@ public class CommunityDetailsController {
             boolean isJoined = communityService.hasUserJoinedIntoCommunity(userId, community.communityId());
             toggleBookingButtons(isJoined);
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating booking status", e);
-            showAlert(Alert.AlertType.ERROR, "Unable to update booking status. Please try again.");
+            LOGGER.log(Level.SEVERE, "Error updating joining status", e);
+            showAlert(Alert.AlertType.ERROR, "Unable to update join status. Please try again.");
         }
     }
 
@@ -130,8 +130,8 @@ public class CommunityDetailsController {
             return;
         }
         handleJoinOperation(() -> communityService.signUpForCommunity(identityService.getUserContext().getUser().getId(), community.communityId()),
-                "Booked into event successfully",
-                "You are already booked into this event");
+                "Joined into community successfully",
+                "You have already joined this community");
     }
 
     @FXML
@@ -141,8 +141,8 @@ public class CommunityDetailsController {
             return;
         }
         handleJoinOperation(() -> communityService.cancelJoin(identityService.getUserContext().getUser().getId(), community.communityId()),
-                "Booking canceled successfully",
-                "Unable to cancel booking. Please try again.");
+                "Successfully removed from community",
+                "Unable to be removed from the community. Please try again.");
     }
 
     private void handleJoinOperation(JoinOperation operation, String successMessage, String failureMessage) {
@@ -155,7 +155,7 @@ public class CommunityDetailsController {
                 showAlert(Alert.AlertType.ERROR, failureMessage);
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error processing booking operation", e);
+            LOGGER.log(Level.SEVERE, "Error processing join operation", e);
             showAlert(Alert.AlertType.ERROR, "Something went wrong. Please contact SoundLink Support.");
         }
     }
