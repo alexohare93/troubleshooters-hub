@@ -18,10 +18,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import hub.troubleshooters.soundlink.app.UserDataStore;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class UserProfileController {
 
@@ -72,9 +72,20 @@ public class UserProfileController {
     public void initialize() {
         var user = identityService.getUserContext().getUser();
         try {
-            userProfile = map.userProfile(userProfileService.getUserProfile(user.getId()).get());     // TODO: error handling
+            Optional<UserProfile> optionalProfile = userProfileService.getUserProfile(user.getId());
+            if (optionalProfile.isPresent()) {
+                userProfile = map.userProfile(optionalProfile.get());
+            } else {
+                // Handle case where the profile is not found
+                System.err.println("User profile not found for user: " + user.getId());
+                // Optionally, you can set a default profile or show an error in the UI
+                return;
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);  // TODO: error handling
+            // Log the exception or display an error message in the UI
+            System.err.println("Error fetching user profile: " + e.getMessage());
+            // Optionally, show an error in the UI
+            return;
         }
 
         nameField.setText(userProfile.displayName());
@@ -138,3 +149,5 @@ public class UserProfileController {
         }
     }
 }
+
+
