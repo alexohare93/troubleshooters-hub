@@ -4,6 +4,8 @@ public class Image {
     private final int id;
     private String fileName;
 
+    private static final String BASE_IMAGE_PATH = "/path/to/images/";
+
     public Image(int id, String fileName) {
         this.id = id;
         this.fileName = fileName;
@@ -19,5 +21,9 @@ public class Image {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFilePath() {
+        return BASE_IMAGE_PATH + fileName;
     }
 }
