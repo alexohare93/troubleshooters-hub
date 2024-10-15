@@ -97,7 +97,6 @@ public class SharedController implements NavigationListener {
 
     @FXML
     protected void onNotificationButtonClick() {
-        // Navigate to the notifications page when the notification button is clicked
         sceneManager.navigate(Routes.ADMIN);
     }
     @Override

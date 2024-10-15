@@ -175,9 +175,8 @@ public class SceneManagerImpl implements SceneManager {
 
     @Override
     public void onNotificationButtonClick(int communityId) {
-        // Navigate to the Admin Approval Page with initialization of AdminController
         switchToOutletScene(Routes.ADMIN, (AdminController controller) -> {
-            controller.initializeWithCommunityId(communityId);  // Assuming AdminController has such a method
+            controller.initializeWithCommunityId(communityId);
         });
     }
 
