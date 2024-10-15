@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.layout.HBox;
 
 public class CommunityDetailsController {
     @FXML
@@ -33,6 +34,8 @@ public class CommunityDetailsController {
     private Button signUpButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private HBox adminButtonBox;
 
     private final CommunityService communityService;
     private final ImageUploaderService imageUploaderService;
@@ -52,17 +55,39 @@ public class CommunityDetailsController {
     }
 
     public void loadCommunityDetails(int id) {
-        Optional<CommunityModel> optionalCommunity = communityService.getCommunity(id);
-        if (optionalCommunity.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Event not found with ID " + id);
-            return;
+        int userId = identityService.getUserContext().getUser().getId();
+
+        try {
+            Optional<Integer> permissionLevelOpt = communityService.getUserPermissionLevel(userId, id);
+
+            int permissionLevel = permissionLevelOpt.orElse(1);
+
+            if (permissionLevel == 1) {
+                adminButtonBox.setVisible(true);
+                adminButtonBox.setManaged(true);
+                descriptionTextArea.setEditable(true);
+            } else {
+                adminButtonBox.setVisible(false);
+                adminButtonBox.setManaged(false);
+                descriptionTextArea.setEditable(false);
+            }
+
+            Optional<CommunityModel> optionalCommunity = communityService.getCommunity(id);
+            if (optionalCommunity.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Community not found with ID " + id);
+                return;
+            }
+            community = optionalCommunity.get();
+            genreLabel.setText(community.genre());
+            nameLabel.setText(community.name());
+            descriptionTextArea.setText(community.description());
+            setUpBannerImage();
+            updateJoinButtons();
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error loading community details or permission check", e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong. Please try again later.");
         }
-        community = optionalCommunity.get();
-        genreLabel.setText(community.genre());
-        nameLabel.setText(community.name());
-        descriptionTextArea.setText(community.description());
-        setUpBannerImage();
-        updateJoinButtons();
     }
 
     private void setUpBannerImage() {
@@ -147,6 +172,55 @@ public class CommunityDetailsController {
     @FunctionalInterface
     private interface JoinOperation {
         boolean execute() throws SQLException;
+    }
+
+    @FXML
+    protected void onSaveChangesClick() {
+        if (community == null) {
+            showAlert(Alert.AlertType.ERROR, "No community selected to update.");
+            return;
+        }
+
+        if (nameLabel.getText().trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Community name cannot be empty.");
+            return;
+        }
+
+        CommunityModel updatedCommunity = new CommunityModel(
+                community.communityId(),
+                nameLabel.getText(),
+                descriptionTextArea.getText(),
+                genreLabel.getText(),
+                community.created(),
+                community.bannerImage()
+        );
+
+        try {
+            communityService.updateCommunity(updatedCommunity);
+            showAlert(Alert.AlertType.INFORMATION, "Community details updated successfully.");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating community details", e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong while updating. Please try again.");
+        }
+    }
+
+    @FXML
+    protected void onDeleteCommunityClick() {
+        if (community == null) {
+            showAlert(Alert.AlertType.ERROR, "No community selected to delete.");
+            return;
+        }
+
+        int userId = identityService.getUserContext().getUser().getId();
+
+        try {
+            communityService.deleteCommunity(community.communityId(), userId);
+            showAlert(Alert.AlertType.INFORMATION, "Community deleted successfully.");
+            sceneManager.navigateToSearchCommunityView();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting community", e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong while deleting. Please try again.");
+        }
     }
 }
 

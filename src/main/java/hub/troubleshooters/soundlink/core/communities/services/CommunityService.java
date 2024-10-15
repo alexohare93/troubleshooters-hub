@@ -18,4 +18,5 @@ public interface CommunityService {
     boolean cancelJoin(int userId, int communityId) throws SQLException;
     void updateCommunity(CommunityModel community) throws SQLException;
     Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException;
+    void deleteCommunity(int communityId, int userId) throws SQLException;
 }

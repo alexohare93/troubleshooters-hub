@@ -195,4 +195,10 @@ public class SceneManagerImpl implements SceneManager {
             e.printStackTrace(); // TODO: replace with proper error handling
         }
     }
+
+    @Override
+    public void navigateToSearchCommunityView() {
+        navigate(Routes.SEARCH_COMMUNITIES);
+    }
+
 }

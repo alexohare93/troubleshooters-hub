@@ -74,7 +74,6 @@ public class CommunityServiceImpl implements CommunityService {
         try {
             List<Community> communities = communityFactory.getAllCommunities();
 
-            // Filter based on name, description, or genre
             return communities.stream()
                     .filter(community -> searchText == null || searchText.isEmpty() ||
                             community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
@@ -90,7 +89,6 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Override
     public boolean signUpForCommunity(int userId, int communityId) throws SQLException {
-        // Check if the user is already signed up for the community
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId);
 
         if (existingMember.isPresent()) {
@@ -108,10 +106,10 @@ public class CommunityServiceImpl implements CommunityService {
         Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
 
         if (existingMember.isPresent()) {
-            communityMemberFactory.delete(userId, communityId); // Assumes a delete method exists to remove the user booking
+            communityMemberFactory.delete(userId, communityId);
             return true;
         } else {
-            return false; // User was not signed up for this community, so cannot cancel
+            return false;
         }
     }
 
@@ -134,23 +132,22 @@ public class CommunityServiceImpl implements CommunityService {
         return existingMember.isPresent();
     }
 
+    // TODO: Check if the update is similar to what is already in the db, if it is, don't update the db.
     @Override
     public void updateCommunity(CommunityModel community) throws SQLException {
         try {
-            // Extract the ID from the Image object (if present)
             Integer bannerImageId = community.bannerImage().map(img -> img.getId()).orElse(null);
 
-            // Create the updated Community object with the correct bannerImageId
             Community updatedCommunity = new Community(
-                    community.communityId(),   // Keep the same ID
+                    community.communityId(),
                     community.name(),
                     community.description(),
                     community.genre(),
-                    community.created(),       // Keep the original creation date
-                    bannerImageId              // Pass the Image ID (Integer), not the Image object
+                    community.created(),
+                    bannerImageId
             );
 
-            // Use the save method in CommunityFactory to update the community in the database
+            System.out.println(community);
             communityFactory.save(updatedCommunity);
 
         } catch (SQLException e) {
@@ -162,6 +159,32 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> communityMember = communityMemberFactory.get(userId, communityId);
-        return communityMember.map(CommunityMember::getPermission);
+        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(0)); // 0 = read-only access
+    }
+
+    @Override
+    public void deleteCommunity(int communityId, int userId) throws SQLException {
+        if (!isAdmin(userId, communityId)) {
+            throw new SecurityException("Only admins can delete communities.");
+        }
+
+        try {
+            Optional<Community> communityOpt = communityFactory.get(communityId);
+
+            if (communityOpt.isEmpty()) {
+                throw new SQLException("Community with ID " + communityId + " not found.");            }
+
+
+            communityFactory.delete(communityOpt.get());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting community", e);
+            throw e;
+        }
+    }
+
+
+    private boolean isAdmin(int userId, int communityId) throws SQLException {
+        Optional<Integer> permissionLevel = getUserPermissionLevel(userId, communityId);
+        return permissionLevel.map(level -> level == 1).orElse(false);  // Assume 1 is admin level
     }
 }

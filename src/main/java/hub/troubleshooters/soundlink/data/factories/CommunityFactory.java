@@ -8,8 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.logging.Logger;
+
 
 public class CommunityFactory extends ModelFactory<Community> {
+
+    private static final Logger LOGGER = Logger.getLogger(CommunityFactory.class.getName());
 
     @Inject
     public CommunityFactory(DatabaseConnection connection) {
@@ -19,13 +25,26 @@ public class CommunityFactory extends ModelFactory<Community> {
     @Override
     public void save(Community community) throws SQLException {
         final String sql = "UPDATE Communities SET Name = ?, Description = ?, Genre = ?, Created = ?, BannerImageId = ? WHERE Id = ?";
+
+        // Convert Date to String with correct DATETIME format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dateFormat.format(community.getCreated());
+
+        // Log the values being passed to debug any issues
+        LOGGER.info("Saving community - ID: " + community.getId() +
+                ", Name: " + community.getName() +
+                ", Description: " + community.getDescription() +
+                ", Genre: " + community.getGenre() +
+                ", Created: " + formattedDate +
+                ", BannerImageId: " + community.getBannerImageId().orElse(null));
+
         connection.executeUpdate(sql, statement -> {
             statement.setString(1, community.getName());
             statement.setString(2, community.getDescription());
             statement.setString(3, community.getGenre());
-            statement.setDate(4, new java.sql.Date(community.getCreated().getTime()));
-            statement.setInt(5, community.getId());
-            statement.setObject(6, community.getBannerImageId().orElse(null));	// setObject so that we can set null
+            statement.setString(4, formattedDate);
+            statement.setObject(5, community.getBannerImageId().orElse(null)); // setObject so that we can set null
+            statement.setInt(6, community.getId());
         }, rowsAffected -> {
             if (rowsAffected != 1) {
                 throw new SQLException("Failed to update community. Rows Affected: " + rowsAffected);
@@ -124,4 +143,20 @@ public class CommunityFactory extends ModelFactory<Community> {
             return result;
         });
     }
+    /**
+     * Deletes a Community
+     * @param community the community object to be deleted
+     * @throws SQLException if the deletion of the community fails
+     */
+    public void delete(Community community) throws SQLException {
+        final String sql = "DELETE FROM Communities WHERE Id = ?";
+        connection.executeUpdate(sql, statement -> {
+            statement.setInt(1, community.getId());  // Only set the ID for deletion
+        }, rowsAffected -> {
+            if (rowsAffected != 1) {
+                throw new SQLException("Failed to delete community. Rows Affected: " + rowsAffected);
+            }
+        });
+    }
+
 }
