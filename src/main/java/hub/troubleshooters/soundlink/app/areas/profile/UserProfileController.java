@@ -127,6 +127,11 @@ public class UserProfileController {
 
     @FXML
     protected void onSaveButtonClick() {
+        if (nameField.getText().isEmpty() || bioField.getText().isEmpty()) {
+            showErrorMessage("Fields cannot be empty", "Name and Bio fields must be filled.");
+            return;
+        }
+
         if (userProfile != null) {
             var updateModel = new UserProfileUpdateModel(userProfile.id(), nameField.getText(), bioField.getText(), profileImageFile);
             var result = userProfileService.update(updateModel, userProfile.userId());
@@ -147,6 +152,13 @@ public class UserProfileController {
         alert.showAndWait();
     }
 
+    private void showSuccessMessage(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(content);
+        alert.showAndWait();
+    }
+
     private void enableSaveButton() {
         saveButton.setDisable(false);
     }
@@ -155,8 +167,6 @@ public class UserProfileController {
         saveButton.setDisable(true);
     }
 }
-
-
 
 
 
