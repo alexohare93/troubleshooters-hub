@@ -1,6 +1,7 @@
 package hub.troubleshooters.soundlink.app.areas.profile;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
@@ -10,6 +11,7 @@ import hub.troubleshooters.soundlink.core.profile.models.UserProfileUpdateModel;
 import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
 import hub.troubleshooters.soundlink.data.models.UserProfile;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -132,9 +134,11 @@ public class UserProfileController {
         var updateModel = new UserProfileUpdateModel(userProfile.id(), nameField.getText(), bioField.getText(), profileImageFile);
         var result = userProfileService.update(updateModel, userProfile.userId());
         if (result.isSuccess()) {
-            System.out.println("Successful save");
+            sceneManager.navigate(Routes.HOME);
+            sceneManager.alert(new Alert(Alert.AlertType.CONFIRMATION, "Profile updated successfully"));
         } else {
-            System.out.println(result.getError().getMessage());
+            var error = result.getErrors().getFirst();
+            sceneManager.alert(new Alert(Alert.AlertType.ERROR, "Validation error: " + error.getMessage()));
         }
     }
 }
