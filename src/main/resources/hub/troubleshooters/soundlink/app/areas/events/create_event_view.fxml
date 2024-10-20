@@ -74,7 +74,7 @@
                   <String fx:value="btn-primary" />
                </styleClass></Button>
                     <Label fx:id="fileNameLabel" text="No file selected" maxWidth="250" />
-                    <Button fx:id="clearImageButton" mnemonicParsing="false" onAction="#onClearImageButtonClick" styleClass="transparent" text="🗙" visible="false" />
+                    <Button fx:id="clearImageButton" mnemonicParsing="false" onAction="#onClearImageButtonClick" styleClass="transparent" text="✖" visible="false" />
               </HBox>
           </VBox>
 
