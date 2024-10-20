@@ -53,6 +53,8 @@ public class UserProfileServiceImpl implements UserProfileService {
             } catch (IOException | SQLException e) {
                 throw new RuntimeException(e);  // todo: error handling
             }
+        } else {
+            userProfile.setProfileImageId(null);
         }
 
         // save profile

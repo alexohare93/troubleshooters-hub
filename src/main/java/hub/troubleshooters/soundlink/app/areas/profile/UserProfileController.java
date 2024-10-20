@@ -60,6 +60,9 @@ public class UserProfileController {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private Button clearImageButton;
+
     @Inject
     public UserProfileController(ImageUploaderService imageUploaderService, UserProfileService userProfileService, IdentityService identityService, SceneManager sceneManager, Map map) {
         this.imageUploaderService = imageUploaderService;
@@ -88,9 +91,11 @@ public class UserProfileController {
         if (userProfile.profileImage().isPresent()) {
             var img = userProfile.profileImage().get();
             userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(img)));
+            clearImageButton.setDisable(false);
         } else {
             var img = imageUploaderService.getDefaultProfileImageFile();
             userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(img)));
+            clearImageButton.setDisable(true);
         }
     }
 
@@ -127,6 +132,7 @@ public class UserProfileController {
         if (file == null) return;
         userImageView.setImage(new Image(imageUploaderService.getFullProtocolPath(file)));
         profileImageFile = file;
+        clearImageButton.setDisable(false);
     }
 
     @FXML
@@ -140,5 +146,12 @@ public class UserProfileController {
             var error = result.getErrors().getFirst();
             sceneManager.alert(new Alert(Alert.AlertType.ERROR, "Validation error: " + error.getMessage()));
         }
+    }
+
+    @FXML
+    protected void onClearImageButtonClick() {
+        userImageView.setImage(new Image(imageUploaderService.getDefaultProfileImageFile().toURI().toString()));
+        profileImageFile = null;
+        clearImageButton.setDisable(true);
     }
 }
