@@ -55,7 +55,7 @@
                 <VBox alignment="CENTER" prefHeight="250.0" prefWidth="700.0" spacing="20.0">
                     <Label style="-fx-font-size: 36px; -fx-text-fill: white; -fx-font-weight: bold;" text="Connect with Your Musical Tribe" />
                     <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Explore local music scenes and find your people." />
-                    <Button style="-fx-background-color: #007bff; -fx-font-size: 16px; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 20;" text="JOIN US" />
+                    <Button onAction="#onBrowseCommunitiesButtonClick" style="-fx-background-color: #007bff; -fx-font-size: 16px; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 20;" text="BROWSE COMMUNITIES" />
                 </VBox>
             </Pane>
 
