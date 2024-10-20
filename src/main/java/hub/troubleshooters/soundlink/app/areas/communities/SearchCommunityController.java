@@ -1,6 +1,10 @@
 package hub.troubleshooters.soundlink.app.areas.communities;
 
 import com.google.inject.Inject;
+import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.core.Map;
+import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
@@ -8,12 +12,19 @@ import hub.troubleshooters.soundlink.app.services.SceneManager;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
+
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class SearchCommunityController {
+
+    private static final Logger LOGGER = Logger.getLogger(SearchCommunityController.class.getName());
 
     @FXML
     private TextField searchTextField;
@@ -28,22 +39,23 @@ public class SearchCommunityController {
     private VBox communityListContainer;
 
     private final CommunityService communityService;
-
     private final IdentityService identityService;
-
     private final SceneManager sceneManager;
+    private final ImageUploaderService imageUploaderService;
+    private final Map map;
 
     @Inject
-    public SearchCommunityController(CommunityService communityService, IdentityService identityService, SceneManager sceneManager) {
+    public SearchCommunityController(CommunityService communityService, IdentityService identityService, SceneManager sceneManager, ImageUploaderService imageUploaderService, Map map) {
         this.communityService = communityService;
         this.identityService = identityService;
         this.sceneManager = sceneManager;
+        this.imageUploaderService = imageUploaderService;
+        this.map = map;
     }
 
     @FXML
     public void initialize() {
         try {
-
             // no communities fetched when first initialized, so it follows the same functionality as search event controller
             communityListContainer.getChildren().clear();
         } catch (Exception e) {
@@ -60,12 +72,26 @@ public class SearchCommunityController {
     }
 
 
-    private VBox createCommunityCard(Community community) {
+    private VBox createCommunityCard(Community community) throws SQLException {
         VBox vbox = new VBox();
         vbox.setSpacing(10.0);
         vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
         vbox.setPrefWidth(250);
-        vbox.setPrefHeight(100);
+
+        var communityModel = map.community(community);
+
+        var imageView = new ImageView();
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(100);
+        var bannerImageOpt = communityModel.bannerImage();
+        if (bannerImageOpt.isPresent()) {
+            var bannerImage = bannerImageOpt.get();
+            var path = imageUploaderService.getFullProtocolPath(bannerImage);
+            imageView.setImage(new Image(path));
+        } else {
+            var file = imageUploaderService.getSampleBannerImageFile(communityModel.communityId());
+            imageView.setImage(new Image(imageUploaderService.getFullProtocolPath(file)));
+        }
 
         Label nameLabel = new Label(community.getName());
         nameLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #fa8072;");
@@ -82,7 +108,7 @@ public class SearchCommunityController {
 
         detailsButton.setOnAction(e -> sceneManager.navigateToCommunityDetailsView(community.getId()));
 
-        vbox.getChildren().addAll(nameLabel, genreLabel, descriptionLabel, detailsButton);
+        vbox.getChildren().addAll(imageView, nameLabel, genreLabel, descriptionLabel, detailsButton);
 
         return vbox;
     }
@@ -99,8 +125,13 @@ public class SearchCommunityController {
                 communityListContainer.getChildren().add(row);
             }
 
-            VBox communityCard = createCommunityCard(communities.get(i));
-            row.getChildren().add(communityCard);
+            try {
+                VBox communityCard = createCommunityCard(communities.get(i));
+                row.getChildren().add(communityCard);
+            } catch (SQLException e) {
+                LOGGER.severe("Error creating community card: " + e.getMessage());
+                // we don't need to go back to the previous screen since some cards might succeed
+            }
         }
     }
 }

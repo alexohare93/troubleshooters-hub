@@ -1,7 +1,11 @@
 package hub.troubleshooters.soundlink.app.areas.events;
 
 
+import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.areas.communities.SearchCommunityController;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
+import hub.troubleshooters.soundlink.core.Map;
+import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.data.models.Event;
 
 import hub.troubleshooters.soundlink.core.events.services.EventService;
@@ -15,6 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Alert.AlertType;
@@ -25,11 +31,15 @@ import java.time.LocalDate;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.sql.SQLException;
+import java.util.logging.Logger;
+
 import javafx.scene.control.TextField;
 import hub.troubleshooters.soundlink.app.components.IntegerTextField;
 import javafx.collections.FXCollections;
 
 public class SearchEventController {
+
+    private static final Logger LOGGER = Logger.getLogger(SearchEventController.class.getName());
 
     @FXML
     private VBox eventListVBox;
@@ -55,12 +65,16 @@ public class SearchEventController {
     private final EventService eventService;
     private final IdentityService identityService;
     private final SceneManager sceneManager;
+    private final Map map;
+    private final ImageUploaderService imageUploaderService;
 
     @Inject
-    public SearchEventController(EventService eventService, IdentityService identityService,SceneManager sceneManager) {
+    public SearchEventController(EventService eventService, IdentityService identityService,SceneManager sceneManager, Map map, ImageUploaderService imageUploaderService){
         this.eventService = eventService;
         this.identityService = identityService;
         this.sceneManager = sceneManager;
+        this.map = map;
+        this.imageUploaderService = imageUploaderService;
     }
 
     @FXML
@@ -104,12 +118,27 @@ public class SearchEventController {
         }
     }
 
-    private VBox createEventCard(Event event) {
+    private VBox createEventCard(Event event) throws SQLException{
         VBox eventCard = new VBox();
         eventCard.setSpacing(10.0);
         eventCard.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-padding: 10px;");
         eventCard.setPrefWidth(250);
         eventCard.setPrefHeight(100);
+
+        var eventModel = map.event(event);
+
+        var imageView = new ImageView();
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(100);
+        var bannerImageOpt = eventModel.bannerImage();
+        if (bannerImageOpt.isPresent()) {
+            var bannerImage = bannerImageOpt.get();
+            var path = imageUploaderService.getFullProtocolPath(bannerImage);
+            imageView.setImage(new Image(path));
+        } else {
+            var file = imageUploaderService.getSampleBannerImageFile(eventModel.id());
+            imageView.setImage(new Image(imageUploaderService.getFullProtocolPath(file)));
+        }
 
         Label nameLabel = new Label(event.getName());
         Label descriptionLabel = new Label("Description: " + event.getDescription());
@@ -122,7 +151,7 @@ public class SearchEventController {
         // Handle sign-up logic on button click
         detailsButton.setOnAction(e -> sceneManager.navigateToEventDetailsView(event.getId()));
 
-        eventCard.getChildren().addAll(nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel, detailsButton);
+        eventCard.getChildren().addAll(imageView, nameLabel, descriptionLabel, locationLabel, dateLabel, capacityLabel, detailsButton);
         return eventCard;
     }
 
@@ -162,8 +191,13 @@ public class SearchEventController {
         }
 
         for (Event event : searchResults) {
-            VBox eventCard = createEventCard(event);
-            eventListVBox.getChildren().add(eventCard);
+            try {
+                VBox eventCard = createEventCard(event);
+                eventListVBox.getChildren().add(eventCard);
+            } catch (SQLException e) {
+                LOGGER.severe("Error creating event card: " + e.getMessage());
+                // we don't need to go back to the previous screen since some cards might succeed
+            }
         }
     }
 }
