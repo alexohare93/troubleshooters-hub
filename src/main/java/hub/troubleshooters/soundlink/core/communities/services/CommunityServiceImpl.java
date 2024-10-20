@@ -163,7 +163,8 @@ public class CommunityServiceImpl implements CommunityService {
                     community.description(),
                     community.genre(),
                     community.created(),
-                    bannerImageId
+                    bannerImageId,
+					community.isPrivate()
             );
 
             communityFactory.save(updatedCommunity);
@@ -191,7 +192,7 @@ public class CommunityServiceImpl implements CommunityService {
             if (communityOpt.isEmpty()) {
                 throw new SQLException("Community with ID " + communityId + " not found.");
             }
-            communityFactory.delete(communityOpt.get());
+            communityFactory.delete(communityOpt.get().getId());
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting community", e);
             throw e;
