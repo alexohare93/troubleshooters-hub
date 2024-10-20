@@ -80,24 +80,26 @@ public class CommunityServiceImpl implements CommunityService {
         return new ValidationResult();
     }
 
-	@Override
-	public List<Community> searchCommunities(String searchText) {
-		try {
-			List<Community> communities = communityFactory.getAllCommunities();
+    @Override
+    public List<Community> searchCommunities(String searchText, boolean showOnlyPrivate) {
+        try {
+            List<Community> communities = communityFactory.getAllCommunities();
 
-			// Filter based on name, description, or genre
-			return communities.stream()
-					.filter(community -> searchText == null || searchText.isEmpty() ||
-							community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
-							community.getDescription().toLowerCase().contains(searchText.toLowerCase()) ||
-							community.getGenre().toLowerCase().contains(searchText.toLowerCase()))
-					.collect(Collectors.toList());
+            // Filter based on name, description, genre, and privacy status
+            return communities.stream()
+                    .filter(community -> (searchText == null || searchText.isEmpty() ||
+                            community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
+                            community.getDescription().toLowerCase().contains(searchText.toLowerCase()) ||
+                            community.getGenre().toLowerCase().contains(searchText.toLowerCase())))
+                    .filter(community -> !showOnlyPrivate || community.isPrivate())
+                    .collect(Collectors.toList());
 
-		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, "Error searching communities", e);
-			return List.of();
-		}
-	}
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error searching communities", e);
+            return List.of();
+        }
+    }
+
 
 	@Override
 	public boolean signUpForCommunity(int userId, int communityId) throws SQLException {

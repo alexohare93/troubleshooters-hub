@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface CommunityService {
     ValidationResult createCommunity(CreateCommunityModel model);
-    List<Community> searchCommunities(String searchText);
+    List<Community> searchCommunities(String searchText, boolean showOnlyPrivate);
     boolean signUpForCommunity(int userId, int communityId) throws SQLException;
     Optional<CommunityModel> getCommunity(int id);
     boolean hasUserJoinedIntoCommunity(int userId, int communityId) throws SQLException;
