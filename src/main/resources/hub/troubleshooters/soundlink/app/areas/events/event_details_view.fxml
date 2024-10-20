@@ -41,12 +41,23 @@
          <Label fx:id="venueLabel" text="SAMPLE VENUE" />
       </children>
    </HBox>
-   <Button mnemonicParsing="false" onAction="#onBookButtonClick" text="Book">
-      <styleClass>
-         <String fx:value="btn" />
-         <String fx:value="btn-primary" />
-      </styleClass>
-   </Button>
+   <!-- Sign Up and Cancel Buttons -->
+   <HBox spacing="10.0">
+      <children>
+         <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onBookButtonClick" text="Sign Up">
+            <styleClass>
+               <String fx:value="btn" />
+               <String fx:value="btn-primary" />
+            </styleClass>
+         </Button>
+         <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel Booking">
+            <styleClass>
+               <String fx:value="btn" />
+               <String fx:value="btn-secondary" />
+            </styleClass>
+         </Button>
+      </children>
+   </HBox>
    <VBox fx:id="commentsVbox" prefHeight="200.0" prefWidth="100.0" />
    <VBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="91.0" prefWidth="500.0" spacing="5.0">
       <children>

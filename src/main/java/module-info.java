@@ -5,6 +5,7 @@ module hub.troubleshooters.soundlink {
     requires bcrypt;
     requires atlantafx.base;
     requires jsr305;
+    requires java.desktop;
 
 
     opens hub.troubleshooters.soundlink.app to javafx.fxml;

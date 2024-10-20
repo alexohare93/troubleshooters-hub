@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.Scope;
 import hub.troubleshooters.soundlink.core.auth.ScopeUtils;
+import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.events.models.EventModel;
 import hub.troubleshooters.soundlink.core.events.validation.BookingAlreadyExistsException;
@@ -16,15 +17,17 @@ import hub.troubleshooters.soundlink.data.factories.EventCommentFactory;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
 import hub.troubleshooters.soundlink.data.factories.BookingFactory;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
-import hub.troubleshooters.soundlink.data.models.Event;
+import hub.troubleshooters.soundlink.data.models.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
-import hub.troubleshooters.soundlink.data.models.EventComment;
 
+import javax.sound.midi.SysexMessage;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.io.IOException;
@@ -183,6 +186,45 @@ public class EventServiceImpl implements EventService {
     @Override
     public void comment(int eventId, int userId, String comment) throws SQLException {
         eventCommentFactory.create(eventId, userId, comment);
+    }
+
+    @Override
+    public boolean cancelBooking(int userId, int eventId) throws SQLException {
+        Optional<Booking> existingBooking = bookingFactory.get(eventId, userId);
+
+        if (existingBooking.isPresent()) {
+            try {
+                bookingFactory.delete(userId, eventId);
+                return true;
+            } catch (SQLException e) {
+                throw new SQLException("Error removing user from the Booked Event.", e);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void updateEvent(EventModel event) throws SQLException {
+        try {
+            Integer bannerImageId = event.bannerImage().map(img -> img.getId()).orElse(null);
+
+            Event updatedEvent = new Event(
+                    event.id(),
+                    event.name(),
+                    event.description(),
+                    event.community(),
+                    event.venue(),
+                    event.capacity(),
+                    event.scheduled(),
+                    event.created(),
+                    bannerImageId
+            );
+            eventFactory.save(updatedEvent);
+
+        } catch (SQLException e) {
+            throw e;
+        }
     }
 }
 

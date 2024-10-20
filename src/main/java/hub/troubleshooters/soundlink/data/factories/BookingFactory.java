@@ -145,4 +145,23 @@ public class BookingFactory extends ModelFactory<Booking> {
 				throw new SQLException("Failed to create Booking. Rows affected" + rowsAffected);
 		});
 	}
+
+	/**
+	 * Delete a Booking for a given user
+	 * @param eventId
+	 * @param userId
+	 * @return
+	 * @throws SQLException
+	 */
+	public void delete( int userId, int eventId) throws SQLException {
+		final String sql = "DELETE FROM Bookings WHERE UserId = ? AND EventId = ?;";
+		connection.executeUpdate(sql, statement -> {
+			statement.setInt(1, userId);
+			statement.setInt(2, eventId);
+		}, rowsAffected -> {
+			if (rowsAffected != 1) {
+				throw new SQLException("Failed to delete booking. Rows Affected: " + rowsAffected);
+			}
+		});
+	}
 }

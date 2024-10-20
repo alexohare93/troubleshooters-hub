@@ -38,5 +38,9 @@ public interface EventService {
     List<EventComment> getComments(int eventId) throws SQLException;
 
     void comment(int eventId, int userId, String comment) throws SQLException;
+
+    boolean cancelBooking(int userId, int eventId) throws SQLException;
+
+    void updateEvent(EventModel event) throws SQLException;
 }
 
