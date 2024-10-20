@@ -41,6 +41,16 @@
          <Label fx:id="venueLabel" text="SAMPLE VENUE" />
       </children>
    </HBox>
+   <HBox spacing="10.0">
+      <children>
+         <Label text="Capacity">
+            <font>
+               <Font name="System Bold" size="12.0" />
+            </font>
+         </Label>
+         <Label fx:id="capacityLabel" text="SAMPLE CAPACITY" />
+      </children>
+   </HBox>
    <Button mnemonicParsing="false" onAction="#onBookButtonClick" text="Book">
       <styleClass>
          <String fx:value="btn" />

@@ -36,6 +36,7 @@ public class EventDetailsController {
     @FXML private TextArea descriptionTextArea;
     @FXML private Label communityLabel;
     @FXML private Label venueLabel;
+    @FXML private Label capacityLabel;
     @FXML private VBox commentsVbox;
     @FXML private TextArea commentTextArea;
 
@@ -77,6 +78,7 @@ public class EventDetailsController {
         descriptionTextArea.setText(event.description());
         communityLabel.setText("This event is shared with the " + event.community().getName() + " community.");
         venueLabel.setText(event.venue());
+        capacityLabel.setText("" + event.capacity());
         commentTextArea.clear();
 
         // set banner image
