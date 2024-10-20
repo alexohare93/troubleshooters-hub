@@ -102,7 +102,7 @@ public class CommunityServiceImpl implements CommunityService {
 	@Override
 	public boolean signUpForCommunity(int userId, int communityId) throws SQLException {
 		// Check if the user is already signed up for the community
-		Optional<CommunityMember> existingMember = communityMemberFactory.get(userId);
+		Optional<CommunityMember> existingMember = communityMemberFactory.get(communityId, userId);
 
 		if (existingMember.isPresent()) {
 			return false;
@@ -113,18 +113,24 @@ public class CommunityServiceImpl implements CommunityService {
 		}
 	}
 
-	@Override
-	public boolean cancelJoin(int userId, int communityId) throws SQLException {
-		// Check if the user is currently signed up for the community
-		Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
+    @Override
+    public boolean cancelJoin(int userId, int communityId) throws SQLException {
+        Optional<CommunityMember> existingMember = communityMemberFactory.get(communityId, userId);
 
-		if (existingMember.isPresent()) {
-			communityMemberFactory.delete(userId, communityId); // Assumes a delete method exists to remove the user booking
-			return true;
-		} else {
-			return false; // User was not signed up for this community, so cannot cancel
-		}
-	}
+        if (existingMember.isPresent()) {
+            try {
+                communityMemberFactory.delete(communityId, userId);
+                return true;
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, "Error removing user from community", e);
+                throw new SQLException("Error removing user from the community.", e);
+            }
+        } else {
+            LOGGER.log(Level.WARNING, "User is not a member of this community: CommunityId = " + communityId + ", UserId = " + userId);
+            return false;
+        }
+    }
+
 
 	@Override
 	public Optional<CommunityModel> getCommunity(int id) {
@@ -141,9 +147,61 @@ public class CommunityServiceImpl implements CommunityService {
 
 	@Override
 	public boolean hasUserJoinedIntoCommunity(int userId, int communityId) throws SQLException {
-		Optional<CommunityMember> existingMember = communityMemberFactory.get(userId, communityId);
+		Optional<CommunityMember> existingMember = communityMemberFactory.get(communityId, userId);
 		return existingMember.isPresent();
 	}
+
+    // TODO: Check if the update is similar to what is already in the db, if it is, don't update the db.
+    @Override
+    public void updateCommunity(CommunityModel community) throws SQLException {
+        try {
+            Integer bannerImageId = community.bannerImage().map(img -> img.getId()).orElse(null);
+
+            Community updatedCommunity = new Community(
+                    community.communityId(),
+                    community.name(),
+                    community.description(),
+                    community.genre(),
+                    community.created(),
+                    bannerImageId
+            );
+
+            communityFactory.save(updatedCommunity);
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating community", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException {
+        Optional<CommunityMember> communityMember = communityMemberFactory.get(communityId, userId);
+        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(1)); // 0 = read-only access
+    }
+
+    @Override
+    public void deleteCommunity(int communityId, int userId) throws SQLException {
+        if (!isAdmin(userId, communityId)) {
+            throw new SecurityException("Only admins can delete communities.");
+        }
+        try {
+            Optional<Community> communityOpt = communityFactory.get(communityId);
+
+            if (communityOpt.isEmpty()) {
+                throw new SQLException("Community with ID " + communityId + " not found.");
+            }
+            communityFactory.delete(communityOpt.get());
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting community", e);
+            throw e;
+        }
+    }
+
+    private boolean isAdmin(int userId, int communityId) throws SQLException {
+        Optional<Integer> permissionLevel = getUserPermissionLevel(userId, communityId);
+        return permissionLevel.map(level -> level == 1).orElse(false);  // Assume 1 is admin level
+    }
 
 	@Override
 	public List<CommunityPostModel> getCommunityPosts(int communityId) throws SQLException {
