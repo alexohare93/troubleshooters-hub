@@ -33,6 +33,8 @@ public interface EventService {
 
     boolean isBooked(int eventId, int userId) throws SQLException;
 
+    List<EventModel> getCommunityEvents(int CommunityId) throws SQLException;
+
     List<EventComment> getComments(int eventId) throws SQLException;
 
     void comment(int eventId, int userId, String comment) throws SQLException;

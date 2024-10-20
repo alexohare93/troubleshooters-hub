@@ -34,6 +34,8 @@ public class CommunityDetailsController {
     private Button signUpButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private Button feedButton;
 
     private final CommunityService communityService;
     private final ImageUploaderService imageUploaderService;
@@ -55,7 +57,7 @@ public class CommunityDetailsController {
     public void loadCommunityDetails(int id) {
         Optional<CommunityModel> optionalCommunity = communityService.getCommunity(id);
         if (optionalCommunity.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Event not found with ID " + id);
+            showAlert(Alert.AlertType.ERROR, "Community not found with ID " + id);
             return;
         }
         community = optionalCommunity.get();
@@ -64,6 +66,7 @@ public class CommunityDetailsController {
         descriptionTextArea.setText(community.description());
         setUpBannerImage();
         updateJoinButtons();
+        feedButton.setOnAction(e -> sceneManager.navigateToCommunityFeedView(community.communityId()));
     }
 
     private void setUpBannerImage() {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0"
+      style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;"
+      xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="hub.troubleshooters.soundlink.app.areas.communities.CommunityFeedController">
+
+    <!-- Event Name -->
+    <Label fx:id="nameLabel" styleClass="h1" text="place holder"/>
+
+    <!-- Tabs -->
+    <HBox alignment="CENTER" maxWidth="Infinity" style="-fx-border-style: none;">
+        <Button fx:id="eventsTab" disable="true" maxWidth="Infinity" onAction="#eventsTabClicked" prefWidth="400.0"
+                style="-fx-background-radius: 10 0 0 10; -fx-border-radius: 10 0 0 10;" text="Events">
+            <styleClass>
+                <String fx:value="btn"/>
+                <String fx:value="btn-primary"/>
+            </styleClass>
+        </Button>
+        <Button fx:id="postsTab" maxWidth="Infinity" onAction="#postsTabClicked" prefHeight="25.0" prefWidth="400.0"
+                style="-fx-background-radius: 0 10 10 0; -fx-border-radius: 0 10 10 0;" text="Community Posts">
+            <styleClass>
+                <String fx:value="btn"/>
+                <String fx:value="btn-primary"/>
+            </styleClass>
+        </Button>
+    </HBox>
+    <!-- Scrolling pane -->
+    <VBox fx:id="listContainer" alignment="TOP_CENTER" spacing="20.0"
+          style="-fx-border-color: gray; -fx-border-radius: 10px;" VBox.vgrow="ALWAYS"/>
+
+</VBox>

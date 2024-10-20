@@ -54,6 +54,7 @@ public class AppModule extends AbstractModule {
         // data factories
         bind(UserFactory.class).in(Singleton.class);
         bind(CommunityFactory.class).in(Singleton.class);
+        bind(CommunityPostFactory.class).in(Singleton.class);
         bind(CommunityMemberFactory.class).in(Singleton.class);
         bind(ImageFactory.class).in(Singleton.class);
         bind(UserProfileFactory.class).in(Singleton.class);

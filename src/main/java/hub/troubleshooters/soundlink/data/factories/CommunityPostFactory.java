@@ -38,13 +38,13 @@ public class CommunityPostFactory extends ModelFactory<CommunityPost> {
 
 	/**
 	 * Gets all Community Posts from a given community
-	 * @param community
+	 * @param communityId
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<CommunityPost> get(Community community) throws SQLException {
+	public List<CommunityPost> getPosts(int communityId) throws SQLException {
 		final String sql = "SELECT * FROM CommunityPosts WHERE CommunityId = ?;";
-		return connection.executeQuery(sql, statement -> statement.setInt(1, community.getId()), executor -> {
+		return connection.executeQuery(sql, statement -> statement.setInt(1, communityId), executor -> {
 			List<CommunityPost> list = new ArrayList<>();
 			while (executor.next()) {
 				list.add(new CommunityPost(

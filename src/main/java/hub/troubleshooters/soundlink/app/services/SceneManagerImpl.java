@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.app.services;
 
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
 import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.areas.communities.CommunityFeedController;
 import hub.troubleshooters.soundlink.app.areas.events.EventDetailsController;
 import hub.troubleshooters.soundlink.app.areas.communities.CommunityDetailsController;
 import hub.troubleshooters.soundlink.app.areas.shared.SharedController;
@@ -168,6 +169,13 @@ public class SceneManagerImpl implements SceneManager {
     public void navigateToCommunityDetailsView(int communityId) {
         switchToOutletScene(Routes.COMMUNITY_DETAILS, (CommunityDetailsController controller) -> {
             controller.loadCommunityDetails(communityId);
+        });
+    }
+
+    @Override
+    public void navigateToCommunityFeedView(int communityId) {
+        switchToOutletScene(Routes.COMMUNITY_FEED, (CommunityFeedController controller) -> {
+            controller.LoadFeed(communityId);
         });
     }
 
