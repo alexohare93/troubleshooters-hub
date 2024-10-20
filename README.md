@@ -22,8 +22,10 @@ Each project will need to provide a certain amount of features/functionalities, 
 1. Open the repository in IntelliJ IDEA and click 'Build' to automatically download the dependencies and build the project.
 
 2. In the root directory of the project, navigate to the `./scripts` directory and run the `initdb.sh` (`$ sh initdb.sh`) script if you are on Linux / MacOS or the `Initialize-Database.ps1` script if you are on Windows to create the DB schema and populate it with some test data.
+ 
+3. In the same `./scripts` directory, run the `populate_db.sh` (`$ sh populate_db.sh`) script if you are on Linux / MacOS or the `populate_db.ps1` script if you are on Windows to create 100 rows of mock data in all relevant tables.
 
-3. Run the `SoundLinkApplication` class located in the `src/main/java/hub/troubleshooters/soundlink/app` directory to start the application.
+4. Run the `SoundLinkApplication` class located in the `src/main/java/hub/troubleshooters/soundlink/app` directory to start the application.
 
 ### Project Structure
 
