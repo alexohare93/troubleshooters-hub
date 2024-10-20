@@ -8,8 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.logging.Logger;
+
 
 public class CommunityFactory extends ModelFactory<Community> {
+
+    private static final Logger LOGGER = Logger.getLogger(CommunityFactory.class.getName());
 
     @Inject
     public CommunityFactory(DatabaseConnection connection) {

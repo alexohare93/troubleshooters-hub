@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.layout.HBox;
 
 public class CommunityDetailsController {
     @FXML
@@ -34,6 +35,10 @@ public class CommunityDetailsController {
     private Button signUpButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private HBox adminButtonBox;
+    @FXML
+    private Button feedButton;
 
     private final CommunityService communityService;
     private final ImageUploaderService imageUploaderService;
@@ -53,17 +58,40 @@ public class CommunityDetailsController {
     }
 
     public void loadCommunityDetails(int id) {
-        Optional<CommunityModel> optionalCommunity = communityService.getCommunity(id);
-        if (optionalCommunity.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Event not found with ID " + id);
-            return;
+        int userId = identityService.getUserContext().getUser().getId();
+
+        try {
+            Optional<Integer> permissionLevelOpt = communityService.getUserPermissionLevel(userId, id);
+
+            int permissionLevel = permissionLevelOpt.orElse(1);
+
+            if (permissionLevel == 1) {
+                adminButtonBox.setVisible(true);
+                adminButtonBox.setManaged(true);
+                descriptionTextArea.setEditable(true);
+            } else {
+                adminButtonBox.setVisible(false);
+                adminButtonBox.setManaged(false);
+                descriptionTextArea.setEditable(false);
+            }
+
+            Optional<CommunityModel> optionalCommunity = communityService.getCommunity(id);
+            if (optionalCommunity.isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Community not found with ID " + id);
+                return;
+            }
+            community = optionalCommunity.get();
+            genreLabel.setText(community.genre());
+            nameLabel.setText(community.name());
+            descriptionTextArea.setText(community.description());
+            setUpBannerImage();
+            updateJoinButtons();
+            feedButton.setOnAction(e -> sceneManager.navigateToCommunityFeedView(community.communityId()));
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error loading community details or permission check", e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong. Please try again later.");
         }
-        community = optionalCommunity.get();
-        genreLabel.setText(community.genre());
-        nameLabel.setText(community.name());
-        descriptionTextArea.setText(community.description());
-        setUpBannerImage();
-        updateJoinButtons();
     }
 
     private void setUpBannerImage() {
@@ -92,22 +120,30 @@ public class CommunityDetailsController {
         try {
             int userId = identityService.getUserContext().getUser().getId();
             boolean isJoined = communityService.hasUserJoinedIntoCommunity(userId, community.communityId());
-            toggleBookingButtons(isJoined);
+            toggleJoiningButtons(isJoined);
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating booking status", e);
-            showAlert(Alert.AlertType.ERROR, "Unable to update booking status. Please try again.");
+            LOGGER.log(Level.SEVERE, "Error updating joining status", e);
+            showAlert(Alert.AlertType.ERROR, "Unable to update join status. Please try again.");
         }
     }
 
     @FXML
-    protected void onBookButtonClick() {
+    protected void onJoinButtonClick() {
         if (community == null) {
             showAlert(Alert.AlertType.ERROR, "No community selected for booking.");
             return;
         }
-        handleJoinOperation(() -> communityService.signUpForCommunity(identityService.getUserContext().getUser().getId(), community.communityId()),
-                "Booked into event successfully",
-                "You are already booked into this event");
+
+        handleJoinOperation(() -> {
+                    int userId = identityService.getUserContext().getUser().getId();
+                    boolean joined = communityService.signUpForCommunity(userId, community.communityId());
+                    if (joined) {
+                        toggleJoiningButtons(true);
+                    }
+                    return joined;
+                },
+                "Joined into community successfully",
+                "You have already joined this community");
     }
 
     @FXML
@@ -116,29 +152,40 @@ public class CommunityDetailsController {
             showAlert(Alert.AlertType.ERROR, "No community selected for cancellation.");
             return;
         }
-        handleJoinOperation(() -> communityService.cancelJoin(identityService.getUserContext().getUser().getId(), community.communityId()),
-                "Booking canceled successfully",
-                "Unable to cancel booking. Please try again.");
+
+        handleJoinOperation(() -> {
+                    int userId = identityService.getUserContext().getUser().getId();
+                    boolean cancelled = communityService.cancelJoin(userId, community.communityId());
+                    if (cancelled) {
+                        toggleJoiningButtons(false);
+                    }
+                    return cancelled;
+                },
+                "Successfully removed from community",
+                "Unable to be removed from the community. Please try again.");
     }
+
 
     private void handleJoinOperation(JoinOperation operation, String successMessage, String failureMessage) {
         try {
             boolean result = operation.execute();
             if (result) {
                 showAlert(Alert.AlertType.INFORMATION, successMessage);
-                updateJoinButtons();
             } else {
                 showAlert(Alert.AlertType.ERROR, failureMessage);
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error processing booking operation", e);
+            LOGGER.log(Level.SEVERE, "Error processing join operation", e);
             showAlert(Alert.AlertType.ERROR, "Something went wrong. Please contact SoundLink Support.");
         }
     }
 
-    private void toggleBookingButtons(boolean isBooked) {
-        signUpButton.setVisible(!isBooked);
-        cancelButton.setVisible(isBooked);
+    private void toggleJoiningButtons(boolean isJoined) {
+        signUpButton.setVisible(!isJoined);
+        signUpButton.setManaged(!isJoined);
+
+        cancelButton.setVisible(isJoined);
+        cancelButton.setManaged(isJoined);
     }
 
     private void showAlert(Alert.AlertType alertType, String message) {
@@ -148,6 +195,55 @@ public class CommunityDetailsController {
     @FunctionalInterface
     private interface JoinOperation {
         boolean execute() throws SQLException;
+    }
+
+    @FXML
+    protected void onSaveChangesClick() {
+        if (community == null) {
+            showAlert(Alert.AlertType.ERROR, "No community selected to update.");
+            return;
+        }
+
+        if (nameLabel.getText().trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Community name cannot be empty.");
+            return;
+        }
+
+        CommunityModel updatedCommunity = new CommunityModel(
+                community.communityId(),
+                nameLabel.getText(),
+                descriptionTextArea.getText(),
+                genreLabel.getText(),
+                community.created(),
+                community.bannerImage()
+        );
+
+        try {
+            communityService.updateCommunity(updatedCommunity);
+            showAlert(Alert.AlertType.INFORMATION, "Community details updated successfully.");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error updating community details", e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong while updating. Please try again.");
+        }
+    }
+
+    @FXML
+    protected void onDeleteCommunityClick() {
+        if (community == null) {
+            showAlert(Alert.AlertType.ERROR, "No community selected to delete.");
+            return;
+        }
+
+        int userId = identityService.getUserContext().getUser().getId();
+
+        try {
+            communityService.deleteCommunity(community.communityId(), userId);
+            showAlert(Alert.AlertType.INFORMATION, "Community deleted successfully.");
+            sceneManager.navigateToSearchCommunityView();
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error deleting community", e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong while deleting. Please try again.");
+        }
     }
 }
 

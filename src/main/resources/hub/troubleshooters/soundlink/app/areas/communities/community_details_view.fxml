@@ -23,19 +23,19 @@
         </viewport>
     </ImageView>
 
-    <!-- Event Name -->
+    <!-- Community Name -->
     <Label fx:id="nameLabel" styleClass="h1" />
 
     <!-- Genre Name -->
     <Label fx:id="genreLabel" styleClass="h1" style="-fx-font-size: 14px;" />
 
-    <!-- Event Description -->
+    <!-- Community Description -->
     <TextArea fx:id="descriptionTextArea" editable="false" />
 
     <!-- Sign Up and Cancel Buttons -->
     <HBox spacing="10.0">
         <children>
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onBookButtonClick" text="Sign Up">
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onJoinButtonClick" text="Sign Up">
                 <styleClass>
                     <String fx:value="btn" />
                     <String fx:value="btn-primary" />
@@ -49,4 +49,29 @@
             </Button>
         </children>
     </HBox>
+    <Button fx:id="feedButton" mnemonicParsing="false" text="Go to Feed">
+        <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-primary" />
+        </styleClass>
+    </Button>
+
+    <!-- Admin Buttons: Save and Delete -->
+    <HBox spacing="10.0" visible="false" fx:id="adminButtonBox">
+        <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveChangesClick" text="Save Changes">
+                <styleClass>
+                    <String fx:value="btn" />
+                    <String fx:value="btn-success" />
+                </styleClass>
+            </Button>
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteCommunityClick" text="Delete Community">
+                <styleClass>
+                    <String fx:value="btn" />
+                    <String fx:value="btn-danger" />
+                </styleClass>
+            </Button>
+        </children>
+    </HBox>
 </VBox>
+

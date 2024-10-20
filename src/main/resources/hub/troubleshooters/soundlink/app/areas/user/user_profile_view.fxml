@@ -29,7 +29,12 @@
                             <Circle centerX="60" centerY="60" radius="60" />
                         </clip>
                     </ImageView>
-                    <Button onAction="#changeImage" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 3);" text="Change Image" />
+               <HBox>
+                  <children>
+                          <Button onAction="#changeImage" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 3);" text="Change Image" />
+                      <Button fx:id="clearImageButton" mnemonicParsing="false" onAction="#onClearImageButtonClick" styleClass="transparent" text="✖" />
+                  </children>
+               </HBox>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="15.0">

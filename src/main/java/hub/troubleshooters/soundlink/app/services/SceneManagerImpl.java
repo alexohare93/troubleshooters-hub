@@ -3,6 +3,7 @@ package hub.troubleshooters.soundlink.app.services;
 import hub.troubleshooters.soundlink.app.SoundLinkApplication;
 import hub.troubleshooters.soundlink.app.areas.Routes;
 import hub.troubleshooters.soundlink.app.areas.admin.AdminController;
+import hub.troubleshooters.soundlink.app.areas.communities.CommunityFeedController;
 import hub.troubleshooters.soundlink.app.areas.events.EventDetailsController;
 import hub.troubleshooters.soundlink.app.areas.communities.CommunityDetailsController;
 import hub.troubleshooters.soundlink.app.areas.notification.NotificationController;
@@ -174,6 +175,13 @@ public class SceneManagerImpl implements SceneManager {
     }
 
     @Override
+    public void navigateToCommunityFeedView(int communityId) {
+        switchToOutletScene(Routes.COMMUNITY_FEED, (CommunityFeedController controller) -> {
+            controller.LoadFeed(communityId);
+        });
+    }
+
+    @Override
     public void onNotificationButtonClick(int communityId) {
         switchToOutletScene(Routes.ADMIN, (AdminController controller) -> {
             controller.initializeWithCommunityId(communityId);
@@ -204,4 +212,10 @@ public class SceneManagerImpl implements SceneManager {
             e.printStackTrace(); // TODO: replace with proper error handling
         }
     }
+
+    @Override
+    public void navigateToSearchCommunityView() {
+        navigate(Routes.SEARCH_COMMUNITIES);
+    }
+
 }

@@ -78,4 +78,7 @@ public interface SceneManager {
     void navigateToCommunityDetailsView(int communityId);
 
     void onNotificationButtonClick(int communityId);
+    void navigateToSearchCommunityView();
+
+    void navigateToCommunityFeedView(int communityId);
 }

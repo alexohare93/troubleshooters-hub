@@ -10,6 +10,7 @@ import javafx.fxml.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
 
 public class LoginController {
@@ -25,6 +26,17 @@ public class LoginController {
     public LoginController(LoginService loginService, SceneManager sceneManager) {
         this.loginService = loginService;
         this.sceneManager = sceneManager;
+    }
+
+    @FXML
+    public void initialize() {
+        // Adds form submission on ENTER key pressed for convenience
+        passwordInput.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) onLoginButtonClick();
+        });
+        usernameInput.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) onLoginButtonClick();
+        });
     }
 
     @FXML

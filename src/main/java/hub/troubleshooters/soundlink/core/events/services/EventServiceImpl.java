@@ -18,6 +18,7 @@ import hub.troubleshooters.soundlink.data.factories.BookingFactory;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.data.models.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -164,6 +165,14 @@ public class EventServiceImpl implements EventService {
     public boolean isBooked(int eventId, int userId) throws SQLException {
        var booking = bookingFactory.get(eventId, userId);
        return booking.isPresent();
+    }
+
+    @Override
+    public List<EventModel> getCommunityEvents(int communityId) throws SQLException {
+        List<Event> events = eventFactory.findCommunityEvents(communityId);
+        List<EventModel> eventModels = new ArrayList<>();
+        for (Event event : events) eventModels.add(map.event(event));
+        return eventModels;
     }
 
     @Override

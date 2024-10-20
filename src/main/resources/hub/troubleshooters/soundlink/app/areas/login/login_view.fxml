@@ -43,13 +43,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.login.LoginController">
+<VBox prefHeight="400.0" prefWidth="640.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.login.LoginController">
     <children>
         <!-- Header bar with SOUNDLINK name at the top -->
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="800.0" style="-fx-background-color: #fa8072;">
             <children>
-                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;" text="SOUNDLINK" />
-                <Region HBox.hgrow="ALWAYS" />
+                <Label style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;"
+                       text="SOUNDLINK"/>
+                <Region HBox.hgrow="ALWAYS"/>
             </children>
         </HBox>
 
@@ -57,16 +59,22 @@
         <BorderPane prefHeight="393.0" prefWidth="600.0">
             <top>
                 <!-- Title below header -->
-                <Label alignment="CENTER" style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;" text="Welcome to SoundLink" BorderPane.alignment="CENTER" />
+                <Label alignment="CENTER" style="-fx-text-fill: #fa8072; -fx-font-size: 28px; -fx-font-weight: bold;"
+                       text="Welcome to SoundLink" BorderPane.alignment="CENTER"/>
             </top>
 
             <!-- Center: Login form, username, password, and buttons all in one VBox -->
             <center>
-                <VBox alignment="CENTER" prefHeight="285.0" prefWidth="416.0" spacing="10.0" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER" prefHeight="285.0" prefWidth="416.0" spacing="10.0"
+                      BorderPane.alignment="CENTER">
                     <children>
                         <!-- Username and Password fields -->
-                        <TextField fx:id="usernameInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="283.0" promptText="Username" style="-fx-background-color: white; -fx-border-color: lightgray;" />
-                        <PasswordField fx:id="passwordInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0" prefWidth="283.0" promptText="Password" style="-fx-background-color: white; -fx-border-color: lightgray;" />
+                        <TextField fx:id="usernameInput" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="32.0"
+                                   prefWidth="283.0" promptText="Username"
+                                   style="-fx-background-color: white; -fx-border-color: lightgray;"/>
+                        <PasswordField fx:id="passwordInput" maxHeight="-Infinity" maxWidth="-Infinity"
+                                       prefHeight="32.0" prefWidth="283.0" promptText="Password"
+                                       style="-fx-background-color: white; -fx-border-color: lightgray;"/>
                     </children>
                 </VBox>
             </center>
@@ -77,21 +85,24 @@
                             <children>
                                 <ButtonBar prefHeight="40.0" prefWidth="161.0">
                                     <buttons>
-                                        <Button mnemonicParsing="false" onAction="#onLoginButtonClick" styleClass="success" text="Login" />
-                                        <Button mnemonicParsing="false" onAction="#onRegisterButtonClick" text="Register" />
+                                        <Button mnemonicParsing="false" onAction="#onLoginButtonClick"
+                                                styleClass="success" text="Login"/>
+                                        <Button mnemonicParsing="false" onAction="#onRegisterButtonClick"
+                                                text="Register"/>
                                     </buttons>
                                 </ButtonBar>
                             </children>
                             <VBox.margin>
-                                <Insets bottom="50.0" top="20.0" />
+                                <Insets bottom="50.0" top="20.0"/>
                             </VBox.margin>
                         </HBox>
-                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0" prefWidth="600.0" text="" textAlignment="CENTER" textFill="RED" />
+                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0"
+                               prefWidth="600.0" text="" textAlignment="CENTER" textFill="RED"/>
                     </children>
                 </VBox>
             </bottom>
             <VBox.margin>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </VBox.margin>
         </BorderPane>
     </children>

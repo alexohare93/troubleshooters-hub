@@ -11,4 +11,5 @@ public class Routes {
     public static final String COMMUNITY_DETAILS = "areas/communities/community_details_view.fxml";
     public static final String PROFILE = "areas/user/user_profile_view.fxml";
     public static final String ADMIN =  "areas/admin/admin_approval_page.fxml";
+    public static final String COMMUNITY_FEED = "areas/communities/community_feed_view.fxml";
 }

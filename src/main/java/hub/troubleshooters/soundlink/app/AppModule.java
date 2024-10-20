@@ -51,9 +51,13 @@ public class AppModule extends AbstractModule {
         bind(UserProfileService.class).to(UserProfileServiceImpl.class).in(Singleton.class);
         bind(ApprovalService.class).to(ApprovalServiceImpl.class).in(Singleton.class);
 
+        // bind UserDataStore as a singleton
+        bind(UserDataStore.class).in(Singleton.class);
+
         // data factories
         bind(UserFactory.class).in(Singleton.class);
         bind(CommunityFactory.class).in(Singleton.class);
+        bind(CommunityPostFactory.class).in(Singleton.class);
         bind(CommunityMemberFactory.class).in(Singleton.class);
         bind(ImageFactory.class).in(Singleton.class);
         bind(UserProfileFactory.class).in(Singleton.class);
@@ -77,3 +81,4 @@ public class AppModule extends AbstractModule {
         return new SQLiteDatabaseConnection(connectionString);
     }
 }
+
