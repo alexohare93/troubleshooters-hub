@@ -144,7 +144,7 @@ public class SearchEventController {
         Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
         Label dateLabel = new Label("Date: " + event.getScheduled().toString());
-        Label capacityLabel = new Label("Capacity: " + event.getCapacity());
+        Label capacityLabel = new Label("Capacity: " + (event.getCapacity() == Integer.MAX_VALUE ? "unlimited" : event.getCapacity()));
         Button detailsButton = new Button("Details");
         detailsButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
 
