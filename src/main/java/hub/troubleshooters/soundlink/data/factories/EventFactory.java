@@ -190,4 +190,32 @@ public class EventFactory extends ModelFactory<Event> {
 	            return publicEvents;
 	        });
 	    }
+
+		/**
+		 * Finds all events within the provided community
+		 * @param communityId The communities id
+		 * @return A list of the communities events
+		 * @throws SQLException If a database error occurs
+		 **/
+		public List<Event> findCommunityEvents(int communityId) throws SQLException {
+				final String sql = "SELECT * FROM Events WHERE CommunityId = ?";
+				return connection.executeQuery(sql, statement -> statement.setInt(1, communityId), executor -> {
+					List<Event> communityEvents = new ArrayList<>();
+					while (executor.next()) {
+						var bannerId = executor.getInt("BannerImageId");
+						communityEvents.add(new Event(
+								executor.getInt("Id"),
+								executor.getInt("CommunityId"),
+								executor.getString("Name"),
+								executor.getString("Description"),
+								executor.getString("Venue"),
+								executor.getInt("Capacity"),
+								executor.getDate("Scheduled"),
+								executor.getDate("Created"),
+								bannerId == 0 ? null : bannerId
+						));
+					}
+					return communityEvents;
+				});
+		}
 	}

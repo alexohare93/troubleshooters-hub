@@ -49,4 +49,10 @@
             </Button>
         </children>
     </HBox>
+    <Button fx:id="feedButton" mnemonicParsing="false" text="Go to Feed">
+        <styleClass>
+            <String fx:value="btn" />
+            <String fx:value="btn-primary" />
+        </styleClass>
+    </Button>
 </VBox>
