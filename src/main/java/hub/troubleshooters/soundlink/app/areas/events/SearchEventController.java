@@ -134,10 +134,10 @@ public class SearchEventController {
         if (bannerImageOpt.isPresent()) {
             var bannerImage = bannerImageOpt.get();
             var path = imageUploaderService.getFullProtocolPath(bannerImage);
-            imageView.setImage(new Image(path));
+            imageView.setImage(new Image(path, 250, 100, false, false, true));
         } else {
             var file = imageUploaderService.getSampleBannerImageFile(eventModel.id());
-            imageView.setImage(new Image(imageUploaderService.getFullProtocolPath(file)));
+            imageView.setImage(new Image(imageUploaderService.getFullProtocolPath(file), 250, 100, false, false, true));
         }
 
         Label nameLabel = new Label(event.getName());
