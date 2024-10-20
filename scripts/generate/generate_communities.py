@@ -139,5 +139,7 @@ output_path = "../mock_data/communities.sql"
 sql = "INSERT INTO Communities (Name, Genre, Description) VALUES ('{name}', '{genre}', '{description}');\n"
 
 with open(output_path, mode="w", newline="", encoding="utf-8") as file:
+    file.write("BEGIN TRANSACTION;\n")
     for d in data:
         file.write(sql.format(name=d[0], genre=d[1], description=d[2]))
+    file.write("COMMIT;")
