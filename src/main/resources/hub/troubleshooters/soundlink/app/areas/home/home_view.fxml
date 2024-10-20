@@ -44,7 +44,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
+<AnchorPane prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #f8f9fa, #e9ecef);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.home.HomeController">
     <children>
         <VBox alignment="CENTER" layoutX="50.0" layoutY="20.0" spacing="30.0" AnchorPane.topAnchor="20.0">
             <!-- Welcome Message -->
@@ -90,9 +90,11 @@
         </VBox>
 
         <!-- Footer Section -->
-        <VBox alignment="CENTER" prefWidth="800.0" spacing="5.0" AnchorPane.bottomAnchor="0.0">
-            <Label style="-fx-font-size: 14px; -fx-text-fill: gray;" text="Over 5,000 music lovers have joined us!" />
-            <Label style="-fx-font-size: 12px; -fx-text-fill: gray;" text="© 2024 SoundLink. All rights reserved." />
+        <VBox alignment="CENTER" prefWidth="800.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" style="-fx-alignment: center;">
+            <Label style="-fx-font-size: 15px; -fx-text-fill: gray;" text="Over 5,000 music lovers have joined us!" />
+            <Label style="-fx-font-size: 15px; -fx-text-fill: gray; -fx-alignment: center;" text="© 2024 SoundLink. All rights reserved." />
         </VBox>
     </children>
 </AnchorPane>
+
+

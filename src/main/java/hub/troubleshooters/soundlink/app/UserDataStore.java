@@ -10,20 +10,9 @@ public class UserDataStore {
     private final List<String> userEvents = new ArrayList<>(); // Events attended or created by the user
     private final List<String> userCommunities = new ArrayList<>(); // Communities the user is part of
 
-    // Singleton instance
-    private static UserDataStore instance;
-
-    // Private constructor to enforce Singleton pattern
-    private UserDataStore() {
+    // Public constructor (no longer Singleton)
+    public UserDataStore() {
         // Initialize with default or sample data if necessary
-    }
-
-    // Static method to get the singleton instance
-    public static UserDataStore getInstance() {
-        if (instance == null) {
-            instance = new UserDataStore();
-        }
-        return instance;
     }
 
     // Method to add a post to the user's data
