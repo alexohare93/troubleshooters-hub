@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<!-- Main layout of the approval page -->
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.admin.AdminController">
+
+    <!-- Title -->
+    <Label text="Pending Join Requests" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #fa8072;" />
+
+    <!-- ListView to display pending requests -->
+    <ListView fx:id="approvalRequestsList" prefHeight="400.0" prefWidth="600.0">
+        <!-- Each item in this ListView will represent a pending request -->
+    </ListView>
+
+    <!-- Approval and rejection buttons for the selected request -->
+    <HBox spacing="10.0" alignment="CENTER">
+        <Button fx:id="approveButton" text="Approve" onAction="#onApproveButtonClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 16px;" />
+        <Button fx:id="rejectButton" text="Reject" onAction="#onRejectButtonClick" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 16px;" />
+    </HBox>
+
+    <!-- Notification label for success or error messages -->
+    <Label fx:id="statusLabel" text="Action Status" style="-fx-font-size: 16px; -fx-text-fill: green;" visible="false" />
+
+</VBox>

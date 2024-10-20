@@ -40,7 +40,7 @@ public abstract class ModelFactory<T> {
      * @param id the ID of the model to delete
      * @throws SQLException if an error occurs while deleting the model
      */
-    void delete(int id) throws SQLException {
+    public void delete(int id) throws SQLException {
         final var sql = "DELETE FROM " + tableName + " WHERE id = " + id;
         connection.executeUpdate(sql, statement -> {
             statement.setInt(1, id);

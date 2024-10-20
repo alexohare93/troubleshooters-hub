@@ -9,6 +9,7 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.CheckBox?>
 <?import hub.troubleshooters.soundlink.app.components.IntegerTextField?>
 
 <!-- Main content for community creation form -->
@@ -50,6 +51,10 @@
               </HBox>
           </VBox>
 
+          <!-- Private Community Checkbox -->
+          <VBox alignment="CENTER_LEFT" spacing="10.0">
+              <CheckBox fx:id="privateCommunityCheckBox" text="Private Community" />
+          </VBox>
                             <!-- Create Community Button -->
           <Button fx:id="createButton" mnemonicParsing="false" onAction="#onCreateButtonClick" style="-fx-background-color: #fa8072; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20;" text="Create Community" />
       </children>

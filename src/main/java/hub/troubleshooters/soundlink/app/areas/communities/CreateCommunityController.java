@@ -33,6 +33,7 @@ public class CreateCommunityController {
 
     @FXML private Label errorLabel;
     @FXML private Tooltip errorTooltip;
+    @FXML private CheckBox privateCommunityCheckBox;
 
     @Inject
     public CreateCommunityController(IdentityService identityService, EventService eventService, SceneManager sceneManager, CommunityService communityService) {
@@ -72,9 +73,10 @@ public class CreateCommunityController {
         var name = nameTextField.getText();
         var description = descriptionTextArea.getText();
         var genre = genreTextField.getText();
+        boolean isPrivate = privateCommunityCheckBox.isSelected();
 
         // set id to 0 because id is auto-incremented by the db, so don't need to provide one when inserting a new record
-        var createCommunityModel = new CreateCommunityModel(0, name, description, genre, null, bannerImageFile);
+        var createCommunityModel = new CreateCommunityModel(0, name, description, genre, null, bannerImageFile, isPrivate);
 
         // send to community service to validate and save
         var result = communityService.createCommunity(createCommunityModel);

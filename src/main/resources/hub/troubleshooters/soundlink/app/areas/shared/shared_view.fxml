@@ -47,7 +47,12 @@
                     </MenuButton>
 
                     <!-- Notifications Icon -->
-                    <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="icon-button" text="🔔" />
+                    <Button mnemonicParsing="false"
+                            style="-fx-background-color: transparent;"
+                            styleClass="icon-button"
+                            text="🔔"
+                            onAction="#onNotificationButtonClick" />
+
 
                     <!-- Profile/User Icon -->
                     <MenuButton fx:id="usernameMenuButton" style="-fx-background-color: transparent;" styleClass="icon-button" text="User">

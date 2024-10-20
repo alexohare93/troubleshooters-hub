@@ -65,20 +65,20 @@ public class CommunityServiceImpl implements CommunityService {
 			return result;
 		}
 
-		try {
-			if (model.bannerImage() != null) {
-				var img = imageUploaderService.upload(model.bannerImage());
-				Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId());
-				communityFactory.create(community);
-			} else {
-				Community community = new Community(0, model.name(), model.description(), model.genre(), null, null);
-				communityFactory.create(community);
-			}
-		} catch (SQLException | IOException e) {
-			return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
-		}
-		return new ValidationResult();
-	}
+        try {
+            if (model.bannerImage() != null) {
+                var img = imageUploaderService.upload(model.bannerImage());
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId(), model.isPrivate());
+                communityFactory.create(community);
+            } else {
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, null, model.isPrivate());
+                communityFactory.create(community);
+            }
+        } catch (SQLException | IOException e) {
+            return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
+        }
+        return new ValidationResult();
+    }
 
 	@Override
 	public List<Community> searchCommunities(String searchText) {
@@ -163,7 +163,8 @@ public class CommunityServiceImpl implements CommunityService {
                     community.description(),
                     community.genre(),
                     community.created(),
-                    bannerImageId
+                    bannerImageId,
+					community.isPrivate()
             );
 
             communityFactory.save(updatedCommunity);
@@ -191,7 +192,7 @@ public class CommunityServiceImpl implements CommunityService {
             if (communityOpt.isEmpty()) {
                 throw new SQLException("Community with ID " + communityId + " not found.");
             }
-            communityFactory.delete(communityOpt.get());
+            communityFactory.delete(communityOpt.get().getId());
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting community", e);
             throw e;
