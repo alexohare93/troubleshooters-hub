@@ -12,7 +12,6 @@
 
 <AnchorPane prefHeight="701.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom right, #f7f7f7, #e2e2e2);" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.profile.UserProfileController">
     <children>
-
         <!-- Main Container for Content -->
         <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
 
@@ -29,12 +28,12 @@
                             <Circle centerX="60" centerY="60" radius="60" />
                         </clip>
                     </ImageView>
-               <HBox>
-                  <children>
-                          <Button onAction="#changeImage" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 3);" text="Change Image" />
-                      <Button fx:id="clearImageButton" mnemonicParsing="false" onAction="#onClearImageButtonClick" styleClass="transparent" text="✖" />
-                  </children>
-               </HBox>
+                    <HBox>
+                        <children>
+                            <Button onAction="#changeImage" style="-fx-background-color: #FF6F61; -fx-text-fill: white; -fx-background-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 5, 0, 0, 3);" text="Change Image" />
+                            <Button fx:id="clearImageButton" mnemonicParsing="false" onAction="#onClearImageButtonClick" styleClass="transparent" text="✖" />
+                        </children>
+                    </HBox>
                 </VBox>
 
                 <VBox alignment="CENTER" spacing="15.0">
@@ -52,27 +51,27 @@
                 </VBox>
             </HBox>
 
-            <!-- User's Posts, Events, and Communities Section -->
+            <!-- User's Events and Communities Section -->
             <VBox alignment="CENTER" prefWidth="400.0" spacing="25.0" style="-fx-background-color: #ffffff; -fx-padding: 30; -fx-background-radius: 15px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 10, 0, 0, 5);">
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #FF6F61;" text="My Posts" />
-                <Label fx:id="postsLabel" style="-fx-font-size: 16px; -fx-text-fill: #333;" text="No posts available." />
-
                 <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #FF6F61;" text="My Events" />
                 <Label fx:id="eventsLabel" style="-fx-font-size: 16px; -fx-text-fill: #333;" text="No events available." />
 
                 <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #FF6F61;" text="My Communities" />
                 <Label fx:id="communitiesLabel" style="-fx-font-size: 16px; -fx-text-fill: #333;" text="No communities available." />
             </VBox>
-         <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save Changes">
-            <styleClass>
-                <String fx:value="btn" />
-                <String fx:value="btn-primary" />
-            </styleClass>
-         </Button>
+
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Save Changes">
+                <styleClass>
+                    <String fx:value="btn" />
+                    <String fx:value="btn-primary" />
+                </styleClass>
+            </Button>
 
             <!-- Footer -->
             <Label alignment="CENTER" style="-fx-text-fill: #999999;" text="© 2024 SoundLink. All rights reserved." />
-
         </VBox>
     </children>
 </AnchorPane>
+
+
+
