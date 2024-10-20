@@ -59,12 +59,8 @@
                 </VBox>
             </Pane>
 
-            <!-- Latest Events Section -->
-            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-background-radius: 10; -fx-padding: 20;">
+            <VBox fx:id="upcomingEventsContainer" alignment="CENTER" prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; -fx-background-radius: 10; -fx-padding: 20;">
                 <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Upcoming Events" />
-                <Label style="-fx-font-size: 14px; -fx-text-fill: #555;" text="Rock Music Fest - 19 December 2024" />
-                <Label style="-fx-font-size: 14px; -fx-text-fill: #555;" text="Indie Night at The Club - 15 January 2025" />
-                <Label style="-fx-font-size: 14px; -fx-text-fill: #555;" text="Jazz Under the Stars - 10 February 2025" />
             </VBox>
 
             <!-- Experience Cards Section -->
