@@ -56,8 +56,7 @@ public class SearchCommunityController {
     @FXML
     public void initialize() {
         try {
-            // no communities fetched when first initialized, so it follows the same functionality as search event controller
-            communityListContainer.getChildren().clear();
+            fetchCommunities();
         } catch (Exception e) {
             System.err.println("Error populating community list: " + e.getMessage());
         }
