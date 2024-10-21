@@ -182,7 +182,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> communityMember = communityMemberFactory.get(communityId, userId);
-        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(1)); // 0 = read-only access
+        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(0)); // 0 = read-only access
     }
 
     @Override
