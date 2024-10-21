@@ -49,5 +49,8 @@ public interface EventService {
 
     boolean isAdmin(int userId, int eventId) throws SQLException;
 
+    int getBookingCountForEvent(int eventId) throws SQLException;
+
+    String getDisplayNameById(int userId) throws SQLException;
 }
 

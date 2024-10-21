@@ -133,7 +133,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> listUpcomingEvents(int userId) throws SQLException {
 
-
         List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(userId);
 
         List<Event> publicEvents = eventFactory.findPublicCommunityEvents(userId);
@@ -246,6 +245,16 @@ public class EventServiceImpl implements EventService {
         } catch (SQLException e) {
             throw e;
         }
+    }
+
+    @Override
+    public int getBookingCountForEvent(int eventId) throws SQLException {
+        return bookingFactory.countBookingsForEvent(eventId);
+    }
+
+    @Override
+    public String getDisplayNameById(int userId) throws SQLException {
+        return bookingFactory.getDisplayNameById(userId);
     }
 }
 
