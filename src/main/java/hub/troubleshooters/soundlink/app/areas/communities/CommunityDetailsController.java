@@ -213,7 +213,8 @@ public class CommunityDetailsController {
                 descriptionTextArea.getText(),
                 genreLabel.getText(),
                 community.created(),
-                community.bannerImage()
+                community.bannerImage(),
+                community.isPrivate()
         );
 
         try {

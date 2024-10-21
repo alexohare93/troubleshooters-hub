@@ -44,8 +44,6 @@ public class CommunityFeedController {
 	private List<CommunityPostModel> posts;
 	private static final Logger LOGGER = Logger.getLogger(CommunityFeedController.class.getName());
 
-	private final Insets cardMargins = new Insets(0, 10, 0, 10);
-
 	@Inject
 	public CommunityFeedController(CommunityService communityService, EventService eventService, ImageUploaderService imageUploaderService,
 								   IdentityService identityService, SceneManager sceneManager) {
@@ -118,7 +116,6 @@ public class CommunityFeedController {
 
 		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
 				"-fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-		VBox.setMargin(vbox, cardMargins);
 		vbox.setAlignment(Pos.TOP_LEFT);
 		vbox.setSpacing(10.0);
 		vbox.setMinWidth(250);
@@ -153,7 +150,6 @@ public class CommunityFeedController {
 
 		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
 				"-fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-		VBox.setMargin(vbox, cardMargins);
 		vbox.setAlignment(Pos.TOP_LEFT);
 		vbox.setSpacing(10.0);
 		vbox.setMinWidth(250);

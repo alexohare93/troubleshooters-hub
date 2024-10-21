@@ -28,6 +28,7 @@ CREATE TABLE Communities (
     Description TEXT NOT NULL,
     Created DATETIME DEFAULT CURRENT_TIMESTAMP,
     BannerImageId INTEGER,
+    IsPrivate INTEGER NOT NULL DEFAULT 0,  -- New isPrivate column to store boolean (0 = false/public, 1 = true/private)
     FOREIGN KEY (BannerImageId) REFERENCES Images(Id) ON DELETE SET NULL
 );
 

@@ -54,6 +54,7 @@ public class EventDetailsController {
     @FXML private Label creatorLabel;
     @FXML private Label createdDate;
 
+
     private final EventService eventService;
     private final ImageUploaderService imageUploaderService;
     private final IdentityService identityService;
@@ -100,6 +101,7 @@ public class EventDetailsController {
         createdDate.setText(formattedCreatedDate);
 
         capacityTextField.setText(String.valueOf(event.capacity()));
+
         commentTextArea.clear();
 
         try {

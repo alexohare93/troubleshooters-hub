@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefWidth="500.0" spacing="20.0"
-      style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;"
+      style="-fx-background-color: white; -fx-padding: 40 40 40 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;"
       xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="hub.troubleshooters.soundlink.app.areas.communities.CommunityDetailsController">
 
@@ -32,16 +32,15 @@
     <!-- Community Description -->
     <TextArea fx:id="descriptionTextArea" editable="false" />
 
-    <!-- Sign Up and Cancel Buttons -->
     <HBox spacing="10.0">
         <children>
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onJoinButtonClick" text="Sign Up">
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onJoinButtonClick" text="Join Community">
                 <styleClass>
                     <String fx:value="btn" />
                     <String fx:value="btn-primary" />
                 </styleClass>
             </Button>
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel Booking">
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Leave Community">
                 <styleClass>
                     <String fx:value="btn" />
                     <String fx:value="btn-secondary" />
@@ -74,4 +73,5 @@
         </children>
     </HBox>
 </VBox>
+
 

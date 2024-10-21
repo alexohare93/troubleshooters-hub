@@ -95,6 +95,10 @@ public class SharedController implements NavigationListener {
 //        sceneManager.navigateForward();
 //    }
 
+    @FXML
+    protected void onNotificationButtonClick() {
+        sceneManager.navigate(Routes.ADMIN);
+    }
     @Override
     public void onNavigationStateChange() {
         updateNavigationState();

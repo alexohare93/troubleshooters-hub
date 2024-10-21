@@ -5,7 +5,8 @@ module hub.troubleshooters.soundlink {
     requires bcrypt;
     requires atlantafx.base;
     requires jsr305;
-    requires java.desktop;
+    requires org.mockito;
+
 
 
     opens hub.troubleshooters.soundlink.app to javafx.fxml;
@@ -31,7 +32,15 @@ module hub.troubleshooters.soundlink {
     exports hub.troubleshooters.soundlink.core.communities.validation to com.google.guice, javafx.fxml;
     exports hub.troubleshooters.soundlink.core.events.services to com.google.guice, javafx.fxml;
     exports hub.troubleshooters.soundlink.core.communities.services to com.google.guice, javafx.fxml;
-    exports hub.troubleshooters.soundlink.core.communities.models;
+    exports hub.troubleshooters.soundlink.app.areas.notification to com.google.guice, javafx.fxml;
+
+    exports hub.troubleshooters.soundlink.core.admin.services to com.google.guice, javafx.fxml;
+    opens hub.troubleshooters.soundlink.core.communities.services to com.google.guice, javafx.fxml;
+    opens hub.troubleshooters.soundlink.app.areas.admin to com.google.guice, javafx.fxml;
+    exports hub.troubleshooters.soundlink.core.communities.models to com.google.guice, javafx.fxml;
+    exports hub.troubleshooters.soundlink.app.areas.admin to com.google.guice, javafx.fxml;
+
+    opens hub.troubleshooters.soundlink.core.communities.models;
     exports hub.troubleshooters.soundlink.core.events.models;
     exports hub.troubleshooters.soundlink.core.profile.models;
     exports hub.troubleshooters.soundlink.app.components to javafx.fxml;

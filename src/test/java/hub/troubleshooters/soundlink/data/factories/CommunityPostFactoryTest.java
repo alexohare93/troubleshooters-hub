@@ -41,7 +41,7 @@ public class CommunityPostFactoryTest {
 
 		communityId = 1;
 		// Initialize a Community object with mock data
-		community = new Community(communityId, "name", "description", "genre", new Date(), null);
+		community = new Community(communityId, "name", "description", "genre", new Date(), null, false);
 	}
 
 	@Test
