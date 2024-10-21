@@ -48,8 +48,7 @@ public class EventDetailsController {
     @FXML private Button saveButton;
     @FXML private Button deleteButton;
     @FXML private HBox adminButtonBox;
-    @FXML
-    private TextField capacityTextField;
+    @FXML private TextField capacityTextField;
 
     private final EventService eventService;
     private final ImageUploaderService imageUploaderService;
@@ -90,6 +89,7 @@ public class EventDetailsController {
         communityLabel.setText("This event is shared with the " + event.community().getName() + " community.");
         venueLabel.setText(event.venue());
         capacityTextField.setText(String.valueOf(event.capacity()));
+
         commentTextArea.clear();
         updateBookButtons();
         updateAdminButtonsVisibility();

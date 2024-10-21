@@ -11,14 +11,16 @@ public class Community {
 	private String description;
 	private final Date created;
 	private Integer bannerImageId;
+	private boolean isPrivate;
 
-	public Community(int id, String name, String description, String genre, Date created, Integer bannerImageId) {
+	public Community(int id, String name, String description, String genre, Date created, Integer bannerImageId, boolean isPrivate) {
 		this.name = name;
 		this.created = created;
 		this.description = description;
 		this.genre = genre;
 		this.id = id;
 		this.bannerImageId = bannerImageId;
+		this.isPrivate = isPrivate;
 	}
 
 	public int getId() { return id; }
@@ -41,5 +43,13 @@ public class Community {
 
 	public void setBannerImageId(Integer bannerImageId) {
 		this.bannerImageId = bannerImageId;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 }

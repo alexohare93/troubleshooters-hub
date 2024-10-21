@@ -65,39 +65,43 @@ public class CommunityServiceImpl implements CommunityService {
 			return result;
 		}
 
-		try {
-			if (model.bannerImage() != null) {
-				var img = imageUploaderService.upload(model.bannerImage());
-				Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId());
-				communityFactory.create(community);
-			} else {
-				Community community = new Community(0, model.name(), model.description(), model.genre(), null, null);
-				communityFactory.create(community);
-			}
-		} catch (SQLException | IOException e) {
-			return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
-		}
-		return new ValidationResult();
-	}
+        try {
+            if (model.bannerImage() != null) {
+                var img = imageUploaderService.upload(model.bannerImage());
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId(), model.isPrivate());
+                communityFactory.create(community);
+                signUpForCommunity(model.id(), community.getId());
+            } else {
+                Community community = new Community(0, model.name(), model.description(), model.genre(), null, null, model.isPrivate());
+                communityFactory.create(community);
+                signUpForCommunity(model.id(), community.getId());
+            }
+        } catch (SQLException | IOException e) {
+            return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
+        }
+        return new ValidationResult();
+    }
 
-	@Override
-	public List<Community> searchCommunities(String searchText) {
-		try {
-			List<Community> communities = communityFactory.getAllCommunities();
+    @Override
+    public List<Community> searchCommunities(String searchText, boolean showOnlyPrivate) {
+        try {
+            List<Community> communities = communityFactory.getAllCommunities();
 
-			// Filter based on name, description, or genre
-			return communities.stream()
-					.filter(community -> searchText == null || searchText.isEmpty() ||
-							community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
-							community.getDescription().toLowerCase().contains(searchText.toLowerCase()) ||
-							community.getGenre().toLowerCase().contains(searchText.toLowerCase()))
-					.collect(Collectors.toList());
+            // Filter based on name, description, genre, and privacy status
+            return communities.stream()
+                    .filter(community -> (searchText == null || searchText.isEmpty() ||
+                            community.getName().toLowerCase().contains(searchText.toLowerCase()) ||
+                            community.getDescription().toLowerCase().contains(searchText.toLowerCase()) ||
+                            community.getGenre().toLowerCase().contains(searchText.toLowerCase())))
+                    .filter(community -> !showOnlyPrivate || community.isPrivate())
+                    .collect(Collectors.toList());
 
-		} catch (SQLException e) {
-			LOGGER.log(Level.SEVERE, "Error searching communities", e);
-			return List.of();
-		}
-	}
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error searching communities", e);
+            return List.of();
+        }
+    }
+
 
 	@Override
 	public boolean signUpForCommunity(int userId, int communityId) throws SQLException {
@@ -163,7 +167,8 @@ public class CommunityServiceImpl implements CommunityService {
                     community.description(),
                     community.genre(),
                     community.created(),
-                    bannerImageId
+                    bannerImageId,
+					community.isPrivate()
             );
 
             communityFactory.save(updatedCommunity);
@@ -177,7 +182,7 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException {
         Optional<CommunityMember> communityMember = communityMemberFactory.get(communityId, userId);
-        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(1)); // 0 = read-only access
+        return communityMember.map(CommunityMember::getPermission).or(() -> Optional.of(0)); // 0 = read-only access
     }
 
     @Override
@@ -191,7 +196,7 @@ public class CommunityServiceImpl implements CommunityService {
             if (communityOpt.isEmpty()) {
                 throw new SQLException("Community with ID " + communityId + " not found.");
             }
-            communityFactory.delete(communityOpt.get());
+            communityFactory.delete(communityOpt.get().getId());
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "Error deleting community", e);
             throw e;
