@@ -8,6 +8,7 @@ module hub.troubleshooters.soundlink {
     requires org.mockito;
 
 
+
     opens hub.troubleshooters.soundlink.app to javafx.fxml;
 
     exports hub.troubleshooters.soundlink.app;

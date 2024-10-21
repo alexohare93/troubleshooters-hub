@@ -2,43 +2,53 @@ package hub.troubleshooters.soundlink.app.areas.events;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.areas.Routes;
+import hub.troubleshooters.soundlink.app.areas.communities.CommunityDetailsController;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
 import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
+import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.core.events.models.EventModel;
 import hub.troubleshooters.soundlink.core.events.services.EventService;
 import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.profile.models.UserProfileModel;
 import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
 import hub.troubleshooters.soundlink.data.models.EventComment;
+import hub.troubleshooters.soundlink.data.models.Community;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.InvalidPathException;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 
 public class EventDetailsController {
     @FXML private ImageView bannerImageView;
     @FXML private Label nameLabel;
     @FXML private TextArea descriptionTextArea;
     @FXML private Label communityLabel;
-    @FXML private Label venueLabel;
-    @FXML private Label capacityLabel;
+    @FXML private TextField venueLabel;
     @FXML private VBox commentsVbox;
     @FXML private TextArea commentTextArea;
+    @FXML private Button signUpButton;
+    @FXML private Button cancelButton;
+    @FXML private Button saveButton;
+    @FXML private Button deleteButton;
+    @FXML private HBox adminButtonBox;
+    @FXML private TextField capacityTextField;
 
     private final EventService eventService;
     private final ImageUploaderService imageUploaderService;
@@ -78,8 +88,11 @@ public class EventDetailsController {
         descriptionTextArea.setText(event.description());
         communityLabel.setText("This event is shared with the " + event.community().getName() + " community.");
         venueLabel.setText(event.venue());
-        capacityLabel.setText("" + event.capacity());
+        capacityTextField.setText(String.valueOf(event.capacity()));
+
         commentTextArea.clear();
+        updateBookButtons();
+        updateAdminButtonsVisibility();
 
         // set banner image
         try {
@@ -113,7 +126,20 @@ public class EventDetailsController {
         } catch (SQLException e) {
             // TODO: error handling
         }
+    }
 
+    private void updateAdminButtonsVisibility() {
+        try {
+            int userId = identityService.getUserContext().getUser().getId();
+            boolean isAdmin = eventService.isAdmin(userId, event.id());
+            adminButtonBox.setVisible(isAdmin);
+            adminButtonBox.setManaged(isAdmin);
+            descriptionTextArea.setEditable(isAdmin);
+            capacityTextField.setEditable(isAdmin);
+            venueLabel.setEditable(isAdmin);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Unable to determine admin status. Please try again.");
+        }
     }
 
     private Node createCommentCard(EventComment comment) {
@@ -182,12 +208,31 @@ public class EventDetailsController {
             var result = eventService.bookEvent(event.id(), identityService.getUserContext().getUser().getId());
             if (result.isSuccess()) {
                 sceneManager.alert(new Alert(Alert.AlertType.INFORMATION, "Booked into event successfully"));
+                toggleJoiningButtons(true);
             } else {
+                toggleJoiningButtons(true);
                 sceneManager.alert(new Alert(Alert.AlertType.ERROR, "You are already booked into this event"));
             }
         } catch (SQLException e) {
             sceneManager.alert(new Alert(Alert.AlertType.ERROR, "Something went wrong booking into this event. Please contact SoundLink Support."));
         }
+    }
+
+    @FXML
+    protected void onCancelButtonClick() {
+        if (event == null) {
+            return;
+        }
+        handleBookingOperation(() -> {
+                    int userId = identityService.getUserContext().getUser().getId();
+                    boolean cancelled = eventService.cancelBooking(userId,event.id());
+                    if (cancelled) {
+                        toggleJoiningButtons(false);
+                    }
+                    return cancelled;
+                },
+                "Successfully removed from the event",
+                "Unable to be removed from the event. Please try again.");
     }
 
     @FXML
@@ -211,5 +256,115 @@ public class EventDetailsController {
 
         // refresh current view
         loadEventDetails(event.id());
+    }
+
+    private void toggleJoiningButtons(boolean isJoined) {
+        signUpButton.setVisible(!isJoined);
+        signUpButton.setManaged(!isJoined);
+
+        cancelButton.setVisible(isJoined);
+        cancelButton.setManaged(isJoined);
+    }
+
+    private void handleBookingOperation(BookOperation operation, String successMessage, String failureMessage) {
+        try {
+            boolean result = operation.execute();
+            if (result) {
+                showAlert(Alert.AlertType.INFORMATION, successMessage);
+            } else {
+                showAlert(Alert.AlertType.ERROR, failureMessage);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            showAlert(Alert.AlertType.ERROR, "Something went wrong. Please contact SoundLink Support.");
+        }
+    }
+
+    @FunctionalInterface
+    private interface BookOperation {
+        boolean execute() throws SQLException;
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        sceneManager.alert(new Alert(alertType, message));
+    }
+
+    private void updateBookButtons() {
+        try {
+            int userId = identityService.getUserContext().getUser().getId();
+            boolean isJoined = eventService.isBooked(userId,event.id());
+            toggleJoiningButtons(isJoined);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Unable to update booking status. Please try again.");
+        }
+    }
+
+    @FXML
+    protected void onSaveChangesClick() {
+        if (event == null) {
+            showAlert(Alert.AlertType.ERROR, "No event selected to update.");
+            return;
+        }
+
+        if (nameLabel.getText().trim().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Event name cannot be empty.");
+            return;
+        }
+
+        // validate capacity
+        int capacity;
+        try {
+            String capacityText = capacityTextField.getText().trim();
+
+            if (capacityText.equalsIgnoreCase("SAMPLE CAPACITY")) {
+                showAlert(Alert.AlertType.ERROR, "Please enter a valid capacity.");
+                return;
+            }
+
+            capacity = Integer.parseInt(capacityText);
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid capacity value. Please enter a valid number.");
+            return;
+        }
+
+        Community community = event.community();
+
+        EventModel updatedEventToBeSaved = new EventModel(
+                event.id(),
+                nameLabel.getText(),
+                descriptionTextArea.getText(),
+                community,
+                venueLabel.getText(),
+                capacity,
+                event.scheduled(),
+                event.created(),
+                event.bannerImage()
+        );
+
+        try {
+            eventService.updateEvent(updatedEventToBeSaved);
+            showAlert(Alert.AlertType.INFORMATION, "Event details updated successfully.");
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Something went wrong while updating. Please try again.");
+        }
+    }
+
+
+    @FXML
+    protected void onDeleteEventClick() {
+        if (event == null) {
+            showAlert(Alert.AlertType.ERROR, "No event selected to delete.");
+            return;
+        }
+
+        int userId = identityService.getUserContext().getUser().getId();
+
+        try {
+            eventService.deleteEvent(event.id(), userId);
+            showAlert(Alert.AlertType.INFORMATION, "Event deleted successfully.");
+            sceneManager.navigateToSearchEventView();
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Something went wrong while deleting. Please try again.");
+        }
     }
 }

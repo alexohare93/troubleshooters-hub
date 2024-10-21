@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.core.Map;
 import hub.troubleshooters.soundlink.core.auth.Scope;
 import hub.troubleshooters.soundlink.core.auth.ScopeUtils;
+import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import hub.troubleshooters.soundlink.core.events.models.CreateEventModel;
 import hub.troubleshooters.soundlink.core.events.models.EventModel;
 import hub.troubleshooters.soundlink.core.events.validation.BookingAlreadyExistsException;
@@ -16,15 +17,17 @@ import hub.troubleshooters.soundlink.data.factories.EventCommentFactory;
 import hub.troubleshooters.soundlink.data.factories.EventFactory;
 import hub.troubleshooters.soundlink.data.factories.BookingFactory;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
-import hub.troubleshooters.soundlink.data.models.Event;
+import hub.troubleshooters.soundlink.data.models.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
-import hub.troubleshooters.soundlink.data.models.EventComment;
 
+import javax.sound.midi.SysexMessage;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.io.IOException;
@@ -97,39 +100,31 @@ public class EventServiceImpl implements EventService {
     }
     
     public List<Event> getUserCommunityEvents(int userId) throws SQLException {
-        // Implementation to fetch events where the user is a member
         return eventFactory.findUserCommunityEvents(userId);
     }
 
     @Override
     public List<Event> getPublicCommunityEvents(int userId) throws SQLException {
-        // Implementation to fetch public events where the user is not a member
         return eventFactory.findPublicCommunityEvents(userId);
     }
 
     @Override
     public List<Event> search(SearchEventModel searchModel) throws SQLException {
-        // Fetch all events from the database
+
         List<Event> allEvents = eventFactory.getAllEvents();
 
-        // Apply filtering logic in-memory
         return allEvents.stream()
                 .filter(event -> {
-                    // Combine text search for name, description, and venue
                     var text = searchModel.textSearch().toLowerCase();
                     return (
                             event.getName().toLowerCase().contains(text) ||
                             event.getDescription().toLowerCase().contains(text) ||
                             event.getVenue().toLowerCase().contains(text)
                     ) &&
-                            // Filter by 'fromDate' and 'toDate' range if provided
+
                             (searchModel.fromDate() == null || !event.getScheduled().before(searchModel.fromDate())) &&
                             (searchModel.toDate() == null || !event.getScheduled().after(searchModel.toDate())) &&
-
-                            // Filter by capacity if provided
                             (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
-
-                            // Filter by communityId if provided
                             (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId());
                 })
                 .collect(Collectors.toList());
@@ -138,13 +133,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> listUpcomingEvents(int userId) throws SQLException {
 
-        // Fetching user community events
+
         List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(userId);
 
-        // Fetching public events
         List<Event> publicEvents = eventFactory.findPublicCommunityEvents(userId);
 
-        // Combine both lists
         userCommunityEvents.addAll(publicEvents);
 
         return userCommunityEvents;
@@ -183,6 +176,76 @@ public class EventServiceImpl implements EventService {
     @Override
     public void comment(int eventId, int userId, String comment) throws SQLException {
         eventCommentFactory.create(eventId, userId, comment);
+    }
+
+    @Override
+    public boolean cancelBooking(int userId, int eventId) throws SQLException {
+        Optional<Booking> existingBooking = bookingFactory.get(eventId, userId);
+
+        if (existingBooking.isPresent()) {
+            try {
+                bookingFactory.delete(userId, eventId);
+                return true;
+            } catch (SQLException e) {
+                throw new SQLException("Error removing user from the booked Event.", e);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void updateEvent(EventModel event) throws SQLException {
+        try {
+            Integer bannerImageId = event.bannerImage().map(img -> img.getId()).orElse(null);
+
+            int communityId = event.community().getId();
+
+            Event updatedEvent = new Event(
+                    event.id(),
+                    communityId,
+                    event.name(),
+                    event.description(),
+                    event.venue(),
+                    event.capacity(),
+                    event.scheduled(),
+                    event.created(),
+                    bannerImageId
+            );
+            eventFactory.save(updatedEvent);
+
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public Optional<Integer> getUserPermissionLevel(int userId, int eventId) throws SQLException {
+        Optional<Booking> booking = bookingFactory.get(eventId, userId);
+        return booking.map(Booking::getPermission).or(() -> Optional.of(0)); // 0 is ready-only
+    }
+
+    @Override
+    public boolean isAdmin(int userId, int eventId) throws SQLException {
+        Optional<Integer> permissionLevel = getUserPermissionLevel(userId, eventId);
+        return permissionLevel.map(level -> level == 1).orElse(false);
+    }
+
+    @Override
+    public void deleteEvent(int eventId, int userId) throws SQLException {
+        if (!isAdmin(userId, eventId)) {
+            throw new SecurityException("Only admins can delete events.");
+        }
+        try {
+            Optional<Event> eventOpt = eventFactory.get(eventId);
+
+            if (eventOpt.isEmpty()) {
+                throw new SQLException("Event with ID " + eventId + " not found.");
+            }
+            eventFactory.delete(eventOpt.get());
+        } catch (SQLException e) {
+            throw e;
+        }
     }
 }
 

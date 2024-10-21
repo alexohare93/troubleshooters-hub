@@ -11,26 +11,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
 <VBox alignment="CENTER" prefWidth="500.0" spacing="20.0" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hub.troubleshooters.soundlink.app.areas.events.EventDetailsController">
    <ImageView fx:id="bannerImageView" pickOnBounds="true" preserveRatio="true">
       <viewport>
          <Rectangle2D height="200.0" width="500.0" />
       </viewport>
    </ImageView>
-    <Label fx:id="nameLabel" styleClass="h1" text="EVENT NAME PLACEHOLDER" />
-   <TextArea fx:id="descriptionTextArea" editable="false" text="EVENT DESCRIPTION PLACEHOLDER" />
+   <Label fx:id="nameLabel" styleClass="h1"/>
+   <TextArea fx:id="descriptionTextArea"/>
+
    <HBox spacing="10.0">
       <children>
          <Label fx:id="communityLabel" text="This event is shared with the PLACEHOLDER community." />
       </children>
-      <opaqueInsets>
-         <Insets />
-      </opaqueInsets>
-      <styleClass>
-         <String fx:value="alert" />
-         <String fx:value="alert-info" />
-      </styleClass>
    </HBox>
+
    <HBox spacing="10.0">
       <children>
          <Label text="Venue">
@@ -38,9 +34,10 @@
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-         <Label fx:id="venueLabel" text="SAMPLE VENUE" />
+         <TextField fx:id="venueLabel"/>
       </children>
    </HBox>
+
    <HBox spacing="10.0">
       <children>
          <Label text="Capacity">
@@ -48,16 +45,47 @@
                <Font name="System Bold" size="12.0" />
             </font>
          </Label>
-         <Label fx:id="capacityLabel" text="SAMPLE CAPACITY" />
+         <TextField fx:id="capacityTextField"/>
       </children>
    </HBox>
-   <Button mnemonicParsing="false" onAction="#onBookButtonClick" text="Book">
-      <styleClass>
-         <String fx:value="btn" />
-         <String fx:value="btn-primary" />
-      </styleClass>
-   </Button>
+
+   <!-- Sign Up and Cancel Buttons -->
+   <HBox spacing="10.0">
+      <children>
+         <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onBookButtonClick" text="Sign Up">
+            <styleClass>
+               <String fx:value="btn" />
+               <String fx:value="btn-primary" />
+            </styleClass>
+         </Button>
+         <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel Booking">
+            <styleClass>
+               <String fx:value="btn" />
+               <String fx:value="btn-secondary" />
+            </styleClass>
+         </Button>
+      </children>
+   </HBox>
+
+   <!-- Admin Buttons: Save and Delete -->
+   <HBox spacing="10.0" visible="false" fx:id="adminButtonBox">
+      <children>
+         <Button fx:id="saveButton" mnemonicParsing="false" onAction="#onSaveChangesClick" text="Save Changes">
+            <styleClass>
+               <String fx:value="btn" />
+               <String fx:value="btn-success" />
+            </styleClass>
+         </Button>
+         <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#onDeleteEventClick" text="Delete Event">
+            <styleClass>
+               <String fx:value="btn" />
+               <String fx:value="btn-danger" />
+            </styleClass>
+         </Button>
+      </children>
+   </HBox>
    <VBox fx:id="commentsVbox" prefHeight="200.0" prefWidth="100.0" />
+
    <VBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="91.0" prefWidth="500.0" spacing="5.0">
       <children>
          <TextArea fx:id="commentTextArea" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="500.0" />

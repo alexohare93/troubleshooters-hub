@@ -149,10 +149,8 @@ public class CommunityDetailsController {
     @FXML
     protected void onCancelButtonClick() {
         if (community == null) {
-            showAlert(Alert.AlertType.ERROR, "No community selected for cancellation.");
             return;
         }
-
         handleJoinOperation(() -> {
                     int userId = identityService.getUserContext().getUser().getId();
                     boolean cancelled = communityService.cancelJoin(userId, community.communityId());

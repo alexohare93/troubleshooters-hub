@@ -129,7 +129,14 @@ public class CommunityFactory extends ModelFactory<Community> {
         });
     }
 
+
+    /**
+     * Deletes a Community
+     * @param community the community object to be deleted
+     * @throws SQLException if the deletion of the community fails
+     */
     public void delete(int id) throws SQLException {
+
         final String sql = "DELETE FROM Communities WHERE Id = ?";
         connection.executeUpdate(sql, statement -> {
             statement.setInt(1, id);
