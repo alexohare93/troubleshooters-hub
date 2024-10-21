@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 
 import hub.troubleshooters.soundlink.core.events.models.SearchEventModel;
 
-import javax.sound.midi.SysexMessage;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.io.IOException;
