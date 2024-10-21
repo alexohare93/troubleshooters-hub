@@ -13,20 +13,21 @@ import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.profile.models.UserProfileModel;
 import hub.troubleshooters.soundlink.core.profile.services.UserProfileService;
 import hub.troubleshooters.soundlink.data.models.EventComment;
+import hub.troubleshooters.soundlink.data.models.Community;
+
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.InvalidPathException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -39,11 +40,16 @@ public class EventDetailsController {
     @FXML private Label nameLabel;
     @FXML private TextArea descriptionTextArea;
     @FXML private Label communityLabel;
-    @FXML private Label venueLabel;
+    @FXML private TextField venueLabel;
     @FXML private VBox commentsVbox;
     @FXML private TextArea commentTextArea;
     @FXML private Button signUpButton;
     @FXML private Button cancelButton;
+    @FXML private Button saveButton;
+    @FXML private Button deleteButton;
+    @FXML private HBox adminButtonBox;
+    @FXML
+    private TextField capacityTextField;
 
     private final EventService eventService;
     private final ImageUploaderService imageUploaderService;
@@ -83,8 +89,10 @@ public class EventDetailsController {
         descriptionTextArea.setText(event.description());
         communityLabel.setText("This event is shared with the " + event.community().getName() + " community.");
         venueLabel.setText(event.venue());
+        capacityTextField.setText(String.valueOf(event.capacity()));
         commentTextArea.clear();
         updateBookButtons();
+        updateAdminButtonsVisibility();
 
         // set banner image
         try {
@@ -118,7 +126,20 @@ public class EventDetailsController {
         } catch (SQLException e) {
             // TODO: error handling
         }
+    }
 
+    private void updateAdminButtonsVisibility() {
+        try {
+            int userId = identityService.getUserContext().getUser().getId();
+            boolean isAdmin = eventService.isAdmin(userId, event.id());
+            adminButtonBox.setVisible(isAdmin);
+            adminButtonBox.setManaged(isAdmin);
+            descriptionTextArea.setEditable(isAdmin);
+            capacityTextField.setEditable(isAdmin);
+            venueLabel.setEditable(isAdmin);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Unable to determine admin status. Please try again.");
+        }
     }
 
     private Node createCommentCard(EventComment comment) {
@@ -189,6 +210,7 @@ public class EventDetailsController {
                 sceneManager.alert(new Alert(Alert.AlertType.INFORMATION, "Booked into event successfully"));
                 toggleJoiningButtons(true);
             } else {
+                toggleJoiningButtons(true);
                 sceneManager.alert(new Alert(Alert.AlertType.ERROR, "You are already booked into this event"));
             }
         } catch (SQLException e) {
@@ -209,8 +231,8 @@ public class EventDetailsController {
                     }
                     return cancelled;
                 },
-                "Successfully removed from community",
-                "Unable to be removed from the community. Please try again.");
+                "Successfully removed from the event",
+                "Unable to be removed from the event. Please try again.");
     }
 
     @FXML
@@ -280,48 +302,68 @@ public class EventDetailsController {
     @FXML
     protected void onSaveChangesClick() {
         if (event == null) {
-            showAlert(Alert.AlertType.ERROR, "No community selected to update.");
+            showAlert(Alert.AlertType.ERROR, "No event selected to update.");
             return;
         }
 
         if (nameLabel.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Community name cannot be empty.");
+            showAlert(Alert.AlertType.ERROR, "Event name cannot be empty.");
             return;
         }
 
-        EventModel updatedEvent = new EventModel(
-                event.Id(),
+        // validate capacity
+        int capacity;
+        try {
+            String capacityText = capacityTextField.getText().trim();
+
+            if (capacityText.equalsIgnoreCase("SAMPLE CAPACITY")) {
+                showAlert(Alert.AlertType.ERROR, "Please enter a valid capacity.");
+                return;
+            }
+
+            capacity = Integer.parseInt(capacityText);
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid capacity value. Please enter a valid number.");
+            return;
+        }
+
+        Community community = event.community();
+
+        EventModel updatedEventToBeSaved = new EventModel(
+                event.id(),
                 nameLabel.getText(),
                 descriptionTextArea.getText(),
-                genreLabel.getText(),
-                community.created(),
-                community.bannerImage()
+                community,
+                venueLabel.getText(),
+                capacity,
+                event.scheduled(),
+                event.created(),
+                event.bannerImage()
         );
 
         try {
-            EventService.updateEvent(updatedEvent);
-            showAlert(Alert.AlertType.INFORMATION, "Community details updated successfully.");
+            eventService.updateEvent(updatedEventToBeSaved);
+            showAlert(Alert.AlertType.INFORMATION, "Event details updated successfully.");
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error updating community details", e);
             showAlert(Alert.AlertType.ERROR, "Something went wrong while updating. Please try again.");
         }
     }
 
+
     @FXML
-    protected void onDeleteCommunityClick() {
-        if (community == null) {
-            showAlert(Alert.AlertType.ERROR, "No community selected to delete.");
+    protected void onDeleteEventClick() {
+        if (event == null) {
+            showAlert(Alert.AlertType.ERROR, "No event selected to delete.");
             return;
         }
 
         int userId = identityService.getUserContext().getUser().getId();
 
         try {
-            communityService.deleteCommunity(community.communityId(), userId);
-            showAlert(Alert.AlertType.INFORMATION, "Community deleted successfully.");
-            sceneManager.navigateToSearchCommunityView();
+            eventService.deleteEvent(event.id(), userId);
+            showAlert(Alert.AlertType.INFORMATION, "Event deleted successfully.");
+            sceneManager.navigateToSearchEventView();
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error deleting community", e);
             showAlert(Alert.AlertType.ERROR, "Something went wrong while deleting. Please try again.");
         }
     }

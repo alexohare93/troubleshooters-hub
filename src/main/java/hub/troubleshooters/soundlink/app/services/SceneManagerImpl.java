@@ -209,4 +209,9 @@ public class SceneManagerImpl implements SceneManager {
         navigate(Routes.SEARCH_COMMUNITIES);
     }
 
+    @Override
+    public void navigateToSearchEventView() {
+        navigate(Routes.SEARCH_EVENTS);
+    }
+
 }

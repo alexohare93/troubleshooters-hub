@@ -2,6 +2,7 @@ package hub.troubleshooters.soundlink.data.factories;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.data.DatabaseConnection;
+import hub.troubleshooters.soundlink.data.models.Community;
 import hub.troubleshooters.soundlink.data.models.Event;
 import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 
@@ -218,4 +219,20 @@ public class EventFactory extends ModelFactory<Event> {
 					return communityEvents;
 				});
 		}
+
+	/**
+	 * Deletes an Event
+	 * @param event the community object to be deleted
+	 * @throws SQLException if the deletion of the community fails
+	 */
+	public void delete(Event event) throws SQLException {
+		final String sql = "DELETE FROM Events WHERE Id = ?";
+		connection.executeUpdate(sql, statement -> {
+			statement.setInt(1, event.getId());
+		}, rowsAffected -> {
+			if (rowsAffected != 1) {
+				throw new SQLException("Failed to delete event. Rows Affected: " + rowsAffected);
+			}
+		});
 	}
+}

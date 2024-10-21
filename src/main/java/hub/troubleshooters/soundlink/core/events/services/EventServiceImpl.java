@@ -100,39 +100,31 @@ public class EventServiceImpl implements EventService {
     }
     
     public List<Event> getUserCommunityEvents(int userId) throws SQLException {
-        // Implementation to fetch events where the user is a member
         return eventFactory.findUserCommunityEvents(userId);
     }
 
     @Override
     public List<Event> getPublicCommunityEvents(int userId) throws SQLException {
-        // Implementation to fetch public events where the user is not a member
         return eventFactory.findPublicCommunityEvents(userId);
     }
 
     @Override
     public List<Event> search(SearchEventModel searchModel) throws SQLException {
-        // Fetch all events from the database
+
         List<Event> allEvents = eventFactory.getAllEvents();
 
-        // Apply filtering logic in-memory
         return allEvents.stream()
                 .filter(event -> {
-                    // Combine text search for name, description, and venue
                     var text = searchModel.textSearch().toLowerCase();
                     return (
                             event.getName().toLowerCase().contains(text) ||
                             event.getDescription().toLowerCase().contains(text) ||
                             event.getVenue().toLowerCase().contains(text)
                     ) &&
-                            // Filter by 'fromDate' and 'toDate' range if provided
+
                             (searchModel.fromDate() == null || !event.getScheduled().before(searchModel.fromDate())) &&
                             (searchModel.toDate() == null || !event.getScheduled().after(searchModel.toDate())) &&
-
-                            // Filter by capacity if provided
                             (searchModel.capacity() == 0 || event.getCapacity() == searchModel.capacity()) &&
-
-                            // Filter by communityId if provided
                             (searchModel.communityId() == 0 || event.getCommunityId() == searchModel.communityId());
                 })
                 .collect(Collectors.toList());
@@ -141,13 +133,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> listUpcomingEvents(int userId) throws SQLException {
 
-        // Fetching user community events
+
         List<Event> userCommunityEvents = eventFactory.findUserCommunityEvents(userId);
 
-        // Fetching public events
         List<Event> publicEvents = eventFactory.findPublicCommunityEvents(userId);
 
-        // Combine both lists
         userCommunityEvents.addAll(publicEvents);
 
         return userCommunityEvents;
@@ -197,7 +187,7 @@ public class EventServiceImpl implements EventService {
                 bookingFactory.delete(userId, eventId);
                 return true;
             } catch (SQLException e) {
-                throw new SQLException("Error removing user from the Booked Event.", e);
+                throw new SQLException("Error removing user from the booked Event.", e);
             }
         } else {
             return false;
@@ -209,11 +199,13 @@ public class EventServiceImpl implements EventService {
         try {
             Integer bannerImageId = event.bannerImage().map(img -> img.getId()).orElse(null);
 
+            int communityId = event.community().getId();
+
             Event updatedEvent = new Event(
                     event.id(),
+                    communityId,
                     event.name(),
                     event.description(),
-                    event.community(),
                     event.venue(),
                     event.capacity(),
                     event.scheduled(),
@@ -222,6 +214,35 @@ public class EventServiceImpl implements EventService {
             );
             eventFactory.save(updatedEvent);
 
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public Optional<Integer> getUserPermissionLevel(int userId, int eventId) throws SQLException {
+        Optional<Booking> booking = bookingFactory.get(eventId, userId);
+        return booking.map(Booking::getPermission).or(() -> Optional.of(0)); // 0 is ready-only
+    }
+
+    @Override
+    public boolean isAdmin(int userId, int eventId) throws SQLException {
+        Optional<Integer> permissionLevel = getUserPermissionLevel(userId, eventId);
+        return permissionLevel.map(level -> level == 1).orElse(false);
+    }
+
+    @Override
+    public void deleteEvent(int eventId, int userId) throws SQLException {
+        if (!isAdmin(userId, eventId)) {
+            throw new SecurityException("Only admins can delete events.");
+        }
+        try {
+            Optional<Event> eventOpt = eventFactory.get(eventId);
+
+            if (eventOpt.isEmpty()) {
+                throw new SQLException("Event with ID " + eventId + " not found.");
+            }
+            eventFactory.delete(eventOpt.get());
         } catch (SQLException e) {
             throw e;
         }

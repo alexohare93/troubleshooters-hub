@@ -80,4 +80,6 @@ public interface SceneManager {
     void navigateToSearchCommunityView();
 
     void navigateToCommunityFeedView(int communityId);
+
+    void navigateToSearchEventView();
 }

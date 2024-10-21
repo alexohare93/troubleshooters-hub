@@ -143,6 +143,7 @@ public class CommunityFactory extends ModelFactory<Community> {
             return result;
         });
     }
+
     /**
      * Deletes a Community
      * @param community the community object to be deleted

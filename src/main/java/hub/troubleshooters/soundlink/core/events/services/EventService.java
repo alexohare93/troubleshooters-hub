@@ -42,5 +42,12 @@ public interface EventService {
     boolean cancelBooking(int userId, int eventId) throws SQLException;
 
     void updateEvent(EventModel event) throws SQLException;
+
+    Optional<Integer> getUserPermissionLevel(int userId, int communityId) throws SQLException;
+
+    void deleteEvent(int communityId, int userId) throws SQLException;
+
+    boolean isAdmin(int userId, int eventId) throws SQLException;
+
 }
 
