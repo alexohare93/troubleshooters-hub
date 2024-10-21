@@ -128,4 +128,15 @@ public class CommunityFactory extends ModelFactory<Community> {
             return result;
         });
     }
+
+    public void delete(int id) throws SQLException {
+        final String sql = "DELETE FROM Communities WHERE Id = ?";
+        connection.executeUpdate(sql, statement -> {
+            statement.setInt(1, id);
+        }, rowsAffected -> {
+            if (rowsAffected != 1) {
+                throw new SQLException("Failed to delete community. Rows Affected: " + rowsAffected);
+            }
+        });
+    }
 }
