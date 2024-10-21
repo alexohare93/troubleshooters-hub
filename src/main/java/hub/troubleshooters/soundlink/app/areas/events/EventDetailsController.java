@@ -49,6 +49,11 @@ public class EventDetailsController {
     @FXML private Button deleteButton;
     @FXML private HBox adminButtonBox;
     @FXML private TextField capacityTextField;
+    @FXML private Label scheduledDateLabel;
+    @FXML private Label placesRemainingLabel;
+    @FXML private Label creatorLabel;
+    @FXML private Label createdDate;
+
 
     private final EventService eventService;
     private final ImageUploaderService imageUploaderService;
@@ -88,9 +93,38 @@ public class EventDetailsController {
         descriptionTextArea.setText(event.description());
         communityLabel.setText("This event is shared with the " + event.community().getName() + " community.");
         venueLabel.setText(event.venue());
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(event.scheduled());
+        scheduledDateLabel.setText(formattedDate);
+        String formattedCreatedDate = dateFormat.format(event.created());
+        createdDate.setText(formattedCreatedDate);
+
         capacityTextField.setText(String.valueOf(event.capacity()));
 
         commentTextArea.clear();
+
+        try {
+            int totalBookings = eventService.getBookingCountForEvent(event.id());
+            int placesRemaining = event.capacity() - totalBookings;
+            placesRemainingLabel.setText(String.valueOf(placesRemaining));
+
+            if (placesRemaining < event.capacity() / 2) {
+                showAlert(Alert.AlertType.WARNING, "Warning: Less than 50% capacity remaining.");
+            }
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Failed to load booking information.");
+        }
+
+        try {
+            int userId = identityService.getUserContext().getUser().getId();
+            String creatorName = eventService.getDisplayNameById(userId);
+            creatorLabel.setText(creatorName);
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Failed to load event creator.");
+        }
+
         updateBookButtons();
         updateAdminButtonsVisibility();
 

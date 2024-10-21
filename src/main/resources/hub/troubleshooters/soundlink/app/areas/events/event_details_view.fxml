@@ -49,6 +49,35 @@
       </children>
    </HBox>
 
+   <HBox spacing="10.0">
+      <children>
+         <Label text="Scheduled:"/>
+         <Label fx:id="scheduledDateLabel" />
+      </children>
+   </HBox>
+
+   <HBox spacing="10.0">
+      <children>
+         <Label text="Places remaining:"/>
+         <Label fx:id="placesRemainingLabel"/>
+      </children>
+   </HBox>
+
+   <HBox spacing="10.0">
+      <children>
+         <Label text="Created by:"/>
+         <Label fx:id="creatorLabel"/>
+      </children>
+   </HBox>
+
+   <HBox spacing="10.0">
+      <children>
+         <Label text="Created date:"/>
+         <Label fx:id="createdDate"/>
+      </children>
+   </HBox>
+
+
    <!-- Sign Up and Cancel Buttons -->
    <HBox spacing="10.0">
       <children>

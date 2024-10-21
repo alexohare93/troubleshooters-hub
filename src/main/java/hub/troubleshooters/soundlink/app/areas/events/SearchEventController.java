@@ -28,6 +28,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Alert;
 import javafx.collections.ObservableList;
 
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -125,8 +126,11 @@ public class SearchEventController {
         eventCard.setPrefWidth(250);
         eventCard.setPrefHeight(100);
 
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = dateFormat.format(event.getScheduled());
+      
         var eventModel = map.event(event);
-
+      
         var imageView = new ImageView();
         imageView.setFitWidth(250);
         imageView.setFitHeight(100);
@@ -138,11 +142,14 @@ public class SearchEventController {
 
         imageView.setImage(new Image(path));
 
+
         Label nameLabel = new Label(event.getName());
         Label descriptionLabel = new Label("Description: " + event.getDescription());
         Label locationLabel = new Label("Location: " + event.getVenue());
-        Label dateLabel = new Label("Date: " + event.getScheduled().toString());
-        Label capacityLabel = new Label("Capacity: " + (event.getCapacity() == Integer.MAX_VALUE ? "unlimited" : event.getCapacity()));
+
+        Label dateLabel = new Label("Date: " + formattedDate);
+        Label capacityLabel = new Label("Capacity: " + event.getCapacity());        
+
         Button detailsButton = new Button("Details");
         detailsButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: white;");
 

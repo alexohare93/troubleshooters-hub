@@ -164,4 +164,32 @@ public class BookingFactory extends ModelFactory<Booking> {
 			}
 		});
 	}
+
+	public int countBookingsForEvent(int eventId) throws SQLException {
+		final String sql = "SELECT COUNT(*) FROM Bookings WHERE EventId = ?;";
+
+		return connection.executeQuery(sql, statement -> {
+			statement.setInt(1, eventId);
+		}, executor -> {
+			if (executor.next()) {
+				return executor.getInt(1);
+			} else {
+				return 0;
+			}
+		});
+	}
+
+	public String getDisplayNameById(int userId) throws SQLException {
+		final String sql = "SELECT DisplayName FROM UserProfiles WHERE UserId = ?";
+
+		return connection.executeQuery(sql, statement -> {
+			statement.setInt(1, userId);
+		}, executor -> {
+			if (executor.next()) {
+				return executor.getString("DisplayName");
+			} else {
+				throw new SQLException("User profile not found for UserId: " + userId);
+			}
+		});
+	}
 }
