@@ -70,9 +70,11 @@ public class CommunityServiceImpl implements CommunityService {
                 var img = imageUploaderService.upload(model.bannerImage());
                 Community community = new Community(0, model.name(), model.description(), model.genre(), null, img.getId(), model.isPrivate());
                 communityFactory.create(community);
+                signUpForCommunity(model.id(), community.getId());
             } else {
                 Community community = new Community(0, model.name(), model.description(), model.genre(), null, null, model.isPrivate());
                 communityFactory.create(community);
+                signUpForCommunity(model.id(), community.getId());
             }
         } catch (SQLException | IOException e) {
             return new ValidationResult(new ValidationError("Internal error: please contact SoundLink Support."));
