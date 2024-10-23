@@ -4,12 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0"
+<VBox alignment="TOP_CENTER" minHeight="600.0" prefWidth="800.0" spacing="20.0"
       style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 10; -fx-border-color: lightgray; -fx-border-radius: 10;"
       xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="hub.troubleshooters.soundlink.app.areas.communities.CommunityFeedController">
 
-    <!-- Event Name -->
+    <!-- Community Name -->
     <Label fx:id="nameLabel" styleClass="h1" text="place holder"/>
 
     <!-- Tabs -->
@@ -30,7 +30,6 @@
         </Button>
     </HBox>
     <!-- Scrolling pane -->
-    <VBox fx:id="listContainer" alignment="TOP_CENTER" spacing="20.0"
-          style="-fx-border-color: gray; -fx-border-radius: 10px;" VBox.vgrow="ALWAYS"/>
+    <VBox fx:id="listContainer" alignment="TOP_CENTER" spacing="20.0" VBox.vgrow="ALWAYS"/>
 
 </VBox>

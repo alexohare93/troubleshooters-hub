@@ -2,12 +2,10 @@ package hub.troubleshooters.soundlink.app.areas.communities;
 
 import com.google.inject.Inject;
 import hub.troubleshooters.soundlink.app.services.SceneManager;
-import hub.troubleshooters.soundlink.core.auth.services.IdentityService;
 import hub.troubleshooters.soundlink.core.communities.models.CommunityPostModel;
 import hub.troubleshooters.soundlink.core.communities.services.CommunityService;
 import hub.troubleshooters.soundlink.core.events.models.EventModel;
 import hub.troubleshooters.soundlink.core.events.services.EventService;
-import hub.troubleshooters.soundlink.core.images.ImageUploaderService;
 import hub.troubleshooters.soundlink.core.communities.models.CommunityModel;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -35,22 +33,17 @@ public class CommunityFeedController {
 
 	private final CommunityService communityService;
 	private final EventService eventService;
-	private final ImageUploaderService imageUploaderService;
-	private final IdentityService identityService;
 	private final SceneManager sceneManager;
-
-	private CommunityModel community;
 	private List<EventModel> events;
 	private List<CommunityPostModel> posts;
 	private static final Logger LOGGER = Logger.getLogger(CommunityFeedController.class.getName());
+	private final Insets cardMargins = new Insets(5, 10, 5, 10);
 
 	@Inject
-	public CommunityFeedController(CommunityService communityService, EventService eventService, ImageUploaderService imageUploaderService,
-								   IdentityService identityService, SceneManager sceneManager) {
+	public CommunityFeedController(CommunityService communityService, EventService eventService,
+								   SceneManager sceneManager) {
 		this.communityService = communityService;
 		this.eventService = eventService;
-		this.imageUploaderService = imageUploaderService;
-		this.identityService = identityService;
 		this.sceneManager = sceneManager;
 	}
 
@@ -65,7 +58,7 @@ public class CommunityFeedController {
 				LOGGER.log(Level.SEVERE, "Community not found with ID " + communityId);
 				throw new Exception("Community not found with ID " + communityId);
 			}
-			community = optionalCommunity.get();
+			CommunityModel community = optionalCommunity.get();
 			nameLabel.setText(community.name());
 			posts = communityService.getCommunityPosts(communityId);
 			events = eventService.getCommunityEvents(communityId);
@@ -117,6 +110,7 @@ public class CommunityFeedController {
 		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
 				"-fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
 		vbox.setAlignment(Pos.TOP_LEFT);
+		VBox.setMargin(vbox, cardMargins);
 		vbox.setSpacing(10.0);
 		vbox.setMinWidth(250);
 		vbox.setMinHeight(100);
@@ -151,6 +145,7 @@ public class CommunityFeedController {
 		vbox.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-border-width: 1px; " +
 				"-fx-padding: 10px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
 		vbox.setAlignment(Pos.TOP_LEFT);
+		VBox.setMargin(vbox, cardMargins);
 		vbox.setSpacing(10.0);
 		vbox.setMinWidth(250);
 		vbox.setMinHeight(100);
