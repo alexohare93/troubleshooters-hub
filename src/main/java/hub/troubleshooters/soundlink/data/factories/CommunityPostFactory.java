@@ -10,12 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Factory class responsible for managing the persistence of {@link CommunityPost} objects in the database.
+ * This class provides methods to retrieve, update, and manage community posts.
+ */
 public class CommunityPostFactory extends ModelFactory<CommunityPost> {
+
+	/**
+	 * Constructs a {@code CommunityPostFactory} with the specified database connection.
+	 *
+	 * @param connection The database connection to be used for operations.
+	 */
 	@Inject
 	public CommunityPostFactory(DatabaseConnection connection) {
 		super(connection, "CommunityPosts");
 	}
 
+	/**
+	 * Retrieves a {@link CommunityPost} from the database by its ID.
+	 *
+	 * @param id The ID of the community post to retrieve.
+	 * @return An {@link Optional} containing the community post if found, or {@code Optional.empty()} if not found.
+	 * @throws SQLException If an error occurs during the query operation.
+	 */
 	@Override
 	public Optional<CommunityPost> get(int id) throws SQLException {
 		final String sql = "SELECT * FROM CommunityPosts WHERE Id = ?;";
@@ -37,10 +54,11 @@ public class CommunityPostFactory extends ModelFactory<CommunityPost> {
 	}
 
 	/**
-	 * Gets all Community Posts from a given community
-	 * @param communityId
-	 * @return
-	 * @throws SQLException
+	 * Retrieves all community posts for a given community.
+	 *
+	 * @param communityId The ID of the community whose posts are to be retrieved.
+	 * @return A list of {@link CommunityPost} objects belonging to the specified community.
+	 * @throws SQLException If an error occurs during the query operation.
 	 */
 	public List<CommunityPost> getPosts(int communityId) throws SQLException {
 		final String sql = "SELECT * FROM CommunityPosts WHERE CommunityId = ?;";
@@ -60,6 +78,12 @@ public class CommunityPostFactory extends ModelFactory<CommunityPost> {
 		});
 	}
 
+	/**
+	 * Saves the updated details of a community post in the database.
+	 *
+	 * @param communityPost The {@link CommunityPost} object to be updated.
+	 * @throws SQLException If an error occurs during the update operation.
+	 */
 	@Override
 	public void save(CommunityPost communityPost) throws SQLException {
 		final String sql = "UPDATE CommunityPosts SET Title = ?, Content = ? WHERE Id = ?;";
@@ -74,12 +98,13 @@ public class CommunityPostFactory extends ModelFactory<CommunityPost> {
 	}
 
 	/**
-	 * Creates a CommunityPost
-	 * @param communityId
-	 * @param userId
-	 * @param title
-	 * @param content
-	 * @throws SQLException
+	 * Creates a new {@link CommunityPost} in the database.
+	 *
+	 * @param communityId The ID of the community the post belongs to.
+	 * @param userId The ID of the user creating the post.
+	 * @param title The title of the community post.
+	 * @param content The content of the community post.
+	 * @throws SQLException If an error occurs during the insert operation.
 	 */
 	public void create(int communityId, int userId, String title, String content) throws SQLException{
 		final String sql = "INSERT INTO CommunityPosts (CommunityId, UserId, Title, Content) VALUES (?, ?, ?, ?);";

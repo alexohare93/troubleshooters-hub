@@ -12,6 +12,8 @@ import java.util.Optional;
 
 /**
  * Class responsible for model validation.
+ *
+ * @param <T> The type of the model to be validated.
  */
 public abstract class ModelValidator<T> {
 

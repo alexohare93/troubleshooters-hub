@@ -8,20 +8,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.time.LocalDateTime;
-import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
-
+/**
+ * Factory class responsible for creating, updating, retrieving, and deleting {@link Community} objects
+ * from the database. This class interacts with the database to manage community-related data.
+ */
 public class CommunityFactory extends ModelFactory<Community> {
 
     private static final Logger LOGGER = Logger.getLogger(CommunityFactory.class.getName());
 
+    /**
+     * Constructs a {@code CommunityFactory} with the specified database connection.
+     *
+     * @param connection The database connection to be used for operations.
+     */
     @Inject
     public CommunityFactory(DatabaseConnection connection) {
         super(connection, "Communities");
     }
 
+    /**
+     * Saves an existing community to the database by updating its details.
+     *
+     * @param community The community object to be updated.
+     * @throws SQLException If there is an error during the update operation.
+     */
     @Override
     public void save(Community community) throws SQLException {
         final String sql = "UPDATE Communities SET Name = ?, Description = ?, Genre = ?, Created = ?, BannerImageId = ?, isPrivate = ? WHERE Id = ?";
@@ -40,6 +52,13 @@ public class CommunityFactory extends ModelFactory<Community> {
         });
     }
 
+    /**
+     * Retrieves a community from the database by its ID.
+     *
+     * @param id The ID of the community to retrieve.
+     * @return An {@link Optional} containing the community if found, or {@code Optional.empty()} if not found.
+     * @throws SQLException If there is an error during the query operation.
+     */
     @Override
     public Optional<Community> get(int id) throws SQLException {
         final String sql = "SELECT * FROM Communities WHERE Id = ?";
@@ -62,6 +81,13 @@ public class CommunityFactory extends ModelFactory<Community> {
         return Optional.of(community);
     }
 
+    /**
+     * Retrieves a list of communities by their IDs.
+     *
+     * @param ids A list of community IDs to retrieve.
+     * @return A list of {@link Community} objects matching the provided IDs.
+     * @throws SQLException If there is an error during the query operation.
+     */
     public List<Community> get(List<Integer> ids) throws SQLException {
         final String sql = "SELECT * FROM Communities WHERE Id IN (?)";
         var sb = new StringBuilder();
@@ -89,6 +115,12 @@ public class CommunityFactory extends ModelFactory<Community> {
         });
     }
 
+    /**
+     * Inserts a new community into the database.
+     *
+     * @param community The community object to be inserted.
+     * @throws SQLException If there is an error during the insert operation.
+     */
     public void create(Community community) throws SQLException {
         final String sql = "INSERT INTO Communities (Name, Description, Genre, Created, BannerImageId, isPrivate) VALUES (?, ?, ?, ?, ?, ?)";
         connection.executeUpdate(sql, statement -> {
@@ -109,6 +141,12 @@ public class CommunityFactory extends ModelFactory<Community> {
         });
     }
 
+    /**
+     * Retrieves a list of all communities from the database.
+     *
+     * @return A list of all {@link Community} objects in the database.
+     * @throws SQLException If there is an error during the query operation.
+     */
     public List<Community> getAllCommunities() throws SQLException {
         final String sql = "SELECT * FROM Communities";
         return connection.executeQuery(sql, statement -> {}, executor -> {
@@ -129,14 +167,13 @@ public class CommunityFactory extends ModelFactory<Community> {
         });
     }
 
-
     /**
-     * Deletes a Community
-     * @param community the community object to be deleted
-     * @throws SQLException if the deletion of the community fails
+     * Deletes a community from the database by its ID.
+     *
+     * @param id The ID of the community to be deleted.
+     * @throws SQLException If the deletion of the community fails.
      */
     public void delete(int id) throws SQLException {
-
         final String sql = "DELETE FROM Communities WHERE Id = ?";
         connection.executeUpdate(sql, statement -> {
             statement.setInt(1, id);

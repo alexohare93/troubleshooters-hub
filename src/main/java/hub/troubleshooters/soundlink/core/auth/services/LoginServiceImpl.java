@@ -15,6 +15,11 @@ import hub.troubleshooters.soundlink.data.factories.UserProfileFactory;
 
 import java.sql.SQLException;
 
+/**
+ * Implementation of the {@link LoginService} interface responsible for user authentication,
+ * registration, and session management. This class validates login and registration models,
+ * handles user authentication, and manages user context during login and logout operations.
+ */
 public class LoginServiceImpl implements LoginService {
     private final UserFactory userFactory;
     private final UserProfileFactory userProfileFactory;
@@ -23,6 +28,16 @@ public class LoginServiceImpl implements LoginService {
     private final LoginModelValidator loginModelValidator;
     private final RegisterModelValidator registerModelValidator;
 
+    /**
+     * Constructs a new {@code LoginServiceImpl} with the necessary dependencies.
+     *
+     * @param identityService The service responsible for managing user identity.
+     * @param userFactory The factory responsible for managing user data.
+     * @param communityUserFactory The factory responsible for managing community membership data.
+     * @param loginModelValidator The validator for login models.
+     * @param registerModelValidator The validator for registration models.
+     * @param userProfileFactory The factory responsible for managing user profiles.
+     */
     @Inject
     public LoginServiceImpl(
             IdentityService identityService,
@@ -40,6 +55,13 @@ public class LoginServiceImpl implements LoginService {
         this.userProfileFactory = userProfileFactory;
     }
 
+    /**
+     * Authenticates the user based on the provided login model. If the username and password are valid,
+     * the user is logged in and their context is set.
+     *
+     * @param model The {@link LoginModel} containing the user's login credentials.
+     * @return An {@link AuthResult} that indicates whether authentication was successful.
+     */
     @Override
     public AuthResult login(LoginModel model) {
         // validate the model is well-formed first
@@ -70,11 +92,21 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    /**
+     * Logs out the currently authenticated user by clearing their session context.
+     */
     @Override
     public void logout() {
         identityService.setUserContext(null);
     }
 
+    /**
+     * Registers a new user based on the provided registration model. If the username is not already
+     * taken, the user is created and their profile is initialized.
+     *
+     * @param model The {@link RegisterModel} containing the user's registration details.
+     * @return An {@link AuthResult} that indicates whether registration was successful.
+     */
     @Override
     public AuthResult register(RegisterModel model) {
         // validate the model is well-formed first
@@ -99,10 +131,23 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    /**
+     * Hashes the user's password using BCrypt with a default strength of 12.
+     *
+     * @param password The plain-text password to hash.
+     * @return The hashed password.
+     */
     private String hashPassword(String password) {
         return BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
+    /**
+     * Verifies the provided plain-text password against the hashed password.
+     *
+     * @param password The plain-text password.
+     * @param hashedPassword The hashed password to compare against.
+     * @return {@code true} if the password is valid, {@code false} otherwise.
+     */
     private boolean verifyPassword(String password, String hashedPassword) {
         var result = BCrypt.verifyer().verify(password.toCharArray(), hashedPassword);
         return result.verified;

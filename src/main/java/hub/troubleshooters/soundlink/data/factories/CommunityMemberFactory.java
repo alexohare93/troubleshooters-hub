@@ -12,8 +12,17 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Factory class responsible for managing the persistence of {@link CommunityMember} objects in the database.
+ * This class provides methods for saving and retrieving community members.
+ */
 public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
 
+    /**
+     * Constructs a {@code CommunityMemberFactory} with the specified database connection.
+     *
+     * @param connection The database connection to be used for operations.
+     */
     @Inject
     public CommunityMemberFactory(DatabaseConnection connection) {
         super(connection, "CommunityMembers");
@@ -21,6 +30,12 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
 
     private static final Logger LOGGER = Logger.getLogger(CommunityMemberFactory.class.getName());
 
+    /**
+     * Saves the details of a community member by updating their information in the database.
+     *
+     * @param model The {@link CommunityMember} object to be updated.
+     * @throws SQLException If an error occurs while updating the community member.
+     */
     @Override
     public void save(CommunityMember model) throws SQLException {
         final String sql = "UPDATE CommunityMembers SET Permission = ? WHERE Id = ?;";
@@ -34,6 +49,13 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
         });
     }
 
+    /**
+     * Retrieves a community member by their ID from the database.
+     *
+     * @param id The ID of the community member to retrieve.
+     * @return An {@link Optional} containing the community member if found, or {@code Optional.empty()} if not found.
+     * @throws SQLException If an error occurs while retrieving the community member.
+     */
     @Override
     public Optional<CommunityMember> get(int id) throws SQLException {
         final String sql = "SELECT * FROM CommunityMembers WHERE Id = ?;";
@@ -56,11 +78,12 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
     }
 
     /**
-     * Gets a CommunityMember object by the unique userId and communityId
-     * @param userId
-     * @param communityId
-     * @return
-     * @throws SQLException
+     * Retrieves a {@link CommunityMember} object by the unique combination of community ID and user ID.
+     *
+     * @param communityId The ID of the community.
+     * @param userId The ID of the user.
+     * @return An {@link Optional} containing the community member if found, or {@code Optional.empty()} if not found.
+     * @throws SQLException If an error occurs during the query operation.
      */
     public Optional<CommunityMember> get(int communityId, int userId) throws SQLException {
         final String sql = "SELECT * FROM CommunityMembers WHERE CommunityId = ? AND UserId = ?;";
@@ -86,10 +109,11 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
     }
 
     /**
-     * Gets all community memberships for a given user
-     * @param user
-     * @return
-     * @throws SQLException
+     * Retrieves all community memberships for a given user.
+     *
+     * @param user The {@link User} whose community memberships are to be retrieved.
+     * @return A list of {@link CommunityMember} objects representing the user's memberships.
+     * @throws SQLException If an error occurs during the query operation.
      */
     public List<CommunityMember> get(User user) throws SQLException {
         final String sql = "SELECT * FROM CommunityMembers WHERE UserId = ?;";
@@ -109,11 +133,12 @@ public class CommunityMemberFactory extends ModelFactory<CommunityMember> {
     }
 
     /**
-     * Creates a CommunityMember
-     * @param communityId
-     * @param userId
-     * @param permission
-     * @throws SQLException
+     * Creates a new {@link CommunityMember} entry for the specified user and community with a permission level.
+     *
+     * @param communityId The ID of the community the user is joining.
+     * @param userId The ID of the user joining the community.
+     * @param permission The permission level for the community member.
+     * @throws SQLException If an error occurs during the creation process or the user is already a member.
      */
     public void create(int communityId, int userId, int permission) throws SQLException {
         // check if the user is already a member of the community.

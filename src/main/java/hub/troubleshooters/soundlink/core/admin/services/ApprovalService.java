@@ -4,6 +4,9 @@ import hub.troubleshooters.soundlink.data.models.ApprovalRequest;
 
 import java.util.List;
 
+/**
+ * Service interface responsible for handling community join requests and approval processes.
+ */
 public interface ApprovalService {
 
     /**

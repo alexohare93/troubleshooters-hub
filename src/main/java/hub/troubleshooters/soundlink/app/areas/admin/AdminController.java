@@ -8,6 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
+/**
+ * Controller class responsible for handling the admin interface, including managing approval requests.
+ */
 public class AdminController {
 
     private final ApprovalService approvalService;
@@ -25,6 +28,11 @@ public class AdminController {
     @FXML
     private Label statusLabel;
 
+    /**
+     * Constructs the AdminController with the necessary {@link ApprovalService}.
+     *
+     * @param approvalService The service used to handle approval requests.
+     */
     @Inject
     public AdminController(ApprovalService approvalService) {
         this.approvalService = approvalService;
@@ -32,6 +40,8 @@ public class AdminController {
 
     /**
      * Initialize the controller with a specific community ID and load pending requests for that community.
+     *
+     * @param communityId The ID of the community for which to load pending approval requests.
      */
     @FXML
     public void initializeWithCommunityId(int communityId) {
@@ -41,6 +51,8 @@ public class AdminController {
 
     /**
      * Load the pending requests for the current community and update the ListView.
+     *
+     * @param communityId The ID of the community for which to load pending requests.
      */
     private void loadPendingRequests(int communityId) {
         var pendingRequests = approvalService.getPendingRequestsForCommunity(communityId);

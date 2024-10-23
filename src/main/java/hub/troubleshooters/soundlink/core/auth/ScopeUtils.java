@@ -3,6 +3,11 @@ package hub.troubleshooters.soundlink.core.auth;
 import java.util.EnumSet;
 import java.util.Set;
 
+/**
+ * Utility class for managing {@link Scope} permissions.
+ * This class provides methods for combining, checking, adding, removing, and deconstructing scopes
+ * that are represented as bitmasks, allowing multiple scopes to be stored in a single integer field.
+ */
 public class ScopeUtils {
     /**
      * Combines multiple scopes into a single int. This is useful for storing multiple distinct scopes in a single field for storage.

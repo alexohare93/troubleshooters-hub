@@ -11,12 +11,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Factory class responsible for managing the persistence of {@link Booking} objects in the database.
+ * Provides methods to retrieve, create, update, and delete bookings, as well as to query booking information.
+ */
 public class BookingFactory extends ModelFactory<Booking> {
+
+	/**
+	 * Constructs a {@code BookingFactory} with the specified database connection.
+	 *
+	 * @param connection The database connection to be used for operations.
+	 */
 	@Inject
 	public BookingFactory(DatabaseConnection connection) {
 		super(connection, "Bookings");
 	}
 
+	/**
+	 * Saves an existing booking by updating its permission level in the database.
+	 *
+	 * @param booking The {@link Booking} object to be updated.
+	 * @throws SQLException If an error occurs while updating the booking.
+	 */
 	@Override
 	public void save(Booking booking) throws SQLException {
 		final String sql = "UPDATE Bookings SET Permission = ? WHERE id = ?;";
@@ -30,6 +46,13 @@ public class BookingFactory extends ModelFactory<Booking> {
 		});
 	}
 
+	/**
+	 * Retrieves a booking by its ID from the database.
+	 *
+	 * @param id The ID of the booking to retrieve.
+	 * @return An {@link Optional} containing the booking if found, or {@code Optional.empty()} if not found.
+	 * @throws SQLException If an error occurs during the query operation.
+	 */
 	@Override
 	public Optional<Booking> get(int id) throws SQLException {
 		final String sql = "SELECT * FROM Bookings WHERE Id = ?;";
@@ -51,11 +74,12 @@ public class BookingFactory extends ModelFactory<Booking> {
 	}
 
 	/**
-	 * Gets a Booking object by the unique userId and eventId
-	 * @param eventId
-	 * @param userId
-	 * @return
-	 * @throws SQLException
+	 * Retrieves a booking by the combination of event ID and user ID.
+	 *
+	 * @param eventId The ID of the event.
+	 * @param userId The ID of the user.
+	 * @return An {@link Optional} containing the booking if found, or {@code Optional.empty()} if not found.
+	 * @throws SQLException If an error occurs during the query operation.
 	 */
 	public Optional<Booking> get(int eventId, int userId) throws SQLException {
 		final String sql = "SELECT * FROM Bookings WHERE EventId = ? AND UserId = ?;";
@@ -80,10 +104,11 @@ public class BookingFactory extends ModelFactory<Booking> {
 	}
 
 	/**
-	 * Gets all Bookings for a given user
-	 * @param user
-	 * @return
-	 * @throws SQLException
+	 * Retrieves all bookings for a given user.
+	 *
+	 * @param user The {@link User} whose bookings are to be retrieved.
+	 * @return A list of {@link Booking} objects associated with the user.
+	 * @throws SQLException If an error occurs during the query operation.
 	 */
 	public List<Booking> get(User user) throws SQLException {
 		final String sql = "SELECT * FROM Bookings WHERE UserId = ?;";
@@ -104,10 +129,11 @@ public class BookingFactory extends ModelFactory<Booking> {
 	}
 
 	/**
-	 * Gets all Bookings for a given event
-	 * @param event
-	 * @return
-	 * @throws SQLException
+	 * Retrieves all bookings for a given event.
+	 *
+	 * @param event The event whose bookings are to be retrieved.
+	 * @return A list of {@link Booking} objects associated with the event.
+	 * @throws SQLException If an error occurs during the query operation.
 	 */
 	public List<Booking> get(Event event) throws SQLException {
 		final String sql = "SELECT * FROM Bookings WHERE EventId = ?;";
@@ -128,11 +154,12 @@ public class BookingFactory extends ModelFactory<Booking> {
 	}
 
 	/**
-	 * Creates a Booking
-	 * @param eventId
-	 * @param userId
-	 * @param permission
-	 * @throws SQLException
+	 * Creates a new booking with the specified event ID, user ID, and permission level.
+	 *
+	 * @param eventId The ID of the event.
+	 * @param userId The ID of the user.
+	 * @param permission The permission level for the booking.
+	 * @throws SQLException If an error occurs during the creation process.
 	 */
 	public void create(int eventId, int userId, int permission) throws SQLException {
 		final String sql = "INSERT INTO Bookings (EventId, UserId, Permission) VALUES (?, ?, ?);";
@@ -147,11 +174,11 @@ public class BookingFactory extends ModelFactory<Booking> {
 	}
 
 	/**
-	 * Delete a Booking for a given user
-	 * @param eventId
-	 * @param userId
-	 * @return
-	 * @throws SQLException
+	 * Deletes a booking for a given user and event.
+	 *
+	 * @param userId The ID of the user.
+	 * @param eventId The ID of the event.
+	 * @throws SQLException If an error occurs during the deletion process.
 	 */
 	public void delete( int userId, int eventId) throws SQLException {
 		final String sql = "DELETE FROM Bookings WHERE UserId = ? AND EventId = ?;";
@@ -165,6 +192,13 @@ public class BookingFactory extends ModelFactory<Booking> {
 		});
 	}
 
+	/**
+	 * Counts the number of bookings for a given event.
+	 *
+	 * @param eventId The ID of the event for which to count bookings.
+	 * @return The number of bookings for the event.
+	 * @throws SQLException If there is an error executing the query.
+	 */
 	public int countBookingsForEvent(int eventId) throws SQLException {
 		final String sql = "SELECT COUNT(*) FROM Bookings WHERE EventId = ?;";
 
@@ -179,6 +213,13 @@ public class BookingFactory extends ModelFactory<Booking> {
 		});
 	}
 
+	/**
+	 * Retrieves the display name of a user by their user ID.
+	 *
+	 * @param userId The ID of the user for which to retrieve the display name.
+	 * @return The display name of the user.
+	 * @throws SQLException If the user profile is not found or there is an error executing the query.
+	 */
 	public String getDisplayNameById(int userId) throws SQLException {
 		final String sql = "SELECT DisplayName FROM UserProfiles WHERE UserId = ?";
 

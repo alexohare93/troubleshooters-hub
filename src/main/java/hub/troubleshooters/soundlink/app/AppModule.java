@@ -29,13 +29,27 @@ import hub.troubleshooters.soundlink.data.DatabaseConnection;
 import hub.troubleshooters.soundlink.data.SQLiteDatabaseConnection;
 import javafx.stage.Stage;
 
+/**
+ * AppModule is responsible for configuring bindings in the application using Google Guice.
+ * It binds various services, validators, factories, and other components to their implementations
+ * and ensures singletons are used where necessary.
+ */
 public class AppModule extends AbstractModule {
     private final Stage primaryStage;
 
+    /**
+     * Constructs an AppModule with the specified primary stage.
+     *
+     * @param primaryStage The primary stage of the JavaFX application.
+     */
     public AppModule(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    /**
+     * Configures the application by binding services, validators, factories, and other dependencies
+     * to their respective implementations. Also sets up singleton instances where needed.
+     */
     @Override
     protected void configure() {
         bind(Stage.class).toInstance(primaryStage);
@@ -75,6 +89,11 @@ public class AppModule extends AbstractModule {
         bind(Map.class).in(Singleton.class);
     }
 
+    /**
+     * Provides an instance of {@link SQLiteDatabaseConnection}.
+     *
+     * @return A {@link SQLiteDatabaseConnection} connected to the local SQLite database.
+     */
     @Provides
     SQLiteDatabaseConnection provideSQLiteDatabaseConnection() {
         String connectionString = "jdbc:sqlite:database.db";
