@@ -90,7 +90,6 @@ public class EventFactory extends ModelFactory<Event> {
 		});
 	}
 
-	// TODO: DRY; these factories are already getting pretty unmaintainable
 	public void create(String name, String description, int communityId, String venue, int capacity, Date scheduled) throws SQLException {
 		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (?, ?, ?, ? ,?, ?)";
 		connection.executeUpdate(sql, statement -> {
@@ -137,7 +136,7 @@ public class EventFactory extends ModelFactory<Event> {
 	     * @throws SQLException if a database error occurs
 	     */
 	    public List<Event> findUserCommunityEvents(int userId) throws SQLException {
-	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId, e.Created, e.BannerImageId " +
+	        final String sql = "SELECT * " +
 	                "FROM Events e " +
 	                "JOIN CommunityMembers cm ON cm.CommunityId = e.CommunityId " +
 	                "WHERE cm.UserId = ?";
@@ -168,7 +167,7 @@ public class EventFactory extends ModelFactory<Event> {
 	     * @throws SQLException if a database error occurs
 	     */
 	    public List<Event> findPublicCommunityEvents(int userId) throws SQLException {
-	        final String sql = "SELECT e.Id, e.Name, e.Description, e.Scheduled, e.Venue, e.Capacity, e.CommunityId, e.Created " +
+	        final String sql = "SELECT * " +
 	                "FROM Events e " +
 	                "JOIN Communities c ON e.CommunityId = c.Id " +
 	                "WHERE c.Id NOT IN (SELECT CommunityId FROM CommunityMembers WHERE UserId = ?) ";

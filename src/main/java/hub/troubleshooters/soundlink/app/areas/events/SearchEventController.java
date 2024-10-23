@@ -140,7 +140,7 @@ public class SearchEventController {
                 .map(imageUploaderService::getFullProtocolPath)
                 .orElseGet(() -> imageUploaderService.getFullProtocolPath(imageUploaderService.getSampleBannerImageFile(eventModel.id())));
 
-        imageView.setImage(new Image(path));
+        imageView.setImage(new Image(path, 250, 100, false, false, true));
 
 
         Label nameLabel = new Label(event.getName());
