@@ -10,7 +10,16 @@ import com.google.inject.Guice;
 
 import java.io.IOException;
 
+/**
+ * Main class for the Soundlink application.
+ */
 public class SoundLinkApplication extends Application {
+
+    /**
+     * Initializes the Guice injector and routes the application to the login screen.
+     * @param stage A {@link Stage}, the main view for the application.
+     * @throws IOException If there is an IO Error.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         // set up DI injector
@@ -24,6 +33,10 @@ public class SoundLinkApplication extends Application {
         sceneManager.switchToScene(Routes.LOGIN);
     }
 
+    /**
+     * Launches the main event loop of the application.
+     * @param args Starting parameters, none are valid.
+     */
     public static void main(String[] args) {
         launch();
     }

@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Implementation of the {@link SceneManager} interface
+ */
 public class SceneManagerImpl implements SceneManager {
     private final Stage primaryStage;
     private final Injector injector;
@@ -38,6 +41,11 @@ public class SceneManagerImpl implements SceneManager {
 
     private final List<NavigationListener> listeners = new ArrayList<>();
 
+    /**
+     * Constructs the {@code SceneManager}.
+     * @param primaryStage The javaFX {@link Stage}.
+     * @param injector The Guice {@link Injector}.
+     */
     @Inject
     public SceneManagerImpl(Stage primaryStage, Injector injector) {
         this.primaryStage = primaryStage;
@@ -188,13 +196,18 @@ public class SceneManagerImpl implements SceneManager {
         });
     }
 
-    // Notify all listeners about a state change
+    /**
+     * Notify all listeners about a state change
+     */
     private void notifyListeners() {
         for (NavigationListener listener : listeners) {
             listener.onNavigationStateChange();
         }
     }
 
+    /**
+     * Initialize the shared view for the application, navbar etc.
+     */
     private void initializeSharedView() {
         try {
             var loader = new FXMLLoader(SoundLinkApplication.class.getResource("areas/shared/shared_view.fxml"));

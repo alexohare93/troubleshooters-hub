@@ -41,6 +41,11 @@ import hub.troubleshooters.soundlink.app.components.IntegerTextField;
 import javafx.collections.FXCollections;
 import org.mockito.internal.matchers.Null;
 
+/**
+ * Controller class responsible for managing the search functionality for events.
+ * This class allows users to search for events by several fields.
+ * And display the search results as event cards.
+ */
 public class SearchEventController {
 
     private static final Logger LOGGER = Logger.getLogger(SearchEventController.class.getName());
@@ -72,6 +77,15 @@ public class SearchEventController {
     private final Map map;
     private final ImageUploaderService imageUploaderService;
 
+    /**
+     * Constructs a new {@code SearchEventController} with the necessary services.
+     *
+     * @param eventService The service responsible for managing event-related operations.
+     * @param identityService The service responsible for managing user identity and permissions.
+     * @param sceneManager The manager responsible for handling scene navigation.
+     * @param map The utility for mapping between database entities and models.
+     * @param imageUploaderService The service responsible for handling image uploads.
+     */
     @Inject
     public SearchEventController(EventService eventService, IdentityService identityService,SceneManager sceneManager, Map map, ImageUploaderService imageUploaderService){
         this.eventService = eventService;
@@ -81,6 +95,10 @@ public class SearchEventController {
         this.imageUploaderService = imageUploaderService;
     }
 
+    /**
+     * Initializes the controller. Called automatically by FXML. Loads the user, displays events and handles errors
+     * getting events.
+     */
     @FXML
     public void initialize() {
         try {
@@ -119,6 +137,12 @@ public class SearchEventController {
         }
     }
 
+    /**
+     * Creates a javaFX {@link VBox} formatted with the provided events' information.
+     * @param event An event database model.
+     * @return a javaFX {@link VBox} formatted with the provided events' information.
+     * @throws SQLException If there is an SQL error.
+     */
     private VBox createEventCard(Event event) throws SQLException{
         VBox eventCard = new VBox();
         eventCard.setSpacing(10.0);
@@ -160,6 +184,10 @@ public class SearchEventController {
         return eventCard;
     }
 
+    /**
+     * Takes the user input from the search form and updates the search results.
+     * @throws SQLException If there is an SQL error.
+     */
     private void searchEvents() throws SQLException {
         String textSearch = searchTextField.getText();
         LocalDate fromDate = fromDatePicker.getValue();
@@ -183,7 +211,10 @@ public class SearchEventController {
     }
 
 
-
+    /**
+     * Updates the displayed event list with new search results.
+     * @param searchResults A {@link ObservableList<Event>} of events to display.
+     */
     private void updateEventList(ObservableList<Event> searchResults) {
         eventListVBox.getChildren().clear();
 

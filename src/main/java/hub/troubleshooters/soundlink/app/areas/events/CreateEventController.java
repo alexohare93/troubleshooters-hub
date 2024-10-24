@@ -20,6 +20,12 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller class responsible for handling the creation of a new event.
+ * This class manages user input for creating a new event, including providing a name, description, venue, community
+ * dates, capacity and optional banner image.
+ * It also handles validation and navigation after successful or unsuccessful creation.
+ */
 public class CreateEventController {
 
     private final IdentityService identityService;
@@ -43,6 +49,12 @@ public class CreateEventController {
     @FXML private Label errorLabel;
     @FXML private Tooltip errorTooltip;
 
+    /**
+     * Constructs a new {@code CreateEventController} with the necessary services.
+     * @param identityService The service responsible for managing user identity and permissions.
+     * @param eventService The service responsible for managing event-related operations.
+     * @param sceneManager The manager responsible for handling scene navigation.
+     */
     @Inject
     public CreateEventController(IdentityService identityService, EventService eventService, SceneManager sceneManager) {
         this.identityService = identityService;
@@ -50,6 +62,11 @@ public class CreateEventController {
         this.sceneManager = sceneManager;
     }
 
+    /**
+     * Initializes the controller. Called automatically after the FXML file is loaded.
+     * Sets the initial state for the UI components and hides error labels and tooltips.
+     * Also gets all communities and populates the community choice box.
+     */
     @FXML
     public void initialize() {
         // set communities options to be communities where the user has event.write permission
@@ -65,6 +82,9 @@ public class CreateEventController {
         publishDatePicker.setValue(LocalDate.now().plusDays(1));    // default to tomorrow
     }
 
+    /**
+     * Opens the file dialog when the file upload button is clicked and displays the uploaded file.
+     */
     @FXML
     protected void onUploadButtonClick() {
         // open file dialog
@@ -76,6 +96,11 @@ public class CreateEventController {
         clearImageButton.setVisible(true);
     }
 
+    /**
+     * Collects the information from the form and calls the {@link EventService} to create the event.
+     * On success, it routes the scene to the home page.
+     * On failure, it displays the error labels.
+     */
     @FXML
     protected void onCreateButtonClick() {
         // create model
@@ -107,6 +132,9 @@ public class CreateEventController {
         );
     }
 
+    /**
+     * Clears the image already loaded.
+     */
     @FXML
     protected void onClearImageButtonClick() {
         bannerImageFile = null;

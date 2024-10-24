@@ -1,5 +1,6 @@
 package hub.troubleshooters.soundlink.app.services;
 
+import hub.troubleshooters.soundlink.app.areas.Routes;
 import javafx.scene.control.Alert;
 
 import java.io.File;
@@ -43,7 +44,7 @@ public interface SceneManager {
     /**
      * Navigates to the new route by pushing as an outlet scene. Rewrites the future if it existed.
      * @param route The name of the new route you are navigating to.
-     * @see hub.troubleshooters.soundlink.app.areas.Routes
+     * @see Routes
      */
     void navigate(String route);
 
@@ -71,16 +72,44 @@ public interface SceneManager {
      */
     void addNavigationListener(NavigationListener listener);
 
+
+    /**
+     * Opens the File dialog for file upload to the application.
+     * @return The {@link File} the user uploads.
+     */
     File openFileDialog();
 
+    /**
+     * Navigates the scene to the event details view
+     * @param eventId The eventId for the event that the event details view will display
+     */
     void navigateToEventDetailsView(int eventId);
 
+    /**
+     * Navigates the scene to the event details view
+     * @param communityId The communityId for the community that the community details view will display
+     */
     void navigateToCommunityDetailsView(int communityId);
 
+    /**
+     * Listener triggered on notification button click.
+     * @param communityId The communityId of the community the notification was in reference to.
+     */
     void onNotificationButtonClick(int communityId);
+
+    /**
+     * Navigates the scene to the community search view
+     */
     void navigateToSearchCommunityView();
 
+    /**
+     * Navigates the scene to the community feed view
+     * @param communityId The communityId for the community that the community feed view will display
+     */
     void navigateToCommunityFeedView(int communityId);
 
+    /**
+     * Navigates the scene to the event search view
+     */
     void navigateToSearchEventView();
 }

@@ -6,5 +6,8 @@ package hub.troubleshooters.soundlink.app.services;
  */
 @FunctionalInterface
 public interface NavigationListener {
+    /**
+     * Listener called on {@code NavigationStateChange} event.
+     */
     void onNavigationStateChange();
 }
