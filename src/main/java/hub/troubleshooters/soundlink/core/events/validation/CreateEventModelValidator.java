@@ -10,15 +10,46 @@ import hub.troubleshooters.soundlink.data.factories.CommunityFactory;
 import java.io.File;
 import java.util.Optional;
 
+/**
+ * Validator for validating a {@link CreateEventModel} before creating an event.
+ *
+ * <p>This class extends the {@link ModelValidator} class and provides validation rules specific to event creation.
+ * It checks the required fields, ensures the scheduled date is in the future, checks the community existence, and verifies the event capacity.</p>
+ *
+ * @see CreateEventModel
+ * @see ModelValidator
+ */
 public class CreateEventModelValidator extends ModelValidator<CreateEventModel> {
 
     private final CommunityFactory communityFactory;
 
+    /**
+     * Constructs the validator and injects the {@link CommunityFactory} to check the existence of communities.
+     *
+     * @param communityFactory The factory used to validate if a community exists.
+     */
     @Inject
     public CreateEventModelValidator(CommunityFactory communityFactory) {
         this.communityFactory = communityFactory;
     }
 
+    /**
+     * Validates the given {@link CreateEventModel}.
+     *
+     * <p>This method checks for the following validation rules:
+     * <ul>
+     *  <li>The event name and description should not be empty.</li>
+     *  <li>The event's scheduled date must be in the future.</li>
+     *  <li>The location of the event should not be empty.</li>
+     *  <li>The event capacity should be positive.</li>
+     *  <li>The specified community must exist in the system.</li>
+     *  <li>The optional banner image, if present, should be in the correct image format (PNG, JPG, JPEG).</li>
+     * </ul>
+     * </p>
+     *
+     * @param createEventModel The model that holds the event details.
+     * @return A {@link ValidationResult} containing validation errors, if any.
+     */
     @Override
     public ValidationResult validate(CreateEventModel createEventModel) {
         if (createEventModel == null) {
