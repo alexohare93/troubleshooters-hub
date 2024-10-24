@@ -32,7 +32,7 @@
     <!-- Community Description -->
     <TextArea fx:id="descriptionTextArea" editable="false" />
 
-    <HBox spacing="10.0">
+    <HBox spacing="10.0" alignment="CENTER">
         <children>
             <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onJoinButtonClick" text="Join Community">
                 <styleClass>
