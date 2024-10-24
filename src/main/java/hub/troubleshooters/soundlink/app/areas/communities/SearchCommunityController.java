@@ -22,6 +22,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Controller class responsible for managing the search functionality for communities.
+ * This class allows users to search for communities by name, filter by private communities,
+ * and display the search results as community cards.
+ */
 public class SearchCommunityController {
 
     private static final Logger LOGGER = Logger.getLogger(SearchCommunityController.class.getName());
@@ -44,6 +49,15 @@ public class SearchCommunityController {
     private final ImageUploaderService imageUploaderService;
     private final Map map;
 
+    /**
+     * Constructs a new {@code SearchCommunityController} with the necessary services.
+     *
+     * @param communityService The service responsible for managing community-related operations.
+     * @param identityService The service responsible for managing user identity and permissions.
+     * @param sceneManager The manager responsible for handling scene navigation.
+     * @param imageUploaderService The service responsible for handling image uploads.
+     * @param map The utility for mapping between database entities and models.
+     */
     @Inject
     public SearchCommunityController(CommunityService communityService, IdentityService identityService, SceneManager sceneManager, ImageUploaderService imageUploaderService, Map map) {
         this.communityService = communityService;
@@ -53,6 +67,10 @@ public class SearchCommunityController {
         this.map = map;
     }
 
+    /**
+     * Initializes the controller. Called automatically after the FXML file is loaded.
+     * Fetches and displays the list of communities.
+     */
     @FXML
     public void initialize() {
         try {
@@ -62,6 +80,10 @@ public class SearchCommunityController {
         }
     }
 
+    /**
+     * Fetches and displays the list of communities based on the search criteria.
+     * The search criteria include the text from the search field and the private filter checkbox.
+     */
     @FXML
     public void fetchCommunities() {
         String searchText = searchTextField.getText();
@@ -70,7 +92,14 @@ public class SearchCommunityController {
         displayCommunities(filteredCommunities);
     }
 
-
+    /**
+     * Creates a visual card representation of a community. The card includes the community's banner image, name, genre,
+     * description, and a button that navigates to the community's details page.
+     *
+     * @param community The community to create a card for.
+     * @return A {@link VBox} containing the visual representation of the community.
+     * @throws SQLException If there is an issue fetching the community details.
+     */
     private VBox createCommunityCard(Community community) throws SQLException {
         VBox vbox = new VBox();
         vbox.setSpacing(10.0);
@@ -112,6 +141,11 @@ public class SearchCommunityController {
         return vbox;
     }
 
+    /**
+     * Displays the list of communities as visual cards in the community list container.
+     *
+     * @param communities The list of communities to display.
+     */
     private void displayCommunities(List<Community> communities) {
         // Clear previous results
         communityListContainer.getChildren().clear();

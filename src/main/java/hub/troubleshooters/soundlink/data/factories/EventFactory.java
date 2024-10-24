@@ -16,13 +16,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Factory class responsible for handling database operations related to {@link Event} models.
+ * This class provides methods for creating, retrieving, updating, and searching for events in the database.
+ */
 public class EventFactory extends ModelFactory<Event> {
 
+	/**
+	 * Constructs a new {@code EventFactory} with the specified database connection.
+	 *
+	 * @param connection The database connection to be used by the factory.
+	 */
 	@Inject
 	public EventFactory(DatabaseConnection connection) {
 		super(connection, "Events");
 	}
 
+	/**
+	 * Updates an existing {@link Event} in the database.
+	 *
+	 * @param event The event model to update.
+	 * @throws SQLException If the update fails or affects an incorrect number of rows.
+	 */
 	@Override
 	public void save(Event event) throws SQLException {
 		final String sql = "UPDATE Events SET CommunityId = ?, Name = ?, Description = ?, Venue = ?, Capacity = ?, Scheduled = ?, Created = ?, BannerImageId = ? WHERE Id = ?";
@@ -43,6 +58,13 @@ public class EventFactory extends ModelFactory<Event> {
 		});
 	}
 
+	/**
+	 * Retrieves an {@link Event} by its unique ID.
+	 *
+	 * @param id The ID of the event to retrieve.
+	 * @return An {@code Optional} containing the event if found, or an empty {@code Optional} if not.
+	 * @throws SQLException If an error occurs during the query.
+	 */
 	@Override
 	public Optional<Event> get(int id) throws SQLException {
 		final String sql = "SELECT * FROM Events WHERE Id = ?";
@@ -70,8 +92,16 @@ public class EventFactory extends ModelFactory<Event> {
 	}
 
 	/**
-	 * Creates new Event
-	 * @throws SQLException if an error occurs while creating the event
+	 * Creates a new {@link Event} with a banner image.
+	 *
+	 * @param name         The name of the event.
+	 * @param description  The description of the event.
+	 * @param communityId  The ID of the community organizing the event.
+	 * @param venue        The venue where the event will take place.
+	 * @param capacity     The maximum capacity for the event.
+	 * @param scheduled    The scheduled date of the event.
+	 * @param bannerImageId The ID of the banner image associated with the event.
+	 * @throws SQLException If an error occurs during the creation of the event.
 	 */
 	public void create(String name, String description, int communityId, String venue, int capacity, Date scheduled, int bannerImageId) throws SQLException {
 		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled, BannerImageId) VALUES (?, ?, ?, ? ,?, ?, ?)";
@@ -90,6 +120,17 @@ public class EventFactory extends ModelFactory<Event> {
 		});
 	}
 
+	/**
+	 * Creates a new {@link Event} without a banner image.
+	 *
+	 * @param name        The name of the event.
+	 * @param description The description of the event.
+	 * @param communityId The ID of the community organizing the event.
+	 * @param venue       The venue where the event will take place.
+	 * @param capacity    The maximum capacity for the event.
+	 * @param scheduled   The scheduled date of the event.
+	 * @throws SQLException If an error occurs during the creation of the event.
+	 */
 	public void create(String name, String description, int communityId, String venue, int capacity, Date scheduled) throws SQLException {
 		final String sql = "INSERT INTO Events (CommunityId, Name, Description, Venue, Capacity, Scheduled) VALUES (?, ?, ?, ? ,?, ?)";
 		connection.executeUpdate(sql, statement -> {
@@ -106,7 +147,12 @@ public class EventFactory extends ModelFactory<Event> {
 		});
 	}
 
-	    // Fetches all events from the database
+	/**
+	 * Retrieves all events from the database.
+	 *
+	 * @return A list of all events.
+	 * @throws SQLException If an error occurs during the query.
+	 */
 	    public List<Event> getAllEvents() throws SQLException {
 	        final String sql = "SELECT * FROM Events";
 	        return connection.executeQuery(sql, statement -> {}, executor -> {

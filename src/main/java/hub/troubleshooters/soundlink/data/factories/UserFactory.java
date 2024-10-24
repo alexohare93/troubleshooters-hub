@@ -7,13 +7,28 @@ import hub.troubleshooters.soundlink.data.models.User;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Factory class responsible for handling database operations related to {@link User} models.
+ * This class provides methods for creating, retrieving, and updating users in the database.
+ */
 public class UserFactory extends ModelFactory<User> {
 
+    /**
+     * Constructs a new {@code UserFactory} with the specified database connection.
+     *
+     * @param connection The database connection to be used by the factory.
+     */
     @Inject
     public UserFactory(DatabaseConnection connection) {
         super(connection, "Users");
     }
 
+    /**
+     * Updates an existing {@link User} in the database.
+     *
+     * @param model The user model to update.
+     * @throws SQLException If the update fails or affects an incorrect number of rows.
+     */
     @Override
     public void save(User model) throws SQLException {
         final String sql = "UPDATE Users SET Username = ?, HashedPassword = ?, Created = ?, LastLogin = ? WHERE Id = ?;";
@@ -30,6 +45,13 @@ public class UserFactory extends ModelFactory<User> {
         });
     }
 
+    /**
+     * Retrieves a {@link User} by its unique ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return An {@code Optional} containing the user if found, or an empty {@code Optional} if not.
+     * @throws SQLException If an error occurs during the query.
+     */
     @Override
     public Optional<User> get(int id) throws SQLException {
         final String sql = "SELECT * FROM Users WHERE Id = ?";

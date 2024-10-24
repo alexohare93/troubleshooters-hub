@@ -22,6 +22,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.layout.HBox;
 
+/**
+ * Controller class for managing the community details view.
+ * This class handles the display and management of community information, including joining and leaving
+ * a community, as well as updating and deleting the community if the user has the necessary permissions.
+ */
 public class CommunityDetailsController {
     @FXML
     private ImageView bannerImageView;
@@ -48,6 +53,14 @@ public class CommunityDetailsController {
     private CommunityModel community;
     private static final Logger LOGGER = Logger.getLogger(CommunityDetailsController.class.getName());
 
+    /**
+     * Constructs a new {@code CommunityDetailsController}.
+     *
+     * @param communityService The service responsible for managing community operations.
+     * @param imageUploaderService The service responsible for handling image uploads.
+     * @param identityService The service responsible for managing user identity and permissions.
+     * @param sceneManager The manager for handling scene navigation.
+     */
     @Inject
     public CommunityDetailsController(CommunityService communityService, ImageUploaderService imageUploaderService,
                                       IdentityService identityService, SceneManager sceneManager) {
@@ -57,6 +70,11 @@ public class CommunityDetailsController {
         this.sceneManager = sceneManager;
     }
 
+    /**
+     * Loads the details of the specified community and updates the view.
+     *
+     * @param id The ID of the community to load.
+     */
     public void loadCommunityDetails(int id) {
         int userId = identityService.getUserContext().getUser().getId();
 
@@ -94,6 +112,9 @@ public class CommunityDetailsController {
         }
     }
 
+    /**
+     * Sets up the community's banner image if available.
+     */
     private void setUpBannerImage() {
         try {
             community.bannerImage().ifPresent(img -> {
@@ -116,6 +137,9 @@ public class CommunityDetailsController {
         }
     }
 
+    /**
+     * Updates the visibility of the join and cancel buttons based on the user's join status.
+     */
     private void updateJoinButtons() {
         try {
             int userId = identityService.getUserContext().getUser().getId();
@@ -127,6 +151,9 @@ public class CommunityDetailsController {
         }
     }
 
+    /**
+     * Handles the logic for joining a community when the join button is clicked.
+     */
     @FXML
     protected void onJoinButtonClick() {
         if (community == null) {
@@ -146,6 +173,9 @@ public class CommunityDetailsController {
                 "You have already joined this community");
     }
 
+    /**
+     * Handles the logic for canceling the join request when the cancel button is clicked.
+     */
     @FXML
     protected void onCancelButtonClick() {
         if (community == null) {
@@ -164,6 +194,13 @@ public class CommunityDetailsController {
     }
 
 
+    /**
+     * Handles the join or cancel operation and displays the result message.
+     *
+     * @param operation The operation to be executed.
+     * @param successMessage The message to display if the operation is successful.
+     * @param failureMessage The message to display if the operation fails.
+     */
     private void handleJoinOperation(JoinOperation operation, String successMessage, String failureMessage) {
         try {
             boolean result = operation.execute();
@@ -178,6 +215,11 @@ public class CommunityDetailsController {
         }
     }
 
+    /**
+     * Toggles the visibility of the join and cancel buttons based on whether the user is joined.
+     *
+     * @param isJoined {@code true} if the user has joined the community, {@code false} otherwise.
+     */
     private void toggleJoiningButtons(boolean isJoined) {
         signUpButton.setVisible(!isJoined);
         signUpButton.setManaged(!isJoined);
@@ -186,15 +228,27 @@ public class CommunityDetailsController {
         cancelButton.setManaged(isJoined);
     }
 
+    /**
+     * Displays an alert with the specified message.
+     *
+     * @param alertType The type of alert to display.
+     * @param message The message to display in the alert.
+     */
     private void showAlert(Alert.AlertType alertType, String message) {
         sceneManager.alert(new Alert(alertType, message));
     }
 
+    /**
+     * Functional interface representing an operation to join or cancel a community membership.
+     */
     @FunctionalInterface
     private interface JoinOperation {
         boolean execute() throws SQLException;
     }
 
+    /**
+     * Saves the changes to the community details when the save button is clicked.
+     */
     @FXML
     protected void onSaveChangesClick() {
         if (community == null) {
@@ -226,6 +280,9 @@ public class CommunityDetailsController {
         }
     }
 
+    /**
+     * Deletes the community when the delete button is clicked.
+     */
     @FXML
     protected void onDeleteCommunityClick() {
         if (community == null) {

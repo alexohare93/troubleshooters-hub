@@ -22,6 +22,11 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Controller class for managing the community feed view, including displaying events and posts related to a community.
+ * This class allows users to switch between viewing events and posts within a community and provides navigation to
+ * event details when the user selects an event.
+ */
 public class CommunityFeedController {
 
 	@FXML
@@ -44,6 +49,15 @@ public class CommunityFeedController {
 	private List<CommunityPostModel> posts;
 	private static final Logger LOGGER = Logger.getLogger(CommunityFeedController.class.getName());
 
+	/**
+	 * Constructs a new {@code CommunityFeedController} with the necessary services.
+	 *
+	 * @param communityService The service responsible for managing community-related operations.
+	 * @param eventService The service responsible for managing event-related operations.
+	 * @param imageUploaderService The service responsible for handling image uploads.
+	 * @param identityService The service responsible for managing user identity and permissions.
+	 * @param sceneManager The manager responsible for handling scene navigation.
+	 */
 	@Inject
 	public CommunityFeedController(CommunityService communityService, EventService eventService, ImageUploaderService imageUploaderService,
 								   IdentityService identityService, SceneManager sceneManager) {
@@ -54,10 +68,18 @@ public class CommunityFeedController {
 		this.sceneManager = sceneManager;
 	}
 
+	/**
+	 * Initializes the controller. Called automatically after the FXML file is loaded.
+	 */
 	@FXML
 	public void initialize() {
 	}
 
+	/**
+	 * Loads the community feed, including events and posts, for the specified community ID.
+	 *
+	 * @param communityId The ID of the community to load.
+	 */
 	public void LoadFeed(int communityId) {
 		try {
 			Optional<CommunityModel> optionalCommunity = communityService.getCommunity(communityId);
@@ -76,6 +98,9 @@ public class CommunityFeedController {
 		}
 	}
 
+	/**
+	 * Handles the event when the events tab is clicked. Switches the view to display the community's events.
+	 */
 	@FXML
 	private void eventsTabClicked() {
 		eventsTab.setDisable(true);
@@ -83,6 +108,9 @@ public class CommunityFeedController {
 		displayEvents();
 	}
 
+	/**
+	 * Handles the event when the posts tab is clicked. Switches the view to display the community's posts.
+	 */
 	@FXML
 	private void postsTabClicked() {
 		postsTab.setDisable(true);
@@ -90,6 +118,9 @@ public class CommunityFeedController {
 		displayPosts();
 	}
 
+	/**
+	 * Displays the community's events in the feed.
+	 */
 	private void displayEvents() {
 		// clear previous list
 		listContainer.getChildren().clear();
@@ -100,6 +131,9 @@ public class CommunityFeedController {
 		}
 	}
 
+	/**
+	 * Displays the community's posts in the feed.
+	 */
 	private void displayPosts() {
 		// clear previous list
 		listContainer.getChildren().clear();
@@ -111,6 +145,12 @@ public class CommunityFeedController {
 		}
 	}
 
+	/**
+	 * Creates a card layout for displaying an event.
+	 *
+	 * @param event The event to be displayed.
+	 * @return A {@link VBox} containing the event details.
+	 */
 	private VBox createEventCard(EventModel event) {
 		VBox vbox = new VBox();
 
@@ -145,6 +185,12 @@ public class CommunityFeedController {
 		return vbox;
 	}
 
+	/**
+	 * Creates a card layout for displaying a community post.
+	 *
+	 * @param post The post to be displayed.
+	 * @return A {@link VBox} containing the post details.
+	 */
 	private VBox createCommunityPostCard(CommunityPostModel post) {
 		VBox vbox = new VBox();
 
