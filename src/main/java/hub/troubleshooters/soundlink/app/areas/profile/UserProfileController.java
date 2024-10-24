@@ -28,6 +28,9 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Controller for the user profile view. Handles updating and displaying user profile data.
+ */
 public class UserProfileController {
 
     private static final Logger logger = Logger.getLogger(UserProfileController.class.getName());
@@ -59,6 +62,17 @@ public class UserProfileController {
     @FXML
     private Button clearImageButton;
 
+    /**
+     * Constructs a new {@code UserProfileController} with the necessary services.
+     * @param imageUploaderService Service responsible for handling image uploads.
+     * @param userProfileService Service responsible for handling user profile information.
+     * @param identityService Service responsible for handling user identity information.
+     * @param sceneManager Service responsible for managing the application's scene.
+     * @param map Utility responsible for mapping database entities to models.
+     * @param userDataStore Utility responsible for storing user data.
+     * @param eventService Service responsible for managing event information.
+     * @param communityService Service responsible for managing community information.
+     */
     @Inject
     public UserProfileController(ImageUploaderService imageUploaderService, UserProfileService userProfileService,
                                  IdentityService identityService, SceneManager sceneManager, Map map,
@@ -73,6 +87,11 @@ public class UserProfileController {
         this.communityService = communityService;
     }
 
+    /**
+     * Initializes the controller, called automatically bt FXML. Loads and displays user information,
+     * including communities and bookings. Binds events for input fields and handles errors by routing the user to
+     * the home view.
+     */
     @FXML
     public void initialize() {
         try {
@@ -118,6 +137,10 @@ public class UserProfileController {
         }
     }
 
+    /**
+     * Opens the file dialog and allows the user to select and image. Then updates the display with the new image and
+     * enables the save button.
+     */
     @FXML
     protected void changeImage() {
         var file = sceneManager.openFileDialog();
@@ -128,6 +151,9 @@ public class UserProfileController {
         enableSaveButton();
     }
 
+    /**
+     * Removes the current image. Then updates the display with the default image and enables the save button.
+     */
     @FXML
     protected void onClearImageButtonClick() {
         var defaultImage = imageUploaderService.getDefaultProfileImageFile();
@@ -137,12 +163,18 @@ public class UserProfileController {
         enableSaveButton();
     }
 
+    /**
+     * Updates the events label with the users events.
+     */
     private void updateEventsLabel() {
         int userId = identityService.getUserContext().getUser().getId();
         var events = eventService.getEventsForUser((long) userId);
         eventsLabel.setText(String.join("\n", events));
     }
 
+    /**
+     * Updates the communities label with the users communities.
+     */
     private void updateCommunitiesLabel() {
         var communities = identityService.getCommunities().stream()
                 .map(community -> community.getName())
@@ -150,14 +182,23 @@ public class UserProfileController {
         communitiesLabel.setText(String.join("\n", communities));
     }
 
+    /**
+     * Disables the save button.
+     */
     private void disableSaveButton() {
         saveButton.setDisable(true);
     }
 
+    /**
+     * Envables the save button.
+     */
     private void enableSaveButton() {
         saveButton.setDisable(false);
     }
 
+    /**
+     * Updates the user profile with the new information. Displays messages on success and failure.
+     */
     @FXML
     protected void onSaveButtonClick() {
         if (userProfile == null) {
@@ -176,6 +217,10 @@ public class UserProfileController {
         }
     }
 
+    /**
+     * Displays and error message.
+     * @param message Error to be displayed.
+     */
     private void showError(String message) {
         logger.log(Level.SEVERE, message);
         sceneManager.alert(new Alert(Alert.AlertType.ERROR, message));

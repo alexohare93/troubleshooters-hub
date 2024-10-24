@@ -35,6 +35,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 
+/**
+ * Controller class for managing the event details view.
+ * This class handles the display and management of event information, including joining and leaving
+ * an event, as well as updating and deleting the event if the user has the necessary permissions.
+ */
 public class EventDetailsController {
     @FXML private ImageView bannerImageView;
     @FXML private Label nameLabel;
@@ -64,6 +69,15 @@ public class EventDetailsController {
 
     private EventModel event;
 
+    /**
+     * Constructs the {@code EventDetailsController}.
+     * @param eventService The service responsible for handling event information.
+     * @param imageUploaderService The service responsible for handling image uploads.
+     * @param identityService The service responsible for managing user identity and permissions.
+     * @param sceneManager The manager for handling scene navigation.
+     * @param userProfileService The service responsible for handling user profile information.
+     * @param map The utility responsible for mapping database entities and models.
+     */
     @Inject
     public EventDetailsController(
             EventService eventService,
@@ -81,6 +95,11 @@ public class EventDetailsController {
         this.map = map;
     }
 
+    /**
+     * Loads the event information from the {@code eventId} and displays it.
+     * Handles errors if the event can not be found and implements logic for booking capacity.
+     * @param eventId The ID of the event that will be detailed.
+     */
     public void loadEventDetails(int eventId) {
         var eventOpt = eventService.getEvent(eventId);
         if (eventOpt.isEmpty()) {
@@ -162,6 +181,9 @@ public class EventDetailsController {
         }
     }
 
+    /**
+     * Sets the visibility of admin tool depending on the users permissions.
+     */
     private void updateAdminButtonsVisibility() {
         try {
             int userId = identityService.getUserContext().getUser().getId();
@@ -176,6 +198,11 @@ public class EventDetailsController {
         }
     }
 
+    /**
+     * Creates a javaFX {@link Node} for a comment.
+     * @param comment An {@code EventComment} model.
+     * @return A javaFX {@link Node} containing the formatted information in the comment.
+     */
     private Node createCommentCard(EventComment comment) {
         UserProfileModel userProfile = null; // TODO: error handling
         try {
@@ -227,11 +254,19 @@ public class EventDetailsController {
         return card;
     }
 
+    /**
+     * Formats {@link Date} object into a formatted {@link String}.
+     * @param date A {@link Date}.
+     * @return A formatted {@link String}.
+     */
     private String formatDate(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy, HH:mm");
         return dateFormat.format(date);
     }
 
+    /**
+     * Attempts to book the user for the event, displayed. Handles errors on failure.
+     */
     @FXML
     protected void onBookButtonClick() {
         if (event == null) {
@@ -252,6 +287,9 @@ public class EventDetailsController {
         }
     }
 
+    /**
+     * Attempts to cancel the users booking of the event, handles errors on failure.
+     */
     @FXML
     protected void onCancelButtonClick() {
         if (event == null) {
@@ -269,6 +307,9 @@ public class EventDetailsController {
                 "Unable to be removed from the event. Please try again.");
     }
 
+    /**
+     * Posts the users comment, handles errors on failure.
+     */
     @FXML
     protected void onCommentButtonClick() {
         if (event == null) {
@@ -292,6 +333,10 @@ public class EventDetailsController {
         loadEventDetails(event.id());
     }
 
+    /**
+     * Handles whether the Book or Cancel Booking button is displayed.
+     * @param isJoined boolean for if the user is booked in the current event.
+     */
     private void toggleJoiningButtons(boolean isJoined) {
         signUpButton.setVisible(!isJoined);
         signUpButton.setManaged(!isJoined);
@@ -300,6 +345,13 @@ public class EventDetailsController {
         cancelButton.setManaged(isJoined);
     }
 
+    /**
+     * Handles the operations for booking the user into and event or canceling the user booking.
+     * Displays success or failure message on completion.
+     * @param operation A {@code BookOperation}.
+     * @param successMessage Message to be displayed on success.
+     * @param failureMessage Message to be displayed on failure.
+     */
     private void handleBookingOperation(BookOperation operation, String successMessage, String failureMessage) {
         try {
             boolean result = operation.execute();
@@ -314,15 +366,31 @@ public class EventDetailsController {
         }
     }
 
+    /**
+     * Functional interface for inline functions.
+     */
     @FunctionalInterface
     private interface BookOperation {
+        /**
+         * Executes the {@code BookOperation}.
+         * @return A boolean indicating the operations' success.
+         * @throws SQLException If there is an SQL error.
+         */
         boolean execute() throws SQLException;
     }
 
+    /**
+     * Shows alert.
+     * @param alertType {@link Alert} {@code AlertType} Enum.
+     * @param message {@link String}
+     */
     private void showAlert(Alert.AlertType alertType, String message) {
         sceneManager.alert(new Alert(alertType, message));
     }
 
+    /**
+     * Updates the display of the Book or Cancel Booking buttons.
+     */
     private void updateBookButtons() {
         try {
             int userId = identityService.getUserContext().getUser().getId();
@@ -333,6 +401,10 @@ public class EventDetailsController {
         }
     }
 
+    /**
+     * Updates the event with the changes made by a user with permissions. Displays success or failure messages on
+     * completion.
+     */
     @FXML
     protected void onSaveChangesClick() {
         if (event == null) {
@@ -384,6 +456,10 @@ public class EventDetailsController {
     }
 
 
+    /**
+     * Deletes the event, can only be preformed by a user with pemissions.
+     * Routes the user to search event view on success and displays error message on failure.
+     */
     @FXML
     protected void onDeleteEventClick() {
         if (event == null) {

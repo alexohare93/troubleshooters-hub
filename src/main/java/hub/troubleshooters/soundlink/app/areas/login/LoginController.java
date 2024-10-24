@@ -13,6 +13,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
 
+/**
+ * Controller for the login view. Handles login attempts and routes the user on a successful login.
+ */
 public class LoginController {
 
     @FXML private Label statusLabel;
@@ -22,12 +25,21 @@ public class LoginController {
     private final LoginService loginService;
     private final SceneManager sceneManager;
 
+    /**
+     * Constructs a new {@code LoginController}.
+     * @param loginService The service responsible for handling user logins.
+     * @param sceneManager The service responsible for handling the application's scene.
+     */
     @Inject
     public LoginController(LoginService loginService, SceneManager sceneManager) {
         this.loginService = loginService;
         this.sceneManager = sceneManager;
     }
 
+    /**
+     * Initializes the controller, called automatically by FXML.
+     * Configures Enter keystroke actions for input fields.
+     */
     @FXML
     public void initialize() {
         // Adds form submission on ENTER key pressed for convenience
@@ -39,6 +51,9 @@ public class LoginController {
         });
     }
 
+    /**
+     * Sends a login request, routes user on success and displays on failure.
+     */
     @FXML
     protected void onLoginButtonClick() {
         var loginResult = loginService.login(new LoginModel(usernameInput.getText(), passwordInput.getText()));
@@ -49,6 +64,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Creates a user, routes user on success and displays an error on failure.
+     */
     @FXML
     protected void onRegisterButtonClick() {
         var result = loginService.register(new RegisterModel(usernameInput.getText(), passwordInput.getText()));
@@ -59,11 +77,19 @@ public class LoginController {
         }
     }
 
+    /**
+     * Logs a message to the status label. Colored black.
+     * @param message message to be logged
+     */
     private void log(String message) {
         statusLabel.setText(message);
         statusLabel.setTextFill(Paint.valueOf("black"));
     }
 
+    /**
+     * Logs an error message to the status label. Colored red.
+     * @param message message to be logged
+     */
     private void logError(String message) {
         statusLabel.setText(message);
         statusLabel.setTextFill(Paint.valueOf("red"));

@@ -10,6 +10,9 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
+/**
+ * Controller for the home view scene.
+ */
 public class HomeController {
     private final SceneManager sceneManager;
     private final BookingService bookingService;
@@ -17,12 +20,21 @@ public class HomeController {
     @FXML
     private VBox upcomingEventsContainer;
 
+    /**
+     * Constructs a new {@code HomeController}.
+     * @param sceneManager Service responsible for managing the application's scene.
+     * @param bookingService Service responsible for managing booking's.
+     */
     @Inject
     public HomeController(SceneManager sceneManager, BookingService bookingService) {
         this.sceneManager = sceneManager;
         this.bookingService = bookingService;
     }
 
+    /**
+     * Initializes the controller, automatically called by FXML.
+     * Loads and displays the users upcoming bookings.
+     */
     @FXML
     public void initialize() {
         List<String> bookings = bookingService.getUpcomingEventsForUser();
@@ -42,6 +54,9 @@ public class HomeController {
         }
     }
 
+    /**
+     * Redirects the user to the search communities view.
+     */
     @FXML
     protected void onBrowseCommunitiesButtonClick() {
         sceneManager.navigate(Routes.SEARCH_COMMUNITIES);

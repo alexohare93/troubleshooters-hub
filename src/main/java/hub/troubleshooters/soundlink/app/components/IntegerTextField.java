@@ -10,6 +10,9 @@ import java.util.function.UnaryOperator;
  */
 public class IntegerTextField extends TextField {
 
+    /**
+     * Constructs an {@code IntegerTextField}.
+     */
     public IntegerTextField() {
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String input = change.getText();
@@ -22,6 +25,10 @@ public class IntegerTextField extends TextField {
         setTextFormatter(new TextFormatter<String>(integerFilter));
     }
 
+    /**
+     * Gets the {@code int} value of the text field.
+     * @return The value in the text field, 0 if the field is empty.
+     */
     public int getValue() {
         if (getText().isEmpty()) {
             return 0;
