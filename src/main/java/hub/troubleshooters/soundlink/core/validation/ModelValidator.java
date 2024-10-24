@@ -24,14 +24,49 @@ public abstract class ModelValidator<T> {
      */
     public abstract ValidationResult validate(T model);
 
+    /**
+     * Functional interface for applying validation logic.
+     *
+     * <p>This interface is used in conjunction with the {@link #ifPresent(String, Object, ValidationFunction)}
+     * method to perform specific validation checks on fields that are not null.</p>
+     */
     public interface ValidationFunction {
+        /**
+         * Applies a validation function to a value.
+         *
+         * @param name The name of the field being validated.
+         * @param value The value of the field to validate.
+         * @return An {@link Optional} containing a {@link ValidationError} if the validation fails, or {@link Optional#empty()} if the validation passes.
+         */
         Optional<ValidationError> apply(String name, Object value);
     }
 
+    /**
+     * Applies a validation function to a value if it is present (not null).
+     *
+     * <p>This method allows for conditional validation. If the value is null, no validation will occur,
+     * and an empty {@link Optional} will be returned. If the value is non-null, the provided validation
+     * function will be executed.</p>
+     *
+     * @param name The name of the field being validated.
+     * @param value The value of the field to validate.
+     * @param function The validation function to apply if the value is present.
+     * @return An {@link Optional} containing a {@link ValidationError} if the validation fails, or {@link Optional#empty()} if the validation passes.
+     */
     protected final Optional<ValidationError> ifPresent(String name, Object value, ValidationFunction function) {
         return value == null ? Optional.empty() : function.apply(name, value);
     }
 
+    /**
+     * Checks whether the given file is a valid image.
+     *
+     * <p>This method checks if a file is a valid image based on its file extension. Valid image formats
+     * include PNG, JPG, and JPEG. If the file is not an image, a {@link ValidationError} is returned.</p>
+     *
+     * @param name The name of the field being validated.
+     * @param value The file to validate.
+     * @return An {@link Optional} containing a {@link ValidationError} if the file is not an image, or {@link Optional#empty()} if it is a valid image.
+     */
     protected final Optional<ValidationError> isImage(String name, File value) {
         if (value == null) {
             return Optional.of(new ValidationError(name + " is null"));
