@@ -49,8 +49,6 @@ public class CommunityFeedController {
 	 *
 	 * @param communityService The service responsible for managing community-related operations.
 	 * @param eventService The service responsible for managing event-related operations.
-	 * @param imageUploaderService The service responsible for handling image uploads.
-	 * @param identityService The service responsible for managing user identity and permissions.
 	 * @param sceneManager The manager responsible for handling scene navigation.
 	 */
 	@Inject
